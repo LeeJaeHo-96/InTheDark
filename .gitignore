@@ -71,3 +71,10 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 /Assets/Imports
+/Assets/Editor Default Resources/Firebase
+/Assets/ExternalDependencyManager
+/Assets/Firebase
+/Assets/Plugins/tvOS
+/Assets/StreamingAssets
+/Assets/Plugins
+/Assets/Editor Default Resources
