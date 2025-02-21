@@ -24,16 +24,9 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        StartFrame(); 
+        StartFrame();
+        StartWindowMode();
     }
-
-
-    private void Update()
-    {
-        Debug.Log($"frame :{Application.targetFrameRate} / Vsync:{QualitySettings.vSyncCount}");
-    }
-
-    //Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;
  
     /// <summary>
     /// 게임 시작 시 설정한 프레임으로 변경
@@ -52,7 +45,22 @@ public class GameManager : MonoBehaviour
             QualitySettings.vSyncCount = 0;
         } 
     }
-
+    
+    /// <summary>
+    /// 게임 시작 시 설정한 윈도우 모드로 변경
+    /// </summary>
+    private void StartWindowMode()
+    {
+        if (PlayerPrefs.HasKey("WindowDropdownValue"))
+        {
+            Screen.fullScreenMode = (FullScreenMode)PlayerPrefs.GetInt("WindowDropdownValue");
+        }
+        else
+        {
+            Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;  
+        }
+    }
+    
     /// <summary>
     /// 전달 받은 프레임 옵션으로 변경
     /// </summary>
@@ -64,6 +72,15 @@ public class GameManager : MonoBehaviour
         QualitySettings.vSyncCount = force ? 1 : 0;
         PlayerPrefs.SetInt("Vsync", QualitySettings.vSyncCount);
 
+    }
+    
+    /// <summary>
+    /// 전달 받은 값으로 윈도우 모드 변경
+    /// </summary>
+    /// <param name="value"></param>
+    public void SetWindowMode(int value)
+    {
+        Screen.fullScreenMode = (FullScreenMode)value; 
     }
     
 }
