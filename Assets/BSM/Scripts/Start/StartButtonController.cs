@@ -7,7 +7,9 @@ using UnityEngine.UI;
 
 public class StartButtonController : MonoBehaviour
 {
-
+    [Header("설정창 판넬 오브젝트")]
+    [SerializeField] private GameObject _settingPanel;
+    
     private StartButton _curStartButton;
     private Image _curButtonColor;
     private TextMeshProUGUI _curButtonTextColor;
@@ -26,11 +28,14 @@ public class StartButtonController : MonoBehaviour
 
         OnClickEventRegister();
     }
-
+    
+    /// <summary>
+    /// OnClick 이벤트 등록
+    /// </summary>
     private void OnClickEventRegister()
     {
         
-        
+        _startButtons[2].onClick.AddListener(() => _settingPanel.SetActive(true));
         _startButtons[4].onClick.AddListener(ExitGame);
     }
     
@@ -59,6 +64,9 @@ public class StartButtonController : MonoBehaviour
     }
 
     
+    /// <summary>
+    /// 게임 종료
+    /// </summary>
     private void ExitGame()
     {
 #if UNITY_EDITOR
