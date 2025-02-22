@@ -61,15 +61,31 @@ public class Setting : ObjBind
         }
         
     }
-
+    
+    /// <summary>
+    /// 감마, 밝기 변경
+    /// </summary>
     private void SetGammaSlider()
     {
         _gammaSlider = GetComponentBind<Slider>("Gamma_Bright_Slider");
+
         _gammaSlider.onValueChanged.AddListener(x =>
         {
-             Screen.brightness = x;
-             Debug.Log($"Screen.brightness :{Screen.brightness}");
+            float gammaBrightness = x;
+            gammaBrightness = Mathf.Clamp(x, -1f, 1f);
+            PlayerPrefs.SetFloat("GammaBrightnessValue", gammaBrightness);
+            
+            _gameManager.SetGammaBrightness(gammaBrightness);
         });
+        
+        if (PlayerPrefs.HasKey("GammaBrightnessValue"))
+        {
+            _gammaSlider.value = PlayerPrefs.GetFloat("GammaBrightnessValue");
+        }
+        else
+        {
+            _gammaSlider.value = 0f;
+        } 
     }
     
     
