@@ -8,4 +8,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/LJH/LoginScene.unity
+    guid: 72d8a0fc6a76f5d499f8d0d0da5f0f9d
+  - enabled: 1
+    path: Assets/LJH/DataBaseScene.unity
+    guid: ec3acb4fcccbb2940a6d9aad01a077b4
   m_configObjects: {}
