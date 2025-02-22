@@ -11,9 +11,13 @@ using Screen = UnityEngine.Device.Screen;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance; 
-    public ColorGrading PostVolume;
-
+    public static GameManager Instance;
+    public int CurFrame;
+    public int CurVSyncCount;
+    public int CurWindowMode;
+    public float CurGammaBrightness;
+    
+    private ColorGrading PostVolume; 
     private PostProcessProfile _postProfile;
     
     private void Awake()
@@ -52,13 +56,23 @@ public class GameManager : MonoBehaviour
         //프레임을 설정했었는지 확인
         if (PlayerPrefs.HasKey("FrameRate"))
         {
-            Application.targetFrameRate = PlayerPrefs.GetInt("FrameRate");
-            QualitySettings.vSyncCount = PlayerPrefs.GetInt("Vsync");
+            CurFrame = PlayerPrefs.GetInt("FrameRate");
+            CurVSyncCount = PlayerPrefs.GetInt("Vsync");
+            
+            Application.targetFrameRate = CurFrame;
+            QualitySettings.vSyncCount = CurVSyncCount;
         }
         else
         {
-            Application.targetFrameRate = Screen.currentResolution.refreshRate;
-            QualitySettings.vSyncCount = 0;
+            CurFrame = Screen.currentResolution.refreshRate;
+            CurVSyncCount = 0;
+
+            Application.targetFrameRate = CurFrame;
+            QualitySettings.vSyncCount = CurVSyncCount;
+            
+            PlayerPrefs.SetInt("FrameDropdownValue", 0);
+            PlayerPrefs.SetInt("FrameRate", CurFrame);
+            PlayerPrefs.SetInt("Vsync", CurVSyncCount);
         } 
     }
     
@@ -67,13 +81,17 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void StartWindowMode()
     {
-        if (PlayerPrefs.HasKey("WindowDropdownValue"))
+        if (PlayerPrefs.HasKey("WindowMode"))
         {
-            Screen.fullScreenMode = (FullScreenMode)PlayerPrefs.GetInt("WindowDropdownValue");
+            CurWindowMode = PlayerPrefs.GetInt("WindowMode"); 
+            Screen.fullScreenMode = (FullScreenMode)CurWindowMode;
         }
         else
         {
-            Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;  
+            CurWindowMode = 0; 
+            Screen.fullScreenMode = (FullScreenMode)CurWindowMode; 
+            
+            PlayerPrefs.SetInt("WindowMode", CurWindowMode);
         }
     }
     
@@ -82,16 +100,17 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void StartGammaBrightness()
     {
-        if (PlayerPrefs.HasKey("GammaBrightnessValue"))
+        if (PlayerPrefs.HasKey("GammaBrightness"))
         {
-            float gammaValue = PlayerPrefs.GetFloat("GammaBrightnessValue");
-            PostVolume.postExposure.value = gammaValue;
-            PostVolume.gamma.value = new Vector4(gammaValue, gammaValue, gammaValue, gammaValue);
+            CurGammaBrightness = PlayerPrefs.GetFloat("GammaBrightness");
+            PostVolume.postExposure.value = CurGammaBrightness;
+            PostVolume.gamma.value = new Vector4(CurGammaBrightness, CurGammaBrightness, CurGammaBrightness, CurGammaBrightness);
         }
         else
         {
             PostVolume.postExposure.value = 0f;
-            PostVolume.gamma.value = new Vector4(1f, 1f, 1f, 1f);
+            PostVolume.gamma.value = new Vector4(1f, 1f, 1f);
+            PlayerPrefs.SetFloat("GammaBrightness", 0f);
         }
     }
     
@@ -101,11 +120,11 @@ public class GameManager : MonoBehaviour
     /// <param name="value"></param>
     public void SetFrames(int value, bool force = false)
     {
-        PlayerPrefs.SetInt("FrameRate", value);
+        CurFrame = value;
+        CurVSyncCount = force ? 1 : 0;
+        
         Application.targetFrameRate = value; 
-        QualitySettings.vSyncCount = force ? 1 : 0;
-        PlayerPrefs.SetInt("Vsync", QualitySettings.vSyncCount);
-
+        QualitySettings.vSyncCount = CurVSyncCount; 
     }
     
     /// <summary>
@@ -114,7 +133,9 @@ public class GameManager : MonoBehaviour
     /// <param name="value"></param>
     public void SetWindowMode(int value)
     {
-        Screen.fullScreenMode = (FullScreenMode)value; 
+        CurWindowMode = value;
+        
+        Screen.fullScreenMode = (FullScreenMode)CurWindowMode; 
     }
     
     /// <summary>
@@ -123,8 +144,10 @@ public class GameManager : MonoBehaviour
     /// <param name="value"></param>
     public void SetGammaBrightness(float value)
     {
-        PostVolume.postExposure.value = value;
-        PostVolume.gamma.value = new Vector4(value, value, value, value);
+        CurGammaBrightness = value;
+        
+        PostVolume.postExposure.value = CurGammaBrightness;
+        PostVolume.gamma.value = new Vector4(CurGammaBrightness, CurGammaBrightness, CurGammaBrightness, CurGammaBrightness);
     }
 
 }

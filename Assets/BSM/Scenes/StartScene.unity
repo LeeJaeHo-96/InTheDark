@@ -1159,7 +1159,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 185d2472bccb39b43bb62fde7610ada3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PostVolume: {fileID: 0}
+  CurFrame: 0
+  CurVSyncCount: 0
+  CurWindowMode: 0
+  CurGammaBrightness: 0
 --- !u!1 &1128894310
 GameObject:
   m_ObjectHideFlags: 0
@@ -2983,6 +2986,11 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4416771093169859724, guid: 28621450489f0134da5f8f975c060dc3,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4504802120017908055, guid: 28621450489f0134da5f8f975c060dc3,
         type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -3007,6 +3015,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6180633687787489579, guid: 28621450489f0134da5f8f975c060dc3,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6501248982974931253, guid: 28621450489f0134da5f8f975c060dc3,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7528542041697521183, guid: 28621450489f0134da5f8f975c060dc3,
         type: 3}
