@@ -9,6 +9,10 @@ using Screen = UnityEngine.Device.Screen;
 public class Setting : ObjBind
 {
     private TMP_Dropdown _frameDropdown;
+    private TMP_Dropdown _windowDropdown;
+
+    private Slider _gammaSlider;
+    
     private GameManager _gameManager;
     
     private void Awake()
@@ -17,10 +21,12 @@ public class Setting : ObjBind
         _gameManager = GameManager.Instance;
 
         SetFrameDropDown();
+        SetWindownDropdown();
+        SetGammaSlider();
     }
 
     /// <summary>
-    /// 드롭다운 메뉴 설정
+    /// 프레임 드롭다운 메뉴 설정
     /// </summary>
     private void SetFrameDropDown()
     {
@@ -35,7 +41,37 @@ public class Setting : ObjBind
         {
             _frameDropdown.value = 0;
         }
-    } 
+    }
+
+    /// <summary>
+    /// 윈도우 모드 드롭다운 메뉴 설정
+    /// </summary>
+    private void SetWindownDropdown()
+    {
+        _windowDropdown = GetComponentBind<TMP_Dropdown>("WindowDropdown");
+        _windowDropdown.onValueChanged.AddListener(x => ChangeWindowMode(x));
+
+        if (PlayerPrefs.HasKey("WindowDropdownValue"))
+        {
+            _windowDropdown.value = PlayerPrefs.GetInt("WindowDropdownValue");
+        }
+        else
+        {
+            _windowDropdown.value = 0;
+        }
+        
+    }
+
+    private void SetGammaSlider()
+    {
+        _gammaSlider = GetComponentBind<Slider>("Gamma_Bright_Slider");
+        _gammaSlider.onValueChanged.AddListener(x =>
+        {
+             Screen.brightness = x;
+             Debug.Log($"Screen.brightness :{Screen.brightness}");
+        });
+    }
+    
     
     /// <summary>
     /// 드롭다운 메뉴 변경 기능
@@ -71,5 +107,17 @@ public class Setting : ObjBind
                 break;
         }
     }
+    
+    /// <summary>
+    /// 윈도우 모드 설정 드롭다운 변경
+    /// </summary>
+    /// <param name="value"></param>
+    private void ChangeWindowMode(int value)
+    {
+        PlayerPrefs.SetInt("WindowDropdownValue", value); 
+        _gameManager.SetWindowMode(value);  
+        
+    }
+    
     
 }
