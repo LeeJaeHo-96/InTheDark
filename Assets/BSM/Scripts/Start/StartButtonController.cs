@@ -20,7 +20,7 @@ public class StartButtonController : MonoBehaviour
     
     private void Init()
     {
-        _startButtons = GetComponentsInChildren<Button>();
+        _startButtons = GetComponentsInChildren<Button>(true);
         
         _curStartButton = _startButtons[0].GetComponent<StartButton>();
         _curButtonColor = _curStartButton.GetComponent<Image>();
