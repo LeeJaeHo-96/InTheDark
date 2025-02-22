@@ -11,6 +11,7 @@ public class CommonButtonController : MonoBehaviour
     private CommonButton _curCommonButton;
     private Image _curButtonColor;
     private TextMeshProUGUI _curButtonTextColor;
+    
     private Button[] _commonButtons;
     
     private void Awake() => Init();
@@ -20,11 +21,12 @@ public class CommonButtonController : MonoBehaviour
         _commonButtons = GetComponentsInChildren<Button>(true);
 
         _curCommonButton = _commonButtons[0].GetComponent<CommonButton>();
+        
         _curButtonColor = _curCommonButton.GetComponent<Image>();
         _curButtonTextColor = _curCommonButton.GetComponentInChildren<TextMeshProUGUI>();
         OnClickAddListener();
     }
-
+    
     private void OnClickAddListener()
     { 
         _commonButtons[1].onClick.AddListener(() => _settingPanel.SetActive(false));

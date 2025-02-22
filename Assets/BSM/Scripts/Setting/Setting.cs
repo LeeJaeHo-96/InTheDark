@@ -10,7 +10,8 @@ using Screen = UnityEngine.Device.Screen;
 public class Setting : ObjBind
 {
     private GameManager _gameManager;
-    
+
+    private TextMeshProUGUI _cancelButtonText;
     private TMP_Dropdown _frameDropdown;
     private TMP_Dropdown _windowDropdown;
     private Slider _gammaSlider;
@@ -29,20 +30,29 @@ public class Setting : ObjBind
         _gameManager = GameManager.Instance;
          
         Bind();
-        Init();  
+        Init();   
         SetFrameDropDown();
         SetWindownDropdown();
         SetGammaSlider();
     }
 
+    private void OnEnable()
+    {
+        _changeDetectCo = StartCoroutine(SettingChangeDetectRoutine());
+    }
+    
+    private void OnDisable()
+    {
+        ChangeCancel(); 
+    }
+    
     private void Init()
     {
+        _cancelButtonText = GetComponentBind<TextMeshProUGUI>("Cancel_Button_Text");
         _confirmButton = GetComponentBind<Button>("Confirm_Button");
         _confirmButton.onClick.AddListener(ChangeSettingSave);
 
-        _changeNoticeText = GetGameObjectBind("Changes_Confirm_Title");
-        
-        _changeDetectCo = StartCoroutine(SettingChangeDetectRoutine());
+        _changeNoticeText = GetGameObjectBind("Changes_Confirm_Title");  
     }
     
     /// <summary>
@@ -54,6 +64,9 @@ public class Setting : ObjBind
         while (true)
         {
            _changeNoticeText.SetActive(_changeDetect > 0);
+
+           _cancelButtonText.text = _changeDetect > 0 ? "   > 취소하기" : "   > 뒤로가기";
+           
            yield return null;
         } 
     }
@@ -165,6 +178,29 @@ public class Setting : ObjBind
         PlayerPrefs.SetFloat("GammaBrightness", _gameManager.CurGammaBrightness);
     }
     
+    /// <summary>
+    /// 변경 내용 복구
+    /// </summary>
+    private void ChangeCancel()
+    {
+        if (_changeDetectCo != null)
+        {
+            StopCoroutine(_changeDetectCo);
+            _changeDetectCo = null;
+        }
+
+        _frameDropdown.value = PlayerPrefs.GetInt("FrameDropdownValue");
+        _gameManager.SetFrames(PlayerPrefs.GetInt("FrameRate"));
+        
+        _windowDropdown.value = PlayerPrefs.GetInt("WindowMode");
+        _gameManager.SetWindowMode(PlayerPrefs.GetInt("WindowMode"));
+        
+        _gameManager.SetGammaBrightness(PlayerPrefs.GetFloat("GammaBrightness"));
+        _gammaSlider.value = PlayerPrefs.GetFloat("GammaBrightness");
+        
+        _changeNoticeText.SetActive(false);
+        _cancelButtonText.text = "   > 뒤로가기"; 
+    }
     
     
 }
