@@ -10,6 +10,8 @@ public class Setting : ObjBind
 {
     private TMP_Dropdown _frameDropdown;
     private TMP_Dropdown _windowDropdown;
+
+    private Slider _gammaSlider;
     
     private GameManager _gameManager;
     
@@ -20,6 +22,7 @@ public class Setting : ObjBind
 
         SetFrameDropDown();
         SetWindownDropdown();
+        SetGammaSlider();
     }
 
     /// <summary>
@@ -57,6 +60,16 @@ public class Setting : ObjBind
             _windowDropdown.value = 0;
         }
         
+    }
+
+    private void SetGammaSlider()
+    {
+        _gammaSlider = GetComponentBind<Slider>("Gamma_Bright_Slider");
+        _gammaSlider.onValueChanged.AddListener(x =>
+        {
+             Screen.brightness = x;
+             Debug.Log($"Screen.brightness :{Screen.brightness}");
+        });
     }
     
     
@@ -102,7 +115,8 @@ public class Setting : ObjBind
     private void ChangeWindowMode(int value)
     {
         PlayerPrefs.SetInt("WindowDropdownValue", value); 
-        _gameManager.SetWindowMode(value); 
+        _gameManager.SetWindowMode(value);  
+        
     }
     
     
