@@ -10,13 +10,19 @@ using Screen = UnityEngine.Device.Screen;
 public class Setting : ObjBind
 {
     private GameManager _gameManager;
-
+    private SoundManager _soundManager;
+    
     private TextMeshProUGUI _cancelButtonText;
     private TMP_Dropdown _frameDropdown;
     private TMP_Dropdown _windowDropdown;
     private Slider _gammaSlider;
+    private Slider _masterVolumeSlider;
+    private Slider _sfxVolumeSlider;
+    private Slider _bgmVolumeSlider;
     private Button _confirmButton;
     private GameObject _changeNoticeText;
+    
+    
     
     //TODO: 다른 설정들 구현 완료하면 SIZE 변경 필요함
     private bool[] _changeCheck = new bool[3];
@@ -28,7 +34,8 @@ public class Setting : ObjBind
     private void Awake()
     {
         _gameManager = GameManager.Instance;
-         
+        _soundManager = SoundManager.Instance; 
+        
         Bind();
         Init();   
         SetFrameDropDown();
@@ -48,12 +55,27 @@ public class Setting : ObjBind
     
     private void Init()
     {
+        _masterVolumeSlider = GetComponentBind<Slider>("Master_Volume_Slider");
+        _sfxVolumeSlider = GetComponentBind<Slider>("SFX_Volume_Slider");
+        _bgmVolumeSlider = GetComponentBind<Slider>("BGM_Volume_Slider");
+
+        _masterVolumeSlider.onValueChanged.AddListener(x => ChangeMasterVolume(x));
+        _sfxVolumeSlider.onValueChanged.AddListener(x => _soundManager.SetVolumeSFX(x));
+        _bgmVolumeSlider.onValueChanged.AddListener(x => _soundManager.SetVolumeBGM(x));
+        
         _cancelButtonText = GetComponentBind<TextMeshProUGUI>("Cancel_Button_Text");
         _confirmButton = GetComponentBind<Button>("Confirm_Button");
         _confirmButton.onClick.AddListener(ChangeSettingSave);
 
         _changeNoticeText = GetGameObjectBind("Changes_Confirm_Title");  
     }
+
+    private void ChangeMasterVolume(float volume)
+    {
+        _soundManager.SetVolumeMaster(volume);
+        //TODO: 사운드 저장 마저하기
+    }
+    
     
     /// <summary>
     /// 변경 사항 있을 경우 안내 문구 활성화 코루틴

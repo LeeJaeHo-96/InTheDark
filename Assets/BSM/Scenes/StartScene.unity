@@ -893,6 +893,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SoundDatas: {fileID: 11400000, guid: 4615cf904e30ce04ea16cb4e56872fb2, type: 2}
+  _audioMixer: {fileID: 24100000, guid: 045771410c0c4ba478039002f4719be4, type: 2}
 --- !u!4 &873001688
 Transform:
   m_ObjectHideFlags: 0
