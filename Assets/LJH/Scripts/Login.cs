@@ -1,6 +1,7 @@
 using Firebase.Auth;
 using Firebase.Database;
 using Firebase.Extensions;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -39,7 +40,7 @@ public class Login : BaseUI
 
         Debug.Log("로그인버튼 눌림");
         NullCheck();
-        FirebaseManager.Auth.SignInWithEmailAndPasswordAsync(id, password).ContinueWith(task =>
+        FirebaseManager.Auth.SignInWithEmailAndPasswordAsync(id, password).ContinueWithOnMainThread(task =>
         {
             if (task.IsCanceled)
             {
@@ -61,9 +62,16 @@ public class Login : BaseUI
                 Debug.Log("이메일 인증 필요");
                 return;
             }
-
-            SceneManager.LoadScene("DatabaseScene");
-
+            try
+            {
+                Debug.Log("씬이동직전");
+                SceneManager.LoadScene("DataBaseScene");
+                Debug.Log("씬이동직후");
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"씬 전환 중 오류 발생: {ex.Message}");
+            }
         });
     }
 
