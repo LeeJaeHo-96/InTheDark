@@ -13,28 +13,33 @@ struct ObjectInfo
     string objName;
     int objPrice;
 }
-public class Database : MonoBehaviour
+public class Database : BaseUI
 {
+    public static Database instance = null;
+
+
     [Header("저장할 변수")]
     int money;
     int days;
     ObjectInfo obj;
 
     [Header("텍스트")]
-    [SerializeField] TMP_Text dayText;
-    [SerializeField] TMP_Text moneyText;
+    public TMP_Text dayText;
+    public TMP_Text moneyText;
 
     DatabaseReference database;
 
     private void Awake()
     {
+        SingletonInit();
+        Bind();
         Init();
     }
 
     private void Start()
     {
         //SaveData("1번플레이어", 1, 100, 1);
-        LoadData("1번플레이어", 1);
+        //LoadData("1번플레이어", 1);
     }
 
     /// <summary>
@@ -44,7 +49,7 @@ public class Database : MonoBehaviour
     /// <param name="slot">세이브 슬롯</param>
     /// <param name="money">보유 금액</param>
     /// <param name="day">현재 날짜</param>
-    void SaveData(string playerId, int slot, int money, int day)
+    public void SaveData(string playerId, int slot, int money, int day)
     {
         //
         // 유저마다 슬롯이 1 ~ 5 있음
@@ -85,7 +90,7 @@ public class Database : MonoBehaviour
     /// </summary>
     /// <param name="playerId">데이터 불러오기 위한 Key값</param>
     /// <param name="slot">몇번 슬롯인지</param>
-    void LoadData(string playerId, int slot)
+    public void LoadData(string playerId, string slot)
     {
         database.Child("Players").Child(playerId).Child("Slots").Child("slot_" + slot)
         .GetValueAsync()
@@ -113,13 +118,18 @@ public class Database : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("저장된 슬롯 데이터가 없습니다.");
+                    Debug.Log("저장된 슬롯 데이터가 없습니다. 새로운 슬롯 데이터를 불러옵니다.");
+                    int money = 150;
+                    int day = 1;
+
+                    moneyText.text = money + "원";
+                    dayText.text = day + "일차";
                 }
             }
         });
     }
 
-   
+
 
 
     void Init()
@@ -127,8 +137,24 @@ public class Database : MonoBehaviour
 
         database = FirebaseDatabase.DefaultInstance.RootReference;
 
-        dayText.text = "0일차";
-        moneyText.text = "0원";
+
+        if (dayText != null)
+            if (moneyText != null)
+            {
+                dayText.text = "0일차";
+                moneyText.text = "0원";
+            }
+    }
+
+    void SingletonInit()
+    {
+        if (instance == null)
+            instance = this;
+
+        else if (instance != this)
+            Destroy(gameObject);
+
+        DontDestroyOnLoad(gameObject);
     }
 
 
