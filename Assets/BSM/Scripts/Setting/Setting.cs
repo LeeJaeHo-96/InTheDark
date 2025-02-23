@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,23 +9,115 @@ using Screen = UnityEngine.Device.Screen;
 
 public class Setting : ObjBind
 {
+    private GameManager _gameManager;
+    private SoundManager _soundManager;
+    
+    private TextMeshProUGUI _cancelButtonText;
     private TMP_Dropdown _frameDropdown;
     private TMP_Dropdown _windowDropdown;
-
     private Slider _gammaSlider;
+    private Slider _masterVolumeSlider;
+    private Slider _sfxVolumeSlider;
+    private Slider _bgmVolumeSlider;
+    private Button _confirmButton;
+    private GameObject _changeNoticeText;
     
-    private GameManager _gameManager;
+    
+    
+    //TODO: 다른 설정들 구현 완료하면 SIZE 변경 필요함
+    private bool[] _changeCheck = new bool[3];
+    private int _frameDropdownValue;
+
+    private int _changeDetect => _changeCheck.Count(x => x);
+    private Coroutine _changeDetectCo;
     
     private void Awake()
     {
-        Bind();
         _gameManager = GameManager.Instance;
-
+        _soundManager = SoundManager.Instance; 
+        
+        Bind();
+        Init();   
         SetFrameDropDown();
         SetWindownDropdown();
         SetGammaSlider();
     }
 
+    private void OnEnable()
+    {
+        _changeDetectCo = StartCoroutine(SettingChangeDetectRoutine());
+    }
+    
+    private void OnDisable()
+    {
+        ChangeCancel(); 
+    }
+    
+    private void Init()
+    {
+        _masterVolumeSlider = GetComponentBind<Slider>("Master_Volume_Slider");
+        _sfxVolumeSlider = GetComponentBind<Slider>("SFX_Volume_Slider");
+        _bgmVolumeSlider = GetComponentBind<Slider>("BGM_Volume_Slider");
+
+        _masterVolumeSlider.onValueChanged.AddListener(x => ChangeMasterVolume(x));
+        _sfxVolumeSlider.onValueChanged.AddListener(x => _soundManager.SetVolumeSFX(x));
+        _bgmVolumeSlider.onValueChanged.AddListener(x => _soundManager.SetVolumeBGM(x));
+        
+        _cancelButtonText = GetComponentBind<TextMeshProUGUI>("Cancel_Button_Text");
+        _confirmButton = GetComponentBind<Button>("Confirm_Button");
+        _confirmButton.onClick.AddListener(ChangeSettingSave);
+
+        _changeNoticeText = GetGameObjectBind("Changes_Confirm_Title");  
+    }
+
+    private void ChangeMasterVolume(float volume)
+    {
+        _soundManager.SetVolumeMaster(volume);
+        //TODO: 사운드 저장 마저하기
+    }
+    
+    
+    /// <summary>
+    /// 변경 사항 있을 경우 안내 문구 활성화 코루틴
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator SettingChangeDetectRoutine()
+    {
+        while (true)
+        {
+           _changeNoticeText.SetActive(_changeDetect > 0);
+
+           _cancelButtonText.text = _changeDetect > 0 ? "   > 취소하기" : "   > 뒤로가기";
+           
+           yield return null;
+        } 
+    }
+    
+    /// <summary>
+    /// 감마, 밝기 값 설정
+    /// </summary>
+    private void SetGammaSlider()
+    {
+        _gammaSlider = GetComponentBind<Slider>("Gamma_Bright_Slider");
+        _gammaSlider.onValueChanged.AddListener(x => ChangeGammaBrightness(x));
+        _gammaSlider.value = PlayerPrefs.HasKey("GammaBrightness") ? PlayerPrefs.GetFloat("GammaBrightness") : 0f;
+    }
+
+    
+    /// <summary>
+    /// 감마, 밝기 값 변경
+    /// </summary>
+    /// <param name="value"></param>
+    private void ChangeGammaBrightness(float value)
+    {
+        float gammaBrightness = value;
+        gammaBrightness = Mathf.Clamp(value, -1f, 1f);
+        
+        _gameManager.SetGammaBrightness(gammaBrightness);
+        _changeCheck[(int)Settings.GAMMA] = !(Mathf.Approximately(_gameManager.CurGammaBrightness, PlayerPrefs.GetFloat("GammaBrightness")));
+    }
+ 
+    
     /// <summary>
     /// 프레임 드롭다운 메뉴 설정
     /// </summary>
@@ -32,46 +125,10 @@ public class Setting : ObjBind
     {
         _frameDropdown = GetComponentBind<TMP_Dropdown>("FrameDropdown");
         _frameDropdown.onValueChanged.AddListener(x => ChangeFrame(x));
-         
-        if (PlayerPrefs.HasKey("FrameDropDownValue"))
-        {
-            _frameDropdown.value = PlayerPrefs.GetInt("FrameDropDownValue");
-        }
-        else
-        {
-            _frameDropdown.value = 0;
-        }
-    }
 
-    /// <summary>
-    /// 윈도우 모드 드롭다운 메뉴 설정
-    /// </summary>
-    private void SetWindownDropdown()
-    {
-        _windowDropdown = GetComponentBind<TMP_Dropdown>("WindowDropdown");
-        _windowDropdown.onValueChanged.AddListener(x => ChangeWindowMode(x));
-
-        if (PlayerPrefs.HasKey("WindowDropdownValue"))
-        {
-            _windowDropdown.value = PlayerPrefs.GetInt("WindowDropdownValue");
-        }
-        else
-        {
-            _windowDropdown.value = 0;
-        }
-        
+        _frameDropdown.value = PlayerPrefs.HasKey("FrameDropdownValue") ? 
+            PlayerPrefs.GetInt("FrameDropdownValue") : 0;
     }
-
-    private void SetGammaSlider()
-    {
-        _gammaSlider = GetComponentBind<Slider>("Gamma_Bright_Slider");
-        _gammaSlider.onValueChanged.AddListener(x =>
-        {
-             Screen.brightness = x;
-             Debug.Log($"Screen.brightness :{Screen.brightness}");
-        });
-    }
-    
     
     /// <summary>
     /// 드롭다운 메뉴 변경 기능
@@ -79,8 +136,6 @@ public class Setting : ObjBind
     /// <param name="value"></param>
     private void ChangeFrame(int value)
     {
-        PlayerPrefs.SetInt("FrameDropDownValue", value);
-        
         switch (value)
         {
             case 0 :
@@ -92,7 +147,7 @@ public class Setting : ObjBind
                 break;
             
             case 2 :
-                _gameManager.SetFrames(144);
+                _gameManager.SetFrames(144); 
                 break;
             case 3 :
                 _gameManager.SetFrames(120);
@@ -106,6 +161,21 @@ public class Setting : ObjBind
                 _gameManager.SetFrames(30);
                 break;
         }
+        
+        _frameDropdownValue = value; 
+        _changeCheck[(int)Settings.FRAME] = _frameDropdownValue != PlayerPrefs.GetInt("FrameDropdownValue");
+    }
+    
+    
+    /// <summary>
+    /// 윈도우 모드 드롭다운 메뉴 설정
+    /// </summary>
+    private void SetWindownDropdown()
+    {
+        _windowDropdown = GetComponentBind<TMP_Dropdown>("WindowDropdown");
+        _windowDropdown.onValueChanged.AddListener(x => ChangeWindowMode(x));
+
+        _windowDropdown.value = PlayerPrefs.HasKey("WindowMode") ? PlayerPrefs.GetInt("WindowMode") : 0;
     }
     
     /// <summary>
@@ -114,9 +184,44 @@ public class Setting : ObjBind
     /// <param name="value"></param>
     private void ChangeWindowMode(int value)
     {
-        PlayerPrefs.SetInt("WindowDropdownValue", value); 
-        _gameManager.SetWindowMode(value);  
+        _gameManager.SetWindowMode(value);
+        _changeCheck[(int)Settings.WINDOWMODE] = _gameManager.CurWindowMode != PlayerPrefs.GetInt("WindowMode");
+    }
+
+    /// <summary>
+    /// 변경 사항 내역 저장
+    /// </summary>
+    private void ChangeSettingSave()
+    {
+        PlayerPrefs.SetInt("FrameRate", _gameManager.CurFrame);
+        PlayerPrefs.SetInt("FrameDropdownValue", _frameDropdownValue);
+        PlayerPrefs.SetInt("Vsync", _gameManager.CurVSyncCount);
+        PlayerPrefs.SetInt("WindowMode", _gameManager.CurWindowMode);
+        PlayerPrefs.SetFloat("GammaBrightness", _gameManager.CurGammaBrightness);
+    }
+    
+    /// <summary>
+    /// 변경 내용 복구
+    /// </summary>
+    private void ChangeCancel()
+    {
+        if (_changeDetectCo != null)
+        {
+            StopCoroutine(_changeDetectCo);
+            _changeDetectCo = null;
+        }
+
+        _frameDropdown.value = PlayerPrefs.GetInt("FrameDropdownValue");
+        _gameManager.SetFrames(PlayerPrefs.GetInt("FrameRate"));
         
+        _windowDropdown.value = PlayerPrefs.GetInt("WindowMode");
+        _gameManager.SetWindowMode(PlayerPrefs.GetInt("WindowMode"));
+        
+        _gameManager.SetGammaBrightness(PlayerPrefs.GetFloat("GammaBrightness"));
+        _gammaSlider.value = PlayerPrefs.GetFloat("GammaBrightness");
+        
+        _changeNoticeText.SetActive(false);
+        _cancelButtonText.text = "   > 뒤로가기"; 
     }
     
     
