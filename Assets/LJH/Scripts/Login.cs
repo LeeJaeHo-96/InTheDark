@@ -62,16 +62,9 @@ public class Login : BaseUI
                 Debug.Log("이메일 인증 필요");
                 return;
             }
-            try
-            {
-                Debug.Log("씬이동직전");
-                SceneManager.LoadScene("DataBaseScene");
-                Debug.Log("씬이동직후");
-            }
-            catch (Exception ex)
-            {
-                Debug.LogError($"씬 전환 중 오류 발생: {ex.Message}");
-            }
+
+            CheckUserInfo();
+            SceneManager.LoadScene("SlotTestScene");
         });
     }
 
@@ -102,6 +95,7 @@ public class Login : BaseUI
                     PlayerData playerData = new PlayerData();
                     playerData.name = FirebaseManager.Auth.CurrentUser.DisplayName;
                     playerData.email = FirebaseManager.Auth.CurrentUser.Email;
+                    playerData.slots = new Dictionary<string, SlotData>();
 
 
                     string json = JsonUtility.ToJson(playerData);
@@ -109,18 +103,23 @@ public class Login : BaseUI
                 }
                 else
                 {
-                    Debug.Log(snapshot.Child("name").Value);
-                    Debug.Log(snapshot.Child("email").Value);
-
-                    foreach (DataSnapshot data in snapshot.Child("record").Children)
+                    if (snapshot.HasChild("slots"))
                     {
-                        Debug.Log($"Record's {data} : {data.Value}");
+                        Debug.Log(snapshot.Child("name").Value);
+                        Debug.Log(snapshot.Child("email").Value);
+
+                        foreach (DataSnapshot slotSnapshot in snapshot.Child("slots").Children)
+                        {
+                            string slotKey = slotSnapshot.Key;
+                            int money = int.Parse(slotSnapshot.Child("money").Value.ToString());
+                            int day = int.Parse(slotSnapshot.Child("day").Value.ToString());
+
+                            Debug.Log($"슬롯 {slotKey} - 돈: {money}, 날짜: {day}");
+                        }
                     }
                 }
 
             });
-
-        
 
     }
 
@@ -131,7 +130,8 @@ public class Login : BaseUI
 
         Debug.Log("회원가입버튼 눌림");
         NullCheck();
-        FirebaseManager.Auth.CreateUserWithEmailAndPasswordAsync(id, password).ContinueWith(task => {
+        FirebaseManager.Auth.CreateUserWithEmailAndPasswordAsync(id, password).ContinueWith(task =>
+        {
             if (task.IsCanceled)
             {
                 Debug.LogError("CreateUserWithEmailAndPasswordAsync was canceled.");
@@ -175,7 +175,7 @@ public class Login : BaseUI
     {
         auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
         database = FirebaseDatabase.DefaultInstance.RootReference;
-        
+
         LoginButton = GetUI<Button>("Login");
         JoinButton = GetUI<Button>("Join");
 
@@ -183,6 +183,6 @@ public class Login : BaseUI
         passwordField = GetUI<TMP_InputField>("Password");
 
         LoginButton.onClick.AddListener(_LoginButton);
-        JoinButton .onClick.AddListener(_JoinButton);
+        JoinButton.onClick.AddListener(_JoinButton);
     }
 }
