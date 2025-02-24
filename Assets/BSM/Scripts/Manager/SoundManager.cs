@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -30,8 +31,21 @@ public class SoundManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        
+ 
     }
+
+    private void Start()
+    {
+        _masterVolume = DataManager.Instance.UserSettingData.MasterVolume;
+        SetVolumeMaster(Mathf.Pow(10, _masterVolume / 20f));
+
+        _bgmVolume = DataManager.Instance.UserSettingData.BgmVolume;
+        SetVolumeBGM(_bgmVolume / 20f);
+
+        _sfxVolume = DataManager.Instance.UserSettingData.SfxVolume;
+        SetVolumeSFX(_sfxVolume / 20f);
+    }
+
 
     /// <summary>
     /// 전체 사운드 조절
@@ -49,8 +63,9 @@ public class SoundManager : MonoBehaviour
     /// <param name="volume">볼륨값</param>
     public void SetVolumeSFX(float volume)
     {
-        _audioMixer.SetFloat("SFX", Mathf.Log10(volume)* 20f);
+        _audioMixer.SetFloat("SFX", volume* 20f);
         _audioMixer.GetFloat("SFX", out _sfxVolume);
+
     }
     
     /// <summary>
@@ -59,14 +74,14 @@ public class SoundManager : MonoBehaviour
     /// <param name="volume">볼륨 값</param>
     public void SetVolumeBGM(float volume)
     {
-        _audioMixer.SetFloat("BGM", Mathf.Log10(volume)* 20f);
+        _audioMixer.SetFloat("BGM", volume* 20f);
         _audioMixer.GetFloat("BGM", out _bgmVolume);
     }
 
     public float GetVolumeMaster() => _masterVolume;
     public float GetVolumeSfx() => _sfxVolume;
     public float GetVolumeBgm() => _bgmVolume;
-
+     
     /// <summary>
     /// 효과음 재생
     /// </summary>

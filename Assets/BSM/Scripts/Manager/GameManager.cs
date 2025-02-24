@@ -11,14 +11,25 @@ using Screen = UnityEngine.Device.Screen;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance;
-    public int CurFrame;
-    public int CurVSyncCount;
-    public int CurWindowMode;
-    public float CurGammaBrightness;
+    [HideInInspector] public int CurFrame;
+    [HideInInspector] public int CurVSyncCount;
+    [HideInInspector] public int CurWindowMode;
+    [HideInInspector] public float CurGammaBrightness;
     
+    public static GameManager Instance;
+
+    private static int _refreshRate; 
     private ColorGrading PostVolume; 
     private PostProcessProfile _postProfile;
+    private Dictionary<int, int> _frameDict = new Dictionary<int, int>()
+    {
+        {0, _refreshRate},
+        {1, -1},
+        {2, 144},
+        {3, 120},
+        {4, 60},
+        {5, 30}
+    };
     
     private void Awake()
     {
@@ -33,12 +44,15 @@ public class GameManager : MonoBehaviour
         }
 
         Init();
+    }
+
+    private void Start()
+    {
         StartFrame();
         StartWindowMode();
         StartGammaBrightness();
     }
 
-    
     /// <summary>
     /// 게임 매니저 초기화 작업
     /// </summary>
@@ -53,27 +67,11 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void StartFrame()
     {
-        //프레임을 설정했었는지 확인
-        if (PlayerPrefs.HasKey("FrameRate"))
-        {
-            CurFrame = PlayerPrefs.GetInt("FrameRate");
-            CurVSyncCount = PlayerPrefs.GetInt("Vsync");
-            
-            Application.targetFrameRate = CurFrame;
-            QualitySettings.vSyncCount = CurVSyncCount;
-        }
-        else
-        {
-            CurFrame = Screen.currentResolution.refreshRate;
-            CurVSyncCount = 0;
-
-            Application.targetFrameRate = CurFrame;
-            QualitySettings.vSyncCount = CurVSyncCount;
-            
-            PlayerPrefs.SetInt("FrameDropdownValue", 0);
-            PlayerPrefs.SetInt("FrameRate", CurFrame);
-            PlayerPrefs.SetInt("Vsync", CurVSyncCount);
-        } 
+        CurFrame = _frameDict[DataManager.Instance.UserSettingData.Frame];
+        CurVSyncCount = DataManager.Instance.UserSettingData.Vsync;
+        Application.targetFrameRate = CurFrame;
+        QualitySettings.vSyncCount = CurVSyncCount;
+         
     }
     
     /// <summary>
@@ -81,18 +79,9 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void StartWindowMode()
     {
-        if (PlayerPrefs.HasKey("WindowMode"))
-        {
-            CurWindowMode = PlayerPrefs.GetInt("WindowMode"); 
-            Screen.fullScreenMode = (FullScreenMode)CurWindowMode;
-        }
-        else
-        {
-            CurWindowMode = 0; 
-            Screen.fullScreenMode = (FullScreenMode)CurWindowMode; 
-            
-            PlayerPrefs.SetInt("WindowMode", CurWindowMode);
-        }
+        CurWindowMode = DataManager.Instance.UserSettingData.WindowMode;
+        Screen.fullScreenMode = (FullScreenMode)CurWindowMode;
+ 
     }
     
     /// <summary>
@@ -100,18 +89,9 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void StartGammaBrightness()
     {
-        if (PlayerPrefs.HasKey("GammaBrightness"))
-        {
-            CurGammaBrightness = PlayerPrefs.GetFloat("GammaBrightness");
-            PostVolume.postExposure.value = CurGammaBrightness;
-            PostVolume.gamma.value = new Vector4(CurGammaBrightness, CurGammaBrightness, CurGammaBrightness, CurGammaBrightness);
-        }
-        else
-        {
-            PostVolume.postExposure.value = 0f;
-            PostVolume.gamma.value = new Vector4(1f, 1f, 1f);
-            PlayerPrefs.SetFloat("GammaBrightness", 0f);
-        }
+        CurGammaBrightness = DataManager.Instance.UserSettingData.GammaBrightness;
+        PostVolume.postExposure.value = CurGammaBrightness;
+        PostVolume.gamma.value = new Vector4(CurGammaBrightness, CurGammaBrightness, CurGammaBrightness, CurGammaBrightness); 
     }
     
     /// <summary>
