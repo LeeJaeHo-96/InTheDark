@@ -7,6 +7,7 @@ using Firebase.Database;
 using Firebase.Extensions;
 using WebSocketSharp;
 using TMPro;
+using System;
 
 struct ObjectInfo
 {
@@ -19,8 +20,8 @@ public class Database : BaseUI
 
 
     [Header("저장할 변수")]
-    int money;
-    int days;
+    public int money;
+    public int days;
     ObjectInfo obj;
 
     [Header("텍스트")]
@@ -38,8 +39,6 @@ public class Database : BaseUI
 
     private void Start()
     {
-        //SaveData("1번플레이어", 1, 100, 1);
-        //LoadData("1번플레이어", 1);
     }
 
     /// <summary>
@@ -49,7 +48,7 @@ public class Database : BaseUI
     /// <param name="slot">세이브 슬롯</param>
     /// <param name="money">보유 금액</param>
     /// <param name="day">현재 날짜</param>
-    public void SaveData(string playerId, int slot, int money, int day)
+    public void SaveData(string playerId, string slot, int money, int day)
     {
         //
         // 유저마다 슬롯이 1 ~ 5 있음
@@ -64,14 +63,14 @@ public class Database : BaseUI
         //슬롯을 Key로 데이터 보관
         Dictionary<string, object> slotData = new Dictionary<string, object>
     {
-        {"보유금", money},
-        {"현재 날짜", day}
+        {"Money", money},
+        {"Days", day}
     };
 
         // 슬롯 데이터를 해당 유저의 특정 슬롯 위치에 저장
-        database.Child("Players").Child(playerId).Child("Slots").Child("slot_" + slot)
+        database.Child("UserData").Child(playerId).Child(slot)
             .SetValueAsync(slotData)
-            .ContinueWith(task =>
+            .ContinueWithOnMainThread(task =>
             {
                 if (task.IsFaulted)
                 {
@@ -90,9 +89,10 @@ public class Database : BaseUI
     /// </summary>
     /// <param name="playerId">데이터 불러오기 위한 Key값</param>
     /// <param name="slot">몇번 슬롯인지</param>
+    /// 
     public void LoadData(string playerId, string slot)
     {
-        database.Child("Players").Child(playerId).Child("Slots").Child("slot_" + slot)
+        database.Child("UserData").Child(playerId).Child(slot)
         .GetValueAsync()
         .ContinueWithOnMainThread(task =>
         {
@@ -103,34 +103,90 @@ public class Database : BaseUI
             else if (task.IsCompleted)
             {
                 DataSnapshot snapshot = task.Result;
+
                 if (snapshot.Exists)
                 {
-                    Dictionary<string, object> slotData = snapshot.Value as Dictionary<string, object>;
+                    Debug.Log($"데이터 불러오기 성공! 전체 데이터: {snapshot.GetRawJsonValue()}");
 
-                    // money와 day 값 가져오기
-                    int money = int.Parse(slotData["보유금"].ToString());
-                    int day = int.Parse(slotData["현재 날짜"].ToString());
+                    // 직접 개별 값 가져오기
+                    int money = 150;
+                    int days = 1;
 
-                    moneyText.text = money + "원";
-                    dayText.text = day + "일차";
+                    if (snapshot.HasChild("Money") && snapshot.Child("Money").Value is long moneyValue)
+                    {
+                        money = (int)moneyValue;
+                    }
+                    if (snapshot.HasChild("Days") && snapshot.Child("Days").Value is long daysValue)
+                    {
+                        days = (int)daysValue;
+                    }
 
-                    Debug.Log($"데이터 불러오기 성공! 플레이어 ID: {playerId}, 슬롯: {slot}, 보유금: {money}, 날짜: {day}");
+                    // UI 업데이트
+                    moneyText.text = money.ToString();
+                    dayText.text = days.ToString();
+
+                    Debug.Log($"데이터 불러오기 성공! 플레이어 ID: {playerId}, 슬롯: {slot}, 보유금: {money}, 날짜: {days}");
                 }
                 else
                 {
                     Debug.Log("저장된 슬롯 데이터가 없습니다. 새로운 슬롯 데이터를 불러옵니다.");
-                    int money = 150;
-                    int day = 1;
-
-                    moneyText.text = money + "원";
-                    dayText.text = day + "일차";
+                    moneyText.text = "150";
+                    dayText.text = "1";
                 }
             }
         });
     }
+    public void LoadData1(string playerId, string slot)
+    {
+        database.Child("UserData").Child(playerId).Child(slot)
+        .GetValueAsync()
+        .ContinueWithOnMainThread(task =>
+        {
+            if (task.IsFaulted)
+            {
+                Debug.LogError("데이터 불러오기 실패: " + task.Exception);
+            }
+            else if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
 
+                if (snapshot != null)
+                {
+                    Debug.Log($"데이터 불러오기 성공! 전체 데이터: {snapshot.GetRawJsonValue()}");
 
+                    // Dictionary 변환 시도
+                    Dictionary<string, object> slotData = snapshot.Value as Dictionary<string, object>;
 
+                    if (slotData != null)
+                    {
+                        // Money 값 가져오기
+                        int money = slotData.ContainsKey("Money") && slotData["Money"] is long moneyValue ? (int)moneyValue : 150;
+
+                        // Days 값 가져오기
+                        int days = slotData.ContainsKey("Days") && slotData["Days"] is long daysValue ? (int)daysValue : 1;
+
+                        // UI 업데이트
+                        moneyText.text = money.ToString();
+                        dayText.text = days.ToString();
+
+                        Debug.Log($"데이터 불러오기 성공! 플레이어 ID: {playerId}, 슬롯: {slot}, 보유금: {money}, 날짜: {days}");
+                    }
+                    else
+                    {
+                        Debug.Log("slotData 변환 실패! 기본값으로 설정");
+                        moneyText.text = "150";
+                        dayText.text = "1";
+                    }
+                }
+                else
+                {
+                    Debug.Log("저장된 슬롯 데이터가 없습니다. 새로운 슬롯 데이터를 불러옵니다.");
+                    moneyText.text = "150";
+                    dayText.text = "1";
+                }
+            }
+        });
+    }
 
     void Init()
     {
@@ -141,8 +197,8 @@ public class Database : BaseUI
         if (dayText != null)
             if (moneyText != null)
             {
-                dayText.text = "0일차";
-                moneyText.text = "0원";
+                dayText.text = "1";
+                moneyText.text = "150";
             }
     }
 
@@ -156,8 +212,4 @@ public class Database : BaseUI
 
         DontDestroyOnLoad(gameObject);
     }
-
-
-
-
 }
