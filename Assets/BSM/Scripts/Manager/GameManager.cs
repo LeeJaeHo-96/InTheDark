@@ -11,13 +11,14 @@ using Screen = UnityEngine.Device.Screen;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance;
-    public int CurFrame;
-    public int CurVSyncCount;
-    public int CurWindowMode;
-    public float CurGammaBrightness;
-    private static int _refreshRate;
+    [HideInInspector] public int CurFrame;
+    [HideInInspector] public int CurVSyncCount;
+    [HideInInspector] public int CurWindowMode;
+    [HideInInspector] public float CurGammaBrightness;
     
+    public static GameManager Instance;
+
+    private static int _refreshRate; 
     private ColorGrading PostVolume; 
     private PostProcessProfile _postProfile;
     private Dictionary<int, int> _frameDict = new Dictionary<int, int>()
@@ -43,12 +44,15 @@ public class GameManager : MonoBehaviour
         }
 
         Init();
+    }
+
+    private void Start()
+    {
         StartFrame();
         StartWindowMode();
         StartGammaBrightness();
     }
 
-    
     /// <summary>
     /// 게임 매니저 초기화 작업
     /// </summary>
