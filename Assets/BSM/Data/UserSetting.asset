@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5d601634f57be542a9a241fb31c6340, type: 3}
   m_Name: UserSetting
   m_EditorClassIdentifier: 
-  MasterVolume: 0
-  BgmVolume: 0
-  SfxVolume: 0
+  MasterVolume: -20
+  BgmVolume: 5
+  SfxVolume: 5
   GammaBrightness: 0
   Vsync: 0
   WindowMode: 0
