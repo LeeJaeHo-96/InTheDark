@@ -7,9 +7,9 @@ using Screen = UnityEngine.Device.Screen;
 [CreateAssetMenu(menuName = "Data/UserSettingData")]
 public class SettingData : ScriptableObject
 {
-    public float MasterVolume;
-    public float BgmVolume;
-    public float SfxVolume;
+    public float MasterVolume = -20f;
+    public float BgmVolume = 5f;
+    public float SfxVolume = 5f;
     public float GammaBrightness;
 
     public int Vsync;
