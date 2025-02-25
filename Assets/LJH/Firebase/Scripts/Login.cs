@@ -64,7 +64,7 @@ public class Login : BaseUI
             }
 
             CheckUserInfo();
-            SceneManager.LoadScene("SlotTestScene");
+            SceneManager.LoadScene("StartScene");
         });
     }
 
