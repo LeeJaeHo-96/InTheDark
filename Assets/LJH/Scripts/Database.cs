@@ -68,7 +68,7 @@ public class Database : BaseUI
     };
 
         // 슬롯 데이터를 해당 유저의 특정 슬롯 위치에 저장
-        database.Child("UserData").Child(playerId).Child(slot)
+        database.Child("UserData").Child(playerId).Child(slot.ToString())
             .SetValueAsync(slotData)
             .ContinueWithOnMainThread(task =>
             {
@@ -92,7 +92,9 @@ public class Database : BaseUI
     /// 
     public void LoadData(string playerId, string slot)
     {
-        database.Child("UserData").Child(playerId).Child(slot)
+        Debug.Log($"데이터 요청 경로: UserData/{playerId}/{slot}");
+
+        database.Child("UserData").Child(playerId).Child(slot.ToString())
         .GetValueAsync()
         .ContinueWithOnMainThread(task =>
         {
@@ -104,6 +106,8 @@ public class Database : BaseUI
             {
                 DataSnapshot snapshot = task.Result;
 
+                Debug.Log($"snapshot.Exists: {snapshot.Exists}");
+
                 if (snapshot.Exists)
                 {
                     Debug.Log($"데이터 불러오기 성공! 전체 데이터: {snapshot.GetRawJsonValue()}");
@@ -112,13 +116,21 @@ public class Database : BaseUI
                     int money = 150;
                     int days = 1;
 
-                    if (snapshot.HasChild("Money") && snapshot.Child("Money").Value is long moneyValue)
+                    if (snapshot.HasChild("Money"))
                     {
-                        money = (int)moneyValue;
+                        object moneyValue = snapshot.Child("Money").Value;
+                        if (moneyValue != null)
+                        {
+                            money = Convert.ToInt32(moneyValue);
+                        }
                     }
-                    if (snapshot.HasChild("Days") && snapshot.Child("Days").Value is long daysValue)
+                    if (snapshot.HasChild("Days"))
                     {
-                        days = (int)daysValue;
+                        object daysValue = snapshot.Child("Days").Value;
+                        if (daysValue != null)
+                        {
+                            days = Convert.ToInt32(daysValue);
+                        }
                     }
 
                     // UI 업데이트
