@@ -2,16 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class CommonButtonController : MonoBehaviour
 {
-    [SerializeField] private GameObject _settingPanel;
+    [SerializeField] private GameObject _panel;
     
     private CommonButton _curCommonButton;
     private Image _curButtonColor;
     private TextMeshProUGUI _curButtonTextColor;
-    
+        
     private Button[] _commonButtons;
     
     private void Awake() => Init();
@@ -29,7 +30,7 @@ public class CommonButtonController : MonoBehaviour
     
     private void OnClickAddListener()
     { 
-        _commonButtons[1].onClick.AddListener(() => _settingPanel.SetActive(false));
+        _commonButtons[1].onClick.AddListener(() => _panel.SetActive(false));
     }
     
     /// <summary>
