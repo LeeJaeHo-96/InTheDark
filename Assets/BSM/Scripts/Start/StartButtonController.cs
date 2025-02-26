@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,9 @@ public class StartButtonController : MonoBehaviour
 {
     [Header("설정창 판넬 오브젝트")]
     [SerializeField] private GameObject _settingPanel;
+    
+    [Header("방 만들기 판넬 오브젝트")]
+    [SerializeField] private GameObject _hostPanel;
     
     private StartButton _curStartButton;
     private Image _curButtonColor;
@@ -34,6 +38,13 @@ public class StartButtonController : MonoBehaviour
     /// </summary>
     private void OnClickEventRegister()
     {
+        _startButtons[0].onClick.AddListener(() =>
+        {
+
+            _curButtonColor.color = Color.black;
+            _curButtonTextColor.color =  new Color(0.98f, 0.07f, 0.26f);
+            _hostPanel.SetActive(true);
+        });
         
         _startButtons[2].onClick.AddListener(() => _settingPanel.SetActive(true));
         _startButtons[4].onClick.AddListener(ExitGame);

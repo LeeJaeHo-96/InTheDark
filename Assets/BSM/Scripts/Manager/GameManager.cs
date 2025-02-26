@@ -3,10 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using ExitGames.Client.Photon;
+using Firebase.Auth;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.UI;
+using Photon.Pun;
+using Photon.Realtime;
 using Screen = UnityEngine.Device.Screen;
 
 public class GameManager : MonoBehaviour
@@ -15,6 +18,9 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public int CurVSyncCount;
     [HideInInspector] public int CurWindowMode;
     [HideInInspector] public float CurGammaBrightness;
+
+    public FirebaseUser CurUser;
+    public RoomOptions CurRoomOptions;
     
     public static GameManager Instance;
 
@@ -48,6 +54,11 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        PhotonNetwork.ConnectUsingSettings();
+        //TODO: 임시로 가져오는 user id
+        CurUser = FirebaseManager.Auth.CurrentUser; 
+        CurRoomOptions = new RoomOptions() { MaxPlayers = 4};
+        
         StartFrame();
         StartWindowMode();
         StartGammaBrightness();
