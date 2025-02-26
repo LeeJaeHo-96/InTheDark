@@ -463,6 +463,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76206d82ee381f344b267671567f9ce2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  doorCon: {fileID: 1287994917}
   leftPill: {fileID: 1558585180}
   rightPill: {fileID: 1101303290}
 --- !u!54 &412645137
@@ -839,6 +840,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76206d82ee381f344b267671567f9ce2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  doorCon: {fileID: 1287994917}
   leftPill: {fileID: 1558585180}
   rightPill: {fileID: 1101303290}
 --- !u!54 &560829430
@@ -1525,6 +1527,7 @@ GameObject:
   - component: {fileID: 1287994914}
   - component: {fileID: 1287994913}
   - component: {fileID: 1287994917}
+  - component: {fileID: 1287994918}
   m_Layer: 0
   m_Name: DoorSwitch
   m_TagString: Untagged
@@ -1624,6 +1627,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   leftDoor: {fileID: 560829424}
   rightDoor: {fileID: 412645131}
+  doorOpend: 1
+--- !u!135 &1287994918
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1287994912}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.36
+  m_Center: {x: 0, y: 0, z: -9.58}
 --- !u!1 &1417788128
 GameObject:
   m_ObjectHideFlags: 0
@@ -1985,7 +2002,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1558585180}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.516, y: 2.84, z: 4.5}
+  m_LocalPosition: {x: 9.516, y: 2.84, z: 4.521}
   m_LocalScale: {x: 1, y: 5.77, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -9,13 +9,27 @@ public class DoorController : MonoBehaviour
 
     Door doorScriptL;
     Door doorScriptR;
-    Coroutine doorCo;
+    public Coroutine doorCoL;
+    public Coroutine doorCoR;
+
+    public bool doorOpend = true;
     private void Start()
     {
         doorScriptL = leftDoor.GetComponent<Door>();
         doorScriptR = rightDoor.GetComponent<Door>();
 
-        doorCo = StartCoroutine(doorScriptL.DoorOpenCoroutine());
-        doorCo = StartCoroutine(doorScriptR.DoorOpenCoroutine());
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            if (doorOpend)
+            {
+                doorOpend = false;
+                doorCoL = StartCoroutine(doorScriptL.DoorOpenCoroutine());
+                doorCoR = StartCoroutine(doorScriptR.DoorOpenCoroutine());
+            }
+        }
     }
 }
