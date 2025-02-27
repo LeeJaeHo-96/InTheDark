@@ -51,7 +51,7 @@ public class StartButtonController : MonoBehaviour
         }); 
         _startButtons[1].onClick.AddListener(() =>
         {
-            PhotonNetwork.JoinLobby();
+            PhotonNetwork.JoinRandomRoom();
             _lobbyPanel.SetActive(true);
         });
         _startButtons[2].onClick.AddListener(() => _settingPanel.SetActive(true));
