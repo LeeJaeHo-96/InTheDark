@@ -20,8 +20,6 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public float CurGammaBrightness;
 
     public FirebaseUser CurUser;
-    public RoomOptions CurRoomOptions;
-    
     public static GameManager Instance;
 
     private static int _refreshRate; 
@@ -57,8 +55,6 @@ public class GameManager : MonoBehaviour
         PhotonNetwork.ConnectUsingSettings();
         //TODO: 임시로 가져오는 user id
         CurUser = FirebaseManager.Auth.CurrentUser; 
-        CurRoomOptions = new RoomOptions() { MaxPlayers = 4};
-        
         StartFrame();
         StartWindowMode();
         StartGammaBrightness();
