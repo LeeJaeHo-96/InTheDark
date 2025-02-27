@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -13,6 +14,9 @@ public class StartButtonController : MonoBehaviour
     
     [Header("방 만들기 판넬 오브젝트")]
     [SerializeField] private GameObject _hostPanel;
+
+    [Header("로비 판넬 오브젝트")] 
+    [SerializeField] private GameObject _lobbyPanel;
     
     private StartButton _curStartButton;
     private Image _curButtonColor;
@@ -44,8 +48,12 @@ public class StartButtonController : MonoBehaviour
             _curButtonColor.color = Color.black;
             _curButtonTextColor.color =  new Color(0.98f, 0.07f, 0.26f);
             _hostPanel.SetActive(true);
+        }); 
+        _startButtons[1].onClick.AddListener(() =>
+        {
+            PhotonNetwork.JoinLobby();
+            _lobbyPanel.SetActive(true);
         });
-        
         _startButtons[2].onClick.AddListener(() => _settingPanel.SetActive(true));
         _startButtons[4].onClick.AddListener(ExitGame);
     }

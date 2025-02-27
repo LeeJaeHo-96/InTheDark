@@ -2,9 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 
-public class StartScene : MonoBehaviourPunCallbacks
+public class PunManager : MonoBehaviourPunCallbacks
 {
     private void Start()
     {
@@ -29,6 +30,21 @@ public class StartScene : MonoBehaviourPunCallbacks
     {
         Debug.Log("방 입장 완료");
         
+    }
+
+    public override void OnJoinedLobby()
+    {
+        Debug.Log("로비 입장");
+    }
+
+    public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    {
+        Debug.Log("룸 리스트 업데이트");
+    }
+
+    public override void OnLeftLobby()
+    {
+        Debug.Log("로비 떠남");
     }
     
 }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Firebase.Auth;
 using Photon.Pun;
+using Photon.Realtime;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,6 +20,8 @@ public class Host : ObjBind
     
     private Image _publicButtonImage;
     private Image _friendsOnlyButtonImage;
+
+    private RoomOptions _roomOptions;
     
     public bool _publicMode = true;
     
@@ -76,10 +79,14 @@ public class Host : ObjBind
         
     }
 
+    /// <summary>
+    /// 방 만들기
+    /// </summary>
     private void HostCreateRoom()
     {
+        _roomOptions = new RoomOptions(){MaxPlayers = 4, IsOpen = true, IsVisible = _publicMode};
         //방이름, 룸옵션,
-        PhotonNetwork.CreateRoom(_roomNameText.text, GameManager.Instance.CurRoomOptions);
+        PhotonNetwork.CreateRoom(_roomNameText.text, _roomOptions);
     }
     
 }
