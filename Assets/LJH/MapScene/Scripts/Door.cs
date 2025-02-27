@@ -42,8 +42,8 @@ public class Door : MonoBehaviour
             if (collision.collider == leftColl)
             {
                 Debug.Log("충돌남왼쪽");
-                doorCon.StopCoroutine(doorCon.doorCoL);
-                doorCon.doorCoL = null;
+                doorCon.StopCoroutine(doorCon.DoorCoL);
+                doorCon.DoorCoL = null;
             }
         }
         if (gameObject.name == "RightDoor")
@@ -51,8 +51,8 @@ public class Door : MonoBehaviour
             if (collision.collider == rightColl)
             {
                 Debug.Log("충돌남오른쪽");
-                doorCon.StopCoroutine(doorCon.doorCoR);
-                doorCon.doorCoR = null;
+                doorCon.StopCoroutine(doorCon.DoorCoR);
+                doorCon.DoorCoR = null;
             }
         }
     }

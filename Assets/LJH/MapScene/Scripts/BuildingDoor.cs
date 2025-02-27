@@ -1,0 +1,67 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
+public class BuildingDoor : MonoBehaviour
+{
+    [SerializeField] Image progressBar;
+
+    bool isClosed = false;
+
+    Coroutine doorIncreaseCo;
+
+    private void Awake()
+    {
+        Init();
+    }
+
+    private void Update()
+    {
+        if(isClosed && Input.GetKeyDown(KeyCode.E) && doorIncreaseCo == null)
+        {
+            doorIncreaseCo = StartCoroutine(DoorIncreaseCoRoutine());
+        }
+
+        if(isClosed && Input.GetKeyUp(KeyCode.E) && doorIncreaseCo != null)
+        {
+            StopCoroutine(doorIncreaseCo);
+            doorIncreaseCo = null;
+            progressBar.fillAmount = 0f;
+        }
+    }
+
+    IEnumerator DoorIncreaseCoRoutine()
+    {
+        while (true)
+        {
+            progressBar.fillAmount += 0.5f * Time.deltaTime;
+            yield return null;
+
+            if (progressBar.fillAmount >= 1)
+                SceneManager.LoadScene("WaitingScene");
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag(Tag.Player))
+        {
+            isClosed = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag(Tag.Player))
+        {
+            isClosed = false;
+        }
+    }
+
+    void Init()
+    {
+    }
+
+}
