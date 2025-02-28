@@ -13,7 +13,8 @@ public class Lobby : ObjBind
     private RectTransform _roomContentRect;
     private RoomJoin _roomJoinPrefab;
     private Dictionary<string, RoomJoin> _roomJoinDict = new Dictionary<string, RoomJoin>();
-    
+
+    private Button _refreshButton;
     private Button _leftLobbyButton;
         
     private void Awake() => Init();
@@ -23,16 +24,28 @@ public class Lobby : ObjBind
         Bind();
 
         _roomContentRect = GetComponentBind<RectTransform>("Room_Content");
+        _refreshButton = GetComponentBind<Button>("Refresh_Button");
         _leftLobbyButton = GetComponentBind<Button>("Back_Button");
+        
         OnClickListener();
+        
         _roomJoinPrefab = Resources.Load<RoomJoin>("Room_Prefabs");
     } 
     
     private void OnClickListener()
     {
         _leftLobbyButton.onClick.AddListener(() => PhotonNetwork.LeaveLobby()); 
+        _refreshButton.onClick.AddListener(() =>
+        {
+            PhotonNetwork.LeaveRoom();
+            PhotonNetwork.JoinLobby(); 
+        });
     }
 
+    /// <summary>
+    /// 로비 입장 시 방 정보 갱신
+    /// </summary>
+    /// <param name="roomList"></param>
     public void RoomListUpdate(List<RoomInfo> roomList)
     {
         foreach (RoomInfo info in roomList)
@@ -62,7 +75,12 @@ public class Lobby : ObjBind
 
     public void ClearRoom()
     {
+        foreach (string name in _roomJoinDict.Keys)
+        {
+            Destroy(_roomJoinDict[name].gameObject);
+        }
         
+        _roomJoinDict.Clear();
     }
     
 }

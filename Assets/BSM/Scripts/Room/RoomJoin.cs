@@ -31,6 +31,10 @@ public class RoomJoin : ObjBind
         _roomJoinButton.onClick.AddListener(Join);
     }
 
+    /// <summary>
+    /// 로비에서 방 정보
+    /// </summary>
+    /// <param name="info"></param>
     public void SetRoomInfo(RoomInfo info)
     {
         _roomName.text = info.Name;
