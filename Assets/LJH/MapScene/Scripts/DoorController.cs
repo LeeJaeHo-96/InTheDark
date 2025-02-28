@@ -9,7 +9,7 @@ public class DoorController : MonoBehaviour
     [SerializeField] GameObject rightDoor;
     [SerializeField] TMP_Text gasText;
 
-    float gas;
+    float gas = 0f;
     Coroutine gasCo;
 
     Door doorScriptL;
@@ -27,6 +27,23 @@ public class DoorController : MonoBehaviour
 
     private void Update()
     {
+        DoorOpen();
+        GasCheck();
+    }
+
+
+    /// <summary>
+    /// 문 개방되는 함수
+    /// </summary>
+    void DoorOpen()
+    {
+        //가스 0되면 강제로 문 개방됨
+        if (gas <= 0)
+        {
+            DoorCoL = StartCoroutine(doorScriptL.DoorOpenCoroutine());
+            DoorCoR = StartCoroutine(doorScriptR.DoorOpenCoroutine());
+        }
+
         if (Input.GetKeyDown(KeyCode.E))
         {
             if (doorOpend)
@@ -36,8 +53,6 @@ public class DoorController : MonoBehaviour
                 DoorCoR = StartCoroutine(doorScriptR.DoorOpenCoroutine());
             }
         }
-
-        GasCheck();
     }
 
     void GasCheck()
@@ -54,7 +69,10 @@ public class DoorController : MonoBehaviour
         }
     }
 
-
+    /// <summary>
+    /// 문 닫혀있을 때, 가스 충전되는 코루틴
+    /// </summary>
+    /// <returns></returns>
     IEnumerator DoorGasCoroutine()
     {
         while (gas < 100f)
@@ -64,6 +82,26 @@ public class DoorController : MonoBehaviour
             if (gas >= 100f)
             {
                 gas = 100f;
+            }
+            gasText.text = $"{gas.ToString("F2")}%";
+
+            yield return null;
+        }
+    }
+
+    /// <summary>
+    /// 문 열려있을 때 가스 감소되는 코루틴
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator DoorGasDeCoroutine()
+    {
+        while (gas > 0)
+        {
+            gas -= 10f * Time.deltaTime;
+
+            if (gas <= 0)
+            {
+                gas = 0f;
             }
             gasText.text = $"{gas.ToString("F2")}%";
 
