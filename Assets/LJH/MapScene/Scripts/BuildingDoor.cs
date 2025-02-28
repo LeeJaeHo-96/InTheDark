@@ -1,21 +1,17 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class BuildingDoor : MonoBehaviour
+public class BuildingDoor : MonoBehaviour, IPunObservable
 {
     [SerializeField] Image progressBar;
 
     bool isClosed = false;
 
     Coroutine doorIncreaseCo;
-
-    private void Awake()
-    {
-        Init();
-    }
 
     private void Update()
     {
@@ -60,8 +56,15 @@ public class BuildingDoor : MonoBehaviour
         }
     }
 
-    void Init()
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(isClosed);
+        }
+        else
+        {
+            isClosed = (bool)stream.ReceiveNext();
+        }
     }
-
 }

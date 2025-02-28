@@ -1,15 +1,16 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class DoorController : MonoBehaviour
+public class DoorController : MonoBehaviourPun, IPunObservable
 {
     [SerializeField] GameObject leftDoor;
     [SerializeField] GameObject rightDoor;
     [SerializeField] TMP_Text gasText;
 
-    float gas;
+    float gas = 0f;
     Coroutine gasCo;
 
     Door doorScriptL;
@@ -27,6 +28,28 @@ public class DoorController : MonoBehaviour
 
     private void Update()
     {
+        DoorOpen();
+        GasCheck();
+    }
+
+    void DoorOpen()
+    {
+        photonView.RPC("RPCDoorOpen", RpcTarget.AllBuffered);
+    }
+
+    /// <summary>
+    /// 문 개방되는 함수
+    /// </summary>
+    [PunRPC]
+    void RPCDoorOpen()
+    {
+        //가스 0되면 강제로 문 개방됨
+        if (gas <= 0)
+        {
+            DoorCoL = StartCoroutine(doorScriptL.DoorOpenCoroutine());
+            DoorCoR = StartCoroutine(doorScriptR.DoorOpenCoroutine());
+        }
+
         if (Input.GetKeyDown(KeyCode.E))
         {
             if (doorOpend)
@@ -36,10 +59,12 @@ public class DoorController : MonoBehaviour
                 DoorCoR = StartCoroutine(doorScriptR.DoorOpenCoroutine());
             }
         }
-
-        GasCheck();
     }
 
+
+    /// <summary>
+    /// 가스량이 100 미만이라면 충전해주는 함수
+    /// </summary>
     void GasCheck()
     {
         if (gasCo == null && gas < 100f)
@@ -54,7 +79,10 @@ public class DoorController : MonoBehaviour
         }
     }
 
-
+    /// <summary>
+    /// 문 닫혀있을 때, 가스 충전되는 코루틴
+    /// </summary>
+    /// <returns></returns>
     IEnumerator DoorGasCoroutine()
     {
         while (gas < 100f)
@@ -68,6 +96,38 @@ public class DoorController : MonoBehaviour
             gasText.text = $"{gas.ToString("F2")}%";
 
             yield return null;
+        }
+    }
+
+    /// <summary>
+    /// 문 열려있을 때 가스 감소되는 코루틴
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator DoorGasDeCoroutine()
+    {
+        while (gas > 0)
+        {
+            gas -= 10f * Time.deltaTime;
+
+            if (gas <= 0)
+            {
+                gas = 0f;
+            }
+            gasText.text = $"{gas.ToString("F2")}%";
+
+            yield return null;
+        }
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(gas);
+        }
+        else
+        {
+            gas = (float)stream.ReceiveNext();
         }
     }
 }

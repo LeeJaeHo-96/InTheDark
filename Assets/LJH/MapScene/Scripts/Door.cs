@@ -1,8 +1,9 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Door : MonoBehaviour
+public class Door : MonoBehaviourPun
 {
     [SerializeField] DoorController doorCon;
     [SerializeField] GameObject leftPill;
@@ -21,6 +22,8 @@ public class Door : MonoBehaviour
         rightColl = rightPill.GetComponent<Collider>();
 
     }
+
+
     public IEnumerator DoorOpenCoroutine()
     {
         while (true)
