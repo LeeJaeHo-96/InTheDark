@@ -1,9 +1,10 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class DoorController : MonoBehaviour
+public class DoorController : MonoBehaviourPun, IPunObservable
 {
     [SerializeField] GameObject leftDoor;
     [SerializeField] GameObject rightDoor;
@@ -31,11 +32,16 @@ public class DoorController : MonoBehaviour
         GasCheck();
     }
 
+    void DoorOpen()
+    {
+        photonView.RPC("RPCDoorOpen", RpcTarget.AllBuffered);
+    }
 
     /// <summary>
     /// 문 개방되는 함수
     /// </summary>
-    void DoorOpen()
+    [PunRPC]
+    void RPCDoorOpen()
     {
         //가스 0되면 강제로 문 개방됨
         if (gas <= 0)
@@ -55,6 +61,10 @@ public class DoorController : MonoBehaviour
         }
     }
 
+
+    /// <summary>
+    /// 가스량이 100 미만이라면 충전해주는 함수
+    /// </summary>
     void GasCheck()
     {
         if (gasCo == null && gas < 100f)
@@ -106,6 +116,18 @@ public class DoorController : MonoBehaviour
             gasText.text = $"{gas.ToString("F2")}%";
 
             yield return null;
+        }
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(gas);
+        }
+        else
+        {
+            gas = (float)stream.ReceiveNext();
         }
     }
 }

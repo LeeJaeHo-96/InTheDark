@@ -366,6 +366,7 @@ GameObject:
   - component: {fileID: 412645132}
   - component: {fileID: 412645136}
   - component: {fileID: 412645137}
+  - component: {fileID: 412645138}
   m_Layer: 0
   m_Name: RightDoor
   m_TagString: Untagged
@@ -482,6 +483,28 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &412645138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 412645131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 1
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &418074767
 GameObject:
   m_ObjectHideFlags: 0
@@ -743,6 +766,7 @@ GameObject:
   - component: {fileID: 560829425}
   - component: {fileID: 560829429}
   - component: {fileID: 560829430}
+  - component: {fileID: 560829431}
   m_Layer: 0
   m_Name: LeftDoor
   m_TagString: Untagged
@@ -859,6 +883,28 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &560829431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 560829424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 2
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &614809454
 GameObject:
   m_ObjectHideFlags: 0
@@ -2251,6 +2297,7 @@ GameObject:
   - component: {fileID: 1287994913}
   - component: {fileID: 1287994917}
   - component: {fileID: 1287994918}
+  - component: {fileID: 1287994919}
   m_Layer: 0
   m_Name: DoorSwitch
   m_TagString: Untagged
@@ -2366,6 +2413,29 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.36
   m_Center: {x: 0, y: 0, z: -9.58}
+--- !u!114 &1287994919
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1287994912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 1287994917}
+  sceneViewId: 3
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &1417788128
 GameObject:
   m_ObjectHideFlags: 0
