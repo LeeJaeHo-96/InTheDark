@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -31,6 +32,7 @@ public class CommonButtonController : MonoBehaviour
     private void OnClickAddListener()
     { 
         _commonButtons[1].onClick.AddListener(() => _panel.SetActive(false));
+        
     }
     
     /// <summary>
