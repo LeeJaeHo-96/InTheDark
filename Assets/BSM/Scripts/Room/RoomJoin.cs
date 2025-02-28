@@ -17,6 +17,8 @@ public class RoomJoin : ObjBind
 
     private void Init()
     {
+        Bind();
+        
         _roomName = GetComponentBind<TextMeshProUGUI>("Lobby_Room_Name");
         _roomPeopleCount = GetComponentBind<TextMeshProUGUI>("Lobby_Room_People");
         _roomJoinButton = GetComponentBind<Button>("Looby_Room_Join");
