@@ -7,6 +7,8 @@ using UnityEngine;
 
 public class PunManager : MonoBehaviourPunCallbacks
 {
+    [SerializeField] private Lobby Lobby;
+    
     private void Start()
     {
         
@@ -39,12 +41,14 @@ public class PunManager : MonoBehaviourPunCallbacks
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
-        Debug.Log("룸 리스트 업데이트");
+        Debug.Log("룸 리스트 업데이트"); 
+        Lobby.RoomListUpdate(roomList);
     }
 
     public override void OnLeftLobby()
     {
         Debug.Log("로비 떠남");
+        Lobby.ClearRoom();
     }
     
 }

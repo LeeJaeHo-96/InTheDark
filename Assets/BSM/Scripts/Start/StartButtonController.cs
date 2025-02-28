@@ -44,16 +44,17 @@ public class StartButtonController : MonoBehaviour
     {
         _startButtons[0].onClick.AddListener(() =>
         {
-
             _curButtonColor.color = Color.black;
             _curButtonTextColor.color =  new Color(0.98f, 0.07f, 0.26f);
             _hostPanel.SetActive(true);
         }); 
+        
         _startButtons[1].onClick.AddListener(() =>
         {
-            PhotonNetwork.JoinRandomRoom();
+            PhotonNetwork.JoinLobby();
             _lobbyPanel.SetActive(true);
         });
+        
         _startButtons[2].onClick.AddListener(() => _settingPanel.SetActive(true));
         _startButtons[4].onClick.AddListener(ExitGame);
     }
