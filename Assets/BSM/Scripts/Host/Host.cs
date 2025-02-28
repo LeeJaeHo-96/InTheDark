@@ -25,7 +25,6 @@ public class Host : ObjBind
     private Image _friendsOnlyButtonImage;
 
     private RoomOptions _roomOptions;
-    private RoomState _roomState = RoomState.PUBLIC;
     
     public bool _publicMode = true;
     
@@ -56,12 +55,11 @@ public class Host : ObjBind
     private void OnDisable()
     {
         RoomButtonChange(new Color(0f, 0.95f, 1f), Color.white, true);
-        RoomStateChange(RoomState.PUBLIC); 
         _joinNoticeText.text = "공개 방으로 만들면 접속한 \n유저들이 방 리스트를 볼 수 있습니다.";
     }
 
     /// <summary>
-    /// 방 공개 여부 버튼 설정
+    /// 버튼 클릭 동작 설정
     /// </summary>
     private void OnClickAddListener()
     {
@@ -73,21 +71,19 @@ public class Host : ObjBind
         _publicButton.onClick.AddListener(() =>
         {
             RoomButtonChange(new Color(0f, 0.95f, 1f), Color.white, true);
-            RoomStateChange(RoomState.PUBLIC);
             _joinNoticeText.text = "공개 방으로 만들면 접속한 \n유저들이 방 리스트를 볼 수 있습니다.";
         });
         
         _friendsOnlyButton.onClick.AddListener(() =>
         {
             RoomButtonChange(Color.white, new Color(0f, 0.95f, 1f), false);
-            RoomStateChange(RoomState.FRIENDS_ONLY);
             _joinNoticeText.text = "비공개 방으로 만들면 초대를 받은 유저들만 접속할 수 있습니다.";
         }); 
         
     }
     
     /// <summary>
-    /// 버튼 클릭 후 동작
+    /// 방 설정 변경
     /// </summary>
     /// <param name="publicColor">공개방 버튼 색</param>
     /// <param name="friendsOnlyColor">비공개방 버튼 색</param>
@@ -97,17 +93,9 @@ public class Host : ObjBind
         _publicButtonImage.color = publicColor;
         _friendsOnlyButtonImage.color = friendsOnlyColor;
         _publicMode = isPublic;
+        _roomCode.gameObject.SetActive(_publicMode);
     }
-    
-    /// <summary>
-    /// 방 상태 변경
-    /// </summary>
-    /// <param name="state"></param>
-    private void RoomStateChange(RoomState state)
-    {
-        _roomCode.gameObject.SetActive(state == RoomState.PUBLIC);
-    }
-    
+     
     /// <summary>
     /// 방 만들기
     /// </summary>
