@@ -9,4 +9,10 @@ public enum Settings
 {
     FRAME, WINDOWMODE, GAMMA, MASTER_VOLUME, BGM_VOLUME, SFX_VOLUME, SIZE
 }
- 
+
+
+[System.Serializable]
+public enum PState
+{
+    IDLE, WALK, RUN, JUMP , SIZE
+}

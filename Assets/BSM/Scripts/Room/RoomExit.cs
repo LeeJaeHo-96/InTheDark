@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class RoomExit : MonoBehaviour
 {
+    [Header("방 나가기 버튼")]
     [SerializeField] private Button _button;
 
     private void Awake()
