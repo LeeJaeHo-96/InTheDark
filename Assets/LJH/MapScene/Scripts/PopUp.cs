@@ -11,6 +11,7 @@ public class PopUp : MonoBehaviour
 
     private void Start()
     {
+        if(player != null)
         Init();
     }
 
