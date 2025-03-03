@@ -11,7 +11,7 @@ using UnityEngine.SceneManagement;
 
 public class PunManager : MonoBehaviourPunCallbacks
 {
-    [SerializeField] private Lobby Lobby => Lobby.Instance;
+    private Lobby Lobby => Lobby.Instance;
 
     public static PunManager Instance;
     
