@@ -4,15 +4,7 @@ using UnityEngine;
 
 public class Computer : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    Canvas monitor;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    //void Onea 
 }

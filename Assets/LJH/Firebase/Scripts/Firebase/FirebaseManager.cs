@@ -47,19 +47,14 @@ public class FirebaseManager : MonoBehaviour
         {
             if (task.Result == DependencyStatus.Available)
             {
-                // Create and hold a reference to your FirebaseApp,
-                // where app is a Firebase.FirebaseApp property of your application class.
                 app = FirebaseApp.DefaultInstance;
                 auth = FirebaseAuth.DefaultInstance;
                 database = FirebaseDatabase.DefaultInstance;
 
-                // Set a flag here to indicate whether Firebase is ready to use by your app.
-                Debug.Log("Firebase 의존성 확인 성공!");
             }
             else
             {
                 Debug.LogError($"Firebase 의존성 확인 실패! 이유: {task.Result}");
-                // Firebase Unity SDK is not safe to use here.
                 app = null;
                 auth = null;
                 database = null;

@@ -42,6 +42,7 @@ public class PunManager : MonoBehaviourPunCallbacks
 
     public override void OnCreatedRoom()
     {
+
         Debug.Log("방 생성 완료"); 
         PhotonNetwork.LoadLevel(SceneUtility.GetBuildIndexByScenePath("WaitingScene"));
     }

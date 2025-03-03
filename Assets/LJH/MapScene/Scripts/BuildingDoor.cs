@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class BuildingDoor : MonoBehaviour, IPunObservable
+public class BuildingDoor : MonoBehaviourPun, IPunObservable
 {
     [SerializeField] Image progressBar;
 
@@ -15,12 +15,20 @@ public class BuildingDoor : MonoBehaviour, IPunObservable
 
     private void Update()
     {
-        if(isClosed && Input.GetKeyDown(KeyCode.E) && doorIncreaseCo == null)
+        if (!photonView.IsMine)
+            return;
+
+        OpenDoor();
+    }
+
+    void OpenDoor()
+    {
+        if (isClosed && Input.GetKeyDown(KeyCode.E) && doorIncreaseCo == null)
         {
             doorIncreaseCo = StartCoroutine(DoorIncreaseCoRoutine());
         }
 
-        if(isClosed && Input.GetKeyUp(KeyCode.E) && doorIncreaseCo != null)
+        if (isClosed && Input.GetKeyUp(KeyCode.E) && doorIncreaseCo != null)
         {
             StopCoroutine(doorIncreaseCo);
             doorIncreaseCo = null;
