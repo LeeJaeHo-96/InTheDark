@@ -10,6 +10,8 @@ using UnityEngine.UI;
 
 public class Lobby : ObjBind
 {
+    public static Lobby Instance;
+    
     private Dictionary<string, RoomJoin> _roomJoinDict = new Dictionary<string, RoomJoin>();
     private Dictionary<string, string> _roomCodeDict = new Dictionary<string, string>();
     
@@ -28,6 +30,15 @@ public class Lobby : ObjBind
     {
         Bind();
 
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+        
         _roomContentRect = GetComponentBind<RectTransform>("Room_Content");
         _refreshButton = GetComponentBind<Button>("Refresh_Button");
         _leftLobbyButton = GetComponentBind<Button>("Back_Button");

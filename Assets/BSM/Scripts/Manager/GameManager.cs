@@ -19,9 +19,9 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public int CurWindowMode;
     [HideInInspector] public float CurGammaBrightness;
 
-    public FirebaseUser CurUser;
     public static GameManager Instance;
-
+    public FirebaseUser CurUser;
+    
     private static int _refreshRate; 
     private ColorGrading PostVolume; 
     private PostProcessProfile _postProfile;
