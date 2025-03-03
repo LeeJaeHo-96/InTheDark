@@ -9,7 +9,6 @@ public class PlayerRun : PlayerState
 
     public override void Enter()
     {
-        Debug.Log("플레이어 뛰는 상태 진입");
     }
 
     public override void Update()

@@ -9,7 +9,6 @@ public class PlayerWalk : PlayerState
 
     public override void Enter()
     {
-        Debug.Log("플레이어 걷는 상태 진입");
     }
 
     public override void Update()
