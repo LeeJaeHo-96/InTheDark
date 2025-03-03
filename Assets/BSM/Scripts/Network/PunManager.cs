@@ -37,25 +37,22 @@ public class PunManager : MonoBehaviourPunCallbacks
 
     public override void OnConnectedToMaster()
     {
-        Debug.Log("OnConnectedToMaster 호출");
+
     }
 
     public override void OnCreatedRoom()
     {
-
-        Debug.Log("방 생성 완료"); 
-        PhotonNetwork.LoadLevel(SceneUtility.GetBuildIndexByScenePath("WaitingScene"));
+        GoToWaitingScene();
     }
 
     public override void OnJoinedRoom()
     {
-        Debug.Log("방 입장 완료");
         OnChangedPlayer?.Invoke();
     }
 
     public override void OnLeftRoom()
     {
-        OnChangedPlayer = null;
+        GoToStartScene();
     }
     
     public override void OnJoinRandomFailed(short returnCode, string message)
@@ -63,26 +60,54 @@ public class PunManager : MonoBehaviourPunCallbacks
         Debug.Log("방 입장 실패");
     }
     
+    /// <summary>
+    /// 방에 입장한 상태에서 다른 플레이어가 입장했을 때 호출
+    /// </summary>
+    /// <param name="newPlayer"></param>
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        Debug.Log("엔터드 룸");
+        
+    }
+
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+ 
+    }
+
+    public override void OnMasterClientSwitched(Player newMasterClient)
+    {
+        PhotonNetwork.LeaveRoom();
     }
     
     public override void OnJoinedLobby()
     {
-        Debug.Log("로비 입장");
+        
     }
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
-        Debug.Log("룸 리스트 업데이트"); 
         Lobby.RoomListUpdate(roomList);
     }
 
     public override void OnLeftLobby()
     {
-        Debug.Log("로비 떠남");
         Lobby.ClearRoom();
+    }
+
+    /// <summary>
+    /// 대기 화면으로 이동
+    /// </summary>
+    private void GoToWaitingScene()
+    {
+        PhotonNetwork.LoadLevel(SceneUtility.GetBuildIndexByScenePath("WaitingScene"));
+    }
+    
+    /// <summary>
+    /// 시작 화면으로 이동
+    /// </summary>
+    private void GoToStartScene()
+    {
+        PhotonNetwork.LoadLevel(SceneUtility.GetBuildIndexByScenePath("StartScene"));
     }
     
 }

@@ -16,7 +16,6 @@ public class Test : MonoBehaviour
 
     private void RoomOut()
     {
-        PhotonNetwork.LeaveRoom();
-        PhotonNetwork.LoadLevel(3);
+        PhotonNetwork.LeaveRoom(); 
     }
 }
