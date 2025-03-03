@@ -38,7 +38,6 @@ public class Login : BaseUI
         id = idField.text;
         password = passwordField.text;
 
-        Debug.Log("로그인버튼 눌림");
         NullCheck();
         FirebaseManager.Auth.SignInWithEmailAndPasswordAsync(id, password).ContinueWithOnMainThread(task =>
         {
@@ -87,7 +86,6 @@ public class Login : BaseUI
                     return;
                 }
 
-                Debug.Log("값 가져오기 성공!");
                 DataSnapshot snapshot = task.Result;
 
                 if (snapshot.Value is null)
@@ -128,7 +126,6 @@ public class Login : BaseUI
         id = idField.text;
         password = passwordField.text;
 
-        Debug.Log("회원가입버튼 눌림");
         NullCheck();
         FirebaseManager.Auth.CreateUserWithEmailAndPasswordAsync(id, password).ContinueWith(task =>
         {

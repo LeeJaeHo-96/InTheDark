@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PunManager : MonoBehaviourPunCallbacks
 {
@@ -26,6 +27,9 @@ public class PunManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("방 생성 완료");
         PhotonNetwork.LoadLevel(4);
+
+        //Todo: 삭제해야함
+        SceneManager.LoadScene("WaitingScene");
     }
 
     public override void OnJoinedRoom()

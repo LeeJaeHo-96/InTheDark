@@ -369,7 +369,7 @@ GameObject:
   - component: {fileID: 412645138}
   m_Layer: 0
   m_Name: RightDoor
-  m_TagString: Untagged
+  m_TagString: ShipDoor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -445,7 +445,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 412645131}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 9.52, y: 1.712, z: 1}
+  m_LocalPosition: {x: 9.52, y: 1.712, z: -0.2}
   m_LocalScale: {x: 0.3, y: 3.44, z: 1.2}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -467,6 +467,8 @@ MonoBehaviour:
   doorCon: {fileID: 1287994917}
   leftPill: {fileID: 1558585180}
   rightPill: {fileID: 1101303290}
+  leftDoor: {fileID: 560829424}
+  rightDoor: {fileID: 412645131}
 --- !u!54 &412645137
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -769,7 +771,7 @@ GameObject:
   - component: {fileID: 560829431}
   m_Layer: 0
   m_Name: LeftDoor
-  m_TagString: Untagged
+  m_TagString: ShipDoor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -845,7 +847,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 560829424}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 9.52, y: 1.712, z: 2.2}
+  m_LocalPosition: {x: 9.52, y: 1.712, z: 3.4}
   m_LocalScale: {x: 0.3, y: 3.44, z: 1.2}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -867,6 +869,8 @@ MonoBehaviour:
   doorCon: {fileID: 1287994917}
   leftPill: {fileID: 1558585180}
   rightPill: {fileID: 1101303290}
+  leftDoor: {fileID: 560829424}
+  rightDoor: {fileID: 412645131}
 --- !u!54 &560829430
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1870,7 +1874,7 @@ GameObject:
   - component: {fileID: 1101303291}
   m_Layer: 0
   m_Name: RightPillar
-  m_TagString: Untagged
+  m_TagString: Pill
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2818,7 +2822,7 @@ GameObject:
   - component: {fileID: 1558585181}
   m_Layer: 0
   m_Name: LeftPillar
-  m_TagString: Untagged
+  m_TagString: Pill
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2916,7 +2920,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1877109951
 Transform:
   m_ObjectHideFlags: 0
@@ -3127,7 +3131,7 @@ Transform:
   m_GameObject: {fileID: 2070730846}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 1, z: 1}
+  m_LocalScale: {x: 4, y: 1, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2055483409147971787}
