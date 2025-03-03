@@ -14,8 +14,6 @@ public class PlayerRun : PlayerState
 
     public override void Update()
     {
-        Debug.Log("뛰는 중");
-        
         if (_controller.MoveDir == Vector3.zero)
         {
             _controller.ChangeState(PState.IDLE);
@@ -24,7 +22,10 @@ public class PlayerRun : PlayerState
         {
             _controller.ChangeState(PState.WALK);
         }
-        
+        else if (Input.GetKeyDown(KeyCode.Space))
+        {
+            _controller.ChangeState(PState.JUMP);
+        }
     }
 
     public override void FixedUpdate()

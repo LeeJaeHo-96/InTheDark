@@ -19,6 +19,14 @@ public class PlayerStats : MonoBehaviourPun
         get => _runSpeed;
         
     }
+
+    private float _jumpPower = 3f;
+
+    public float JumpPower
+    {
+        get => _jumpPower;
+    }
     
+
 
 }
