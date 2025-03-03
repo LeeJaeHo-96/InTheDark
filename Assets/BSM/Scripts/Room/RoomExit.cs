@@ -5,16 +5,16 @@ using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Test : MonoBehaviour
+public class RoomExit : MonoBehaviour
 {
     [SerializeField] private Button _button;
 
     private void Awake()
     {
-        _button.onClick.AddListener(RoomOut);
+        _button.onClick.AddListener(LeaveRoom);
     }
 
-    private void RoomOut()
+    private void LeaveRoom()
     {
         PhotonNetwork.LeaveRoom(); 
     }
