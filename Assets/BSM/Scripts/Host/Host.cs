@@ -104,8 +104,7 @@ public class Host : ObjBind
         _roomOptions = new RoomOptions(){MaxPlayers = 4, IsOpen = true, IsVisible = _publicMode};
         //방이름, 룸옵션,
         _roomOptions.CustomRoomProperties = new Hashtable(){{RoomCodeKey, _roomCode.text}};
-        _roomOptions.CustomRoomPropertiesForLobby = new string[] {RoomCodeKey};
-        Debug.Log(_roomOptions.CustomRoomProperties[RoomCodeKey]);
+        _roomOptions.CustomRoomPropertiesForLobby = new string[] {RoomCodeKey}; 
         PhotonNetwork.CreateRoom(_roomNameText.text, _roomOptions);
     }
     

@@ -54,7 +54,7 @@ public class StartButtonController : MonoBehaviour
             PhotonNetwork.JoinLobby();
             _lobbyPanel.SetActive(true);
         });
-        
+        //TODO: buttons[3] 기능 구현 필요
         _startButtons[2].onClick.AddListener(() => _settingPanel.SetActive(true));
         _startButtons[4].onClick.AddListener(ExitGame);
     }
