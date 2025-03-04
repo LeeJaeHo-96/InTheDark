@@ -29,8 +29,9 @@ public class PlayerWalk : PlayerState
     
     public override void FixedUpdate()
     {
-        _controller.PlayerRb.MovePosition(_controller.PlayerRb.position + _controller.MoveDir * _controller.PlayerStats.WalkSpeed * Time.fixedDeltaTime);
+        Vector3 dir = _controller.transform.TransformDirection(_controller.MoveDir);
         
+        _controller.PlayerRb.MovePosition(_controller.transform.position + dir.normalized * _controller.PlayerStats.WalkSpeed * Time.fixedDeltaTime);   
     }
     
 }
