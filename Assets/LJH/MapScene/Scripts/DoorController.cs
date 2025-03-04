@@ -22,18 +22,21 @@ public class DoorController : MonoBehaviourPun, IPunObservable
     public Coroutine DoorCloseCoR;
 
     public bool doorOpend = true;
+
+    //문 제어권 여부
+    bool canDoorControll = true;
     private void Start()
     {
         doorScriptL = leftDoor.GetComponent<Door>();
         doorScriptR = rightDoor.GetComponent<Door>();
+
+        StartCoroutine(GasCheck());
 
 
     }
 
     private void Update()
     {
-        GasCheck();
-
         if (photonView.IsMine)
         {
             DoorOpen();
@@ -42,7 +45,7 @@ public class DoorController : MonoBehaviourPun, IPunObservable
 
     void DoorOpen()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (canDoorControll && Input.GetKeyDown(KeyCode.E))
         {
             photonView.RPC("RPCDoorOpenAndClose", RpcTarget.AllViaServer, photonView.ViewID);
         }
@@ -54,41 +57,43 @@ public class DoorController : MonoBehaviourPun, IPunObservable
     [PunRPC]
     void RPCDoorOpenAndClose(int playerID)
     {
-            Debug.Log("E 눌렀음");
-            // E버튼 누를때마다 가스 코루틴 초기화 시킴
-            if (gasCo != null)
-                StopCoroutine(gasCo);
-            gasCo = null;
+        // E버튼 누를때마다 가스 코루틴 초기화 시킴
+        if (gasCo != null)
+            StopCoroutine(gasCo);
+        gasCo = null;
 
-            // 문 닫혀있는 상태일 때 E누르면 문열림
-            if (!doorOpend)
+        // 문 닫혀있는 상태일 때 E누르면 문열림
+        if (!doorOpend)
+        {
+            // 문닫기를 멈추고 열기 실행
+            if (DoorCloseCoL != null)
             {
-                // 문닫기를 멈추고 열기 실행
-                if (DoorCloseCoL != null)
-                {
-                    StopCoroutine(DoorCloseCoL);
-                    StopCoroutine(DoorCloseCoR);
-                }
-                Debug.Log("문 열림");
-                doorOpend = true;
-                DoorOpenCoL = StartCoroutine(doorScriptL.DoorOpenCoroutine());
-                DoorOpenCoR = StartCoroutine(doorScriptR.DoorOpenCoroutine());
-            }
-            // 문 열려있는 상태일 때 E누르면 문닫힘
-            else if (doorOpend)
-            {
-                if (DoorOpenCoL != null)
-                {
-                    // 문열기를 멈추고 닫기 실행
-                    StopCoroutine(DoorOpenCoL);
-                    StopCoroutine(DoorOpenCoR);
-                }
-                Debug.Log("문 닫힘");
-                doorOpend = false;
-                DoorCloseCoL = StartCoroutine(doorScriptL.DoorCloseCoroutine());
-                DoorCloseCoR = StartCoroutine(doorScriptR.DoorCloseCoroutine());
+                StopCoroutine(DoorCloseCoL);
+                StopCoroutine(DoorCloseCoR);
 
+                DoorCloseCoL = null;
+                DoorCloseCoR = null;
             }
+            doorOpend = true;
+            DoorOpenCoL = StartCoroutine(doorScriptL.DoorOpenCoroutine());
+            DoorOpenCoR = StartCoroutine(doorScriptR.DoorOpenCoroutine());
+        }
+        // 문 열려있는 상태일 때 E누르면 문닫힘
+        else if (doorOpend)
+        {
+            if (DoorOpenCoL != null)
+            {
+                // 문열기를 멈추고 닫기 실행
+                StopCoroutine(DoorOpenCoL);
+                StopCoroutine(DoorOpenCoR);
+
+                DoorOpenCoL = null;
+                DoorOpenCoR = null;
+            }
+            doorOpend = false;
+            DoorCloseCoL = StartCoroutine(doorScriptL.DoorCloseCoroutine());
+            DoorCloseCoR = StartCoroutine(doorScriptR.DoorCloseCoroutine());
+        }
     }
 
 
@@ -96,31 +101,65 @@ public class DoorController : MonoBehaviourPun, IPunObservable
     /// <summary>
     /// 문 열림 상태에 따라 가스를 충전, 감소 시키는 함수
     /// </summary>
-    void GasCheck()
+    IEnumerator GasCheck()
     {
-        //가스 0되면 강제로 문 개방됨
-        if (gas <= 0)
+        while (true)
         {
-            if (DoorOpenCoL == null)
-                DoorOpenCoL = StartCoroutine(doorScriptL.DoorOpenCoroutine());
-            if (DoorOpenCoR == null)
-                DoorOpenCoR = StartCoroutine(doorScriptR.DoorOpenCoroutine());
-        }
-
-        //문 개방 여부에 따라 코루틴 변경
-        if (gasCo == null)
-        {
-            switch (doorOpend)
+            if (gas >= 100)
             {
-                case false:
-                    gasCo = StartCoroutine(DoorGasDeCoroutine());
-                    break;
+                if (gasCo != null)
+                    StopCoroutine(gasCo);
 
-                case true:
-                    gasCo = StartCoroutine(DoorGasCoroutine());
-                    break;
+                gasCo = null;
+                canDoorControll = true;
             }
+            //가스 0되면 강제로 문 개방됨
+            if (gas <= 0)
+            {
+                if (DoorOpenCoL == null)
+                    DoorOpenCoL = StartCoroutine(doorScriptL.DoorOpenCoroutine());
+                if (DoorOpenCoR == null)
+                    DoorOpenCoR = StartCoroutine(doorScriptR.DoorOpenCoroutine());
+
+                //가스가 100이 될 때까지 제어권 상실
+                if (canDoorControll)
+                {
+                    canDoorControll = false;
+                    StopCoroutine(gasCo);
+                    gasCo = null;
+                    if (gasCo == null)
+                    {
+                        gasCo = StartCoroutine(GasZeroRechargeCoroutine());
+                    }
+                }
+            }
+
+            //문 개방 여부에 따라 코루틴 변경
+            if (gasCo == null)
+            {
+                switch (doorOpend)
+                {
+                    case false:
+                        Debug.Log("가스감소발동");
+                        gasCo = StartCoroutine(DoorGasDeCoroutine());
+                        break;
+
+                    case true:
+                        gasCo = StartCoroutine(DoorGasCoroutine());
+                        break;
+                }
+            }
+
+            yield return null;
         }
+    }
+
+    IEnumerator GasZeroRechargeCoroutine()
+    {
+        yield return new WaitForSeconds(2f);
+
+        doorOpend = true;
+        gasCo = StartCoroutine(DoorGasCoroutine());
     }
 
     /// <summary>
@@ -131,7 +170,8 @@ public class DoorController : MonoBehaviourPun, IPunObservable
     {
         while (gas < 100f)
         {
-            gas += 10f * Time.deltaTime;
+            Debug.Log("가스증가");
+            gas += 25f * Time.deltaTime;
 
             if (gas >= 100f)
             {
@@ -151,7 +191,8 @@ public class DoorController : MonoBehaviourPun, IPunObservable
     {
         while (gas > 0)
         {
-            gas -= 10f * Time.deltaTime;
+            Debug.Log("가스감소");
+            gas -= 25f * Time.deltaTime;
 
             if (gas <= 0)
             {
