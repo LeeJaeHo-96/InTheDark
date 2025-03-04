@@ -17,7 +17,7 @@ public class ComputerControll : BaseUI
     const string land_Start = "시작의 섬";
     const string land_Middle = "중간섬";
     const string land_End = "끝의 섬";
-    const string light = "손전등";
+    const string flashlight = "손전등";
     const string stick = "막대기";
     const string exit = "나가기";
 
@@ -54,7 +54,6 @@ public class ComputerControll : BaseUI
     /// <param name="inputText"></param>
     void TextInput(string inputText)
     {
-        
         if (Input.GetKeyDown(KeyCode.Return))
         {
             switch (curPage.name)
@@ -114,7 +113,7 @@ public class ComputerControll : BaseUI
                 case "SubMenuText_Store":
                     switch (inputText)
                     {
-                        case light:
+                        case flashlight:
                             //Todo : 구매 리스트에 손전등 추가
                             Debug.Log("손전등 추가");
                             break;
