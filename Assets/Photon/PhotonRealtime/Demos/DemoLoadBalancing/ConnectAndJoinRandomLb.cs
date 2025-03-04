@@ -18,7 +18,7 @@ namespace Photon.Realtime.Demo
         private LoadBalancingClient lbc;
 
         private ConnectionHandler ch;
-        public Text StateUiText;
+        public UnityEngine.UI.Text StateUiText;
 
         public void Start()
         {
@@ -46,7 +46,7 @@ namespace Photon.Realtime.Demo
                 client.Service();
 
 
-                Text uiText = this.StateUiText;
+                UnityEngine.UI.Text uiText = this.StateUiText;
                 string state = client.State.ToString();
                 if (uiText != null && !uiText.text.Equals(state))
                 {

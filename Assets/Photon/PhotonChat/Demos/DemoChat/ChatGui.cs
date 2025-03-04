@@ -69,7 +69,7 @@ namespace Photon.Chat.Demo
         public RectTransform ChatPanel;     // set in inspector (to enable/disable panel)
         public GameObject UserIdFormPanel;
         public InputField InputFieldChat;   // set in inspector
-        public Text CurrentChannelText;     // set in inspector
+        public UnityEngine.UI.Text CurrentChannelText;     // set in inspector
         public Toggle ChannelToggleToInstantiate; // set in inspector
 
 
@@ -81,8 +81,8 @@ namespace Photon.Chat.Demo
 
         public bool ShowState = true;
         public GameObject Title;
-        public Text StateText; // set in inspector
-        public Text UserIdText; // set in inspector
+        public UnityEngine.UI.Text StateText; // set in inspector
+        public UnityEngine.UI.Text UserIdText; // set in inspector
 
         // private static string WelcomeText = "Welcome to chat. Type \\help to list commands.";
         private static string HelpText = "\n    -- HELP --\n" +
