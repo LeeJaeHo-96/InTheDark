@@ -20,6 +20,8 @@ public class PlayerController : MonoBehaviourPun
     
     private float _mouseX;
     private float _mouseY;
+
+    private float _sensitivity => DataManager.Instance.UserSettingData.Sensitivity;
     
     private void Awake() => Init();
     
@@ -75,9 +77,7 @@ public class PlayerController : MonoBehaviourPun
     /// </summary>
     private void InputRotate()
     {
-        
-        //TODO: 추후 마우스 감도가 들어갈 자리 GetAxis * 마우스 감도 * Time.DeltaTime
-        _mouseX += Input.GetAxisRaw("Mouse X");
+        _mouseX += Input.GetAxisRaw("Mouse X") * _sensitivity * Time.deltaTime;
         _mouseY += Input.GetAxisRaw("Mouse Y");
 
         _mouseY = Mathf.Clamp(_mouseY, -90f, 90f);
