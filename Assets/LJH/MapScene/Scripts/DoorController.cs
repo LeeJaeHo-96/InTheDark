@@ -32,8 +32,8 @@ public class DoorController : MonoBehaviourPun, IPunObservable
 
     private void Update()
     {
-        DoorOpen();
-        GasCheck();
+        //DoorOpen();
+        //GasCheck();
     }
 
     void DoorOpen()
@@ -42,12 +42,12 @@ public class DoorController : MonoBehaviourPun, IPunObservable
     }
 
     /// <summary>
-    /// ¹® °³¹æµÇ´Â ÇÔ¼ö
+    /// ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç´ï¿½ ï¿½Ô¼ï¿½
     /// </summary>
     [PunRPC]
     void RPCDoorOpenAndClose()
     {
-        //°¡½º 0µÇ¸é °­Á¦·Î ¹® °³¹æµÊ
+        //ï¿½ï¿½ï¿½ï¿½ 0ï¿½Ç¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
         if (gas <= 0)
         {
             if (DoorOpenCoL == null)
@@ -58,23 +58,23 @@ public class DoorController : MonoBehaviourPun, IPunObservable
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            // E¹öÆ° ´©¸¦¶§¸¶´Ù °¡½º ÄÚ·çÆ¾ ÃÊ±âÈ­ ½ÃÅ´
+            // Eï¿½ï¿½Æ° ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ú·ï¿½Æ¾ ï¿½Ê±ï¿½È­ ï¿½ï¿½Å´
             if(gasCo != null)
                 StopCoroutine(gasCo);
             gasCo = null;
 
-            // ¹® ´ÝÇôÀÖ´Â »óÅÂÀÏ ¶§ E´©¸£¸é ¹®¿­¸²
+            // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Eï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             if (!doorOpend)
             {
-                Debug.Log("¹® ¿­¸²");
+                Debug.Log("ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
                 doorOpend = true;
                 DoorOpenCoL = StartCoroutine(doorScriptL.DoorOpenCoroutine());
                 DoorOpenCoR = StartCoroutine(doorScriptR.DoorOpenCoroutine());
             }
-            // ¹® ¿­·ÁÀÖ´Â »óÅÂÀÏ ¶§ E´©¸£¸é ¹®´ÝÈû
+            // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Eï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             else if (doorOpend)
             {
-                Debug.Log("¹® ´ÝÈû");
+                Debug.Log("ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
                 doorOpend = false;
                 DoorCloseCoL = StartCoroutine(doorScriptL.DoorCloseCoroutine());
                 DoorCloseCoR = StartCoroutine(doorScriptR.DoorCloseCoroutine());
@@ -86,7 +86,7 @@ public class DoorController : MonoBehaviourPun, IPunObservable
 
 
     /// <summary>
-    /// ¹® ¿­¸² »óÅÂ¿¡ µû¶ó °¡½º¸¦ ÃæÀü, °¨¼Ò ½ÃÅ°´Â ÇÔ¼ö
+    /// ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å°ï¿½ï¿½ ï¿½Ô¼ï¿½
     /// </summary>
     void GasCheck()
     {
@@ -106,7 +106,7 @@ public class DoorController : MonoBehaviourPun, IPunObservable
     }
 
     /// <summary>
-    /// ¹® ´ÝÇôÀÖÀ» ¶§, °¡½º ÃæÀüµÇ´Â ÄÚ·çÆ¾
+    /// ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç´ï¿½ ï¿½Ú·ï¿½Æ¾
     /// </summary>
     /// <returns></returns>
     IEnumerator DoorGasCoroutine()
@@ -126,7 +126,7 @@ public class DoorController : MonoBehaviourPun, IPunObservable
     }
 
     /// <summary>
-    /// ¹® ¿­·ÁÀÖÀ» ¶§ °¡½º °¨¼ÒµÇ´Â ÄÚ·çÆ¾
+    /// ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ÒµÇ´ï¿½ ï¿½Ú·ï¿½Æ¾
     /// </summary>
     /// <returns></returns>
     IEnumerator DoorGasDeCoroutine()

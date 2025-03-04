@@ -12,7 +12,12 @@ public class PlayerSpawner : MonoBehaviour
     private void OnEnable()
     {
         PunManager.Instance.OnChangedPlayer += PlayerSpawn;
-    } 
+    }
+
+    private void OnDisable()
+    {
+        PunManager.Instance.OnChangedPlayer -= PlayerSpawn;
+    }
 
     private void PlayerSpawn()
     {
