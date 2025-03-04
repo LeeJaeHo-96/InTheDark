@@ -29,7 +29,7 @@ public class PopUp : MonoBehaviour
     {
         if (other == playerCol)
         {
-                Debug.Log("½ÇÇàµÊ");
+                Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½");
                 keyInfo.SetActive(!keyInfo.activeSelf);
         }
     }

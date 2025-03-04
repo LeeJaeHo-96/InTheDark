@@ -15,7 +15,5 @@ public class ServerState : MonoBehaviourPunCallbacks
         if (_state == PhotonNetwork.NetworkClientState) return;
         
         _state = PhotonNetwork.NetworkClientState;
-
-        Debug.Log($"state :{_state}");
     }
 }
