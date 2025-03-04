@@ -46,7 +46,8 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
+        Cursor.lockState = CursorLockMode.Locked; 
+        
         Init();
     }
 
