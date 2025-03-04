@@ -21,7 +21,7 @@ namespace Photon.Chat.Demo
     [ExecuteInEditMode]
     public class ChatAppIdCheckerUI : MonoBehaviour
     {
-        public Text Description;
+        public UnityEngine.UI.Text Description;
         public bool WizardOpenedOnce;   // avoid opening the wizard again and again
 
         // TODO: maybe this can run on Start(), not on Update()?!

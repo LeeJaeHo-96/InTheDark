@@ -22,64 +22,78 @@ public class DoorController : MonoBehaviourPun, IPunObservable
     public Coroutine DoorCloseCoR;
 
     public bool doorOpend = true;
+
+    //�� ����� ����
+    bool canDoorControll = true;
     private void Start()
     {
         doorScriptL = leftDoor.GetComponent<Door>();
         doorScriptR = rightDoor.GetComponent<Door>();
+
+        StartCoroutine(GasCheck());
 
 
     }
 
     private void Update()
     {
-        //DoorOpen();
-        //GasCheck();
+        if (photonView.IsMine)
+        {
+            DoorOpen();
+        }
     }
 
     void DoorOpen()
     {
-        photonView.RPC("RPCDoorOpenAndClose", RpcTarget.AllBuffered);
+        if (canDoorControll && Input.GetKeyDown(KeyCode.E))
+        {
+            photonView.RPC("RPCDoorOpenAndClose", RpcTarget.AllViaServer, photonView.ViewID);
+        }
     }
 
     /// <summary>
     /// �� ����Ǵ� �Լ�
     /// </summary>
     [PunRPC]
-    void RPCDoorOpenAndClose()
+    void RPCDoorOpenAndClose(int playerID)
     {
-        //���� 0�Ǹ� ������ �� �����
-        if (gas <= 0)
+        // E��ư ���������� ���� �ڷ�ƾ �ʱ�ȭ ��Ŵ
+        if (gasCo != null)
+            StopCoroutine(gasCo);
+        gasCo = null;
+
+
+        // �� �����ִ� ������ �� E������ ������
+        if (!doorOpend)
         {
-            if (DoorOpenCoL == null)
-                DoorOpenCoL = StartCoroutine(doorScriptL.DoorOpenCoroutine());
-            if (DoorOpenCoR == null)
-                DoorOpenCoR = StartCoroutine(doorScriptR.DoorOpenCoroutine());
+            // ���ݱ⸦ ���߰� ���� ����
+            if (DoorCloseCoL != null)
+            {
+                StopCoroutine(DoorCloseCoL);
+                StopCoroutine(DoorCloseCoR);
+
+                DoorCloseCoL = null;
+                DoorCloseCoR = null;
+            }
+            doorOpend = true;
+            DoorOpenCoL = StartCoroutine(doorScriptL.DoorOpenCoroutine());
+            DoorOpenCoR = StartCoroutine(doorScriptR.DoorOpenCoroutine());
         }
-
-        if (Input.GetKeyDown(KeyCode.E))
+        // �� �����ִ� ������ �� E������ ������
+        else if (doorOpend)
         {
-            // E��ư ���������� ���� �ڷ�ƾ �ʱ�ȭ ��Ŵ
-            if(gasCo != null)
-                StopCoroutine(gasCo);
-            gasCo = null;
-
-            // �� �����ִ� ������ �� E������ ������
-            if (!doorOpend)
+            if (DoorOpenCoL != null)
             {
-                Debug.Log("�� ����");
-                doorOpend = true;
-                DoorOpenCoL = StartCoroutine(doorScriptL.DoorOpenCoroutine());
-                DoorOpenCoR = StartCoroutine(doorScriptR.DoorOpenCoroutine());
-            }
-            // �� �����ִ� ������ �� E������ ������
-            else if (doorOpend)
-            {
-                Debug.Log("�� ����");
-                doorOpend = false;
-                DoorCloseCoL = StartCoroutine(doorScriptL.DoorCloseCoroutine());
-                DoorCloseCoR = StartCoroutine(doorScriptR.DoorCloseCoroutine());
+                // �����⸦ ���߰� �ݱ� ����
+                StopCoroutine(DoorOpenCoL);
+                StopCoroutine(DoorOpenCoR);
 
+                DoorOpenCoL = null;
+                DoorOpenCoR = null;
             }
+            doorOpend = false;
+            DoorCloseCoL = StartCoroutine(doorScriptL.DoorCloseCoroutine());
+            DoorCloseCoR = StartCoroutine(doorScriptR.DoorCloseCoroutine());
         }
     }
 
@@ -88,21 +102,65 @@ public class DoorController : MonoBehaviourPun, IPunObservable
     /// <summary>
     /// �� ���� ���¿� ���� ������ ����, ���� ��Ű�� �Լ�
     /// </summary>
-    void GasCheck()
+    IEnumerator GasCheck()
     {
-        if (gasCo == null)
+        while (true)
         {
-            switch (doorOpend)
+            if (gas >= 100)
             {
-                case false:
-                    gasCo = StartCoroutine(DoorGasDeCoroutine());
-                    break;
+                if (gasCo != null)
+                    StopCoroutine(gasCo);
 
-                case true:
-                    gasCo = StartCoroutine(DoorGasCoroutine());
-                    break;
+                gasCo = null;
+                canDoorControll = true;
             }
+            //���� 0�Ǹ� ������ �� �����
+            if (gas <= 0)
+            {
+                if (DoorOpenCoL == null)
+                    DoorOpenCoL = StartCoroutine(doorScriptL.DoorOpenCoroutine());
+                if (DoorOpenCoR == null)
+                    DoorOpenCoR = StartCoroutine(doorScriptR.DoorOpenCoroutine());
+
+                //������ 100�� �� ������ ����� ���
+                if (canDoorControll)
+                {
+                    canDoorControll = false;
+                    StopCoroutine(gasCo);
+                    gasCo = null;
+                    if (gasCo == null)
+                    {
+                        gasCo = StartCoroutine(GasZeroRechargeCoroutine());
+                    }
+                }
+            }
+
+            //�� ���� ���ο� ���� �ڷ�ƾ ����
+            if (gasCo == null)
+            {
+                switch (doorOpend)
+                {
+                    case false:
+                        Debug.Log("�������ҹߵ�");
+                        gasCo = StartCoroutine(DoorGasDeCoroutine());
+                        break;
+
+                    case true:
+                        gasCo = StartCoroutine(DoorGasCoroutine());
+                        break;
+                }
+            }
+
+            yield return null;
         }
+    }
+
+    IEnumerator GasZeroRechargeCoroutine()
+    {
+        yield return new WaitForSeconds(2f);
+
+        doorOpend = true;
+        gasCo = StartCoroutine(DoorGasCoroutine());
     }
 
     /// <summary>
@@ -113,7 +171,8 @@ public class DoorController : MonoBehaviourPun, IPunObservable
     {
         while (gas < 100f)
         {
-            gas += 10f * Time.deltaTime;
+            Debug.Log("��������");
+            gas += 25f * Time.deltaTime;
 
             if (gas >= 100f)
             {
@@ -133,7 +192,8 @@ public class DoorController : MonoBehaviourPun, IPunObservable
     {
         while (gas > 0)
         {
-            gas -= 10f * Time.deltaTime;
+            Debug.Log("��������");
+            gas -= 25f * Time.deltaTime;
 
             if (gas <= 0)
             {

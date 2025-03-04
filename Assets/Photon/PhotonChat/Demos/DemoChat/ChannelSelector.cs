@@ -19,7 +19,7 @@ namespace Photon.Chat.Demo
         public void SetChannel(string channel)
         {
             this.Channel = channel;
-            Text t = this.GetComponentInChildren<Text>();
+            UnityEngine.UI.Text t = this.GetComponentInChildren<UnityEngine.UI.Text>();
             t.text = this.Channel;
         }
 

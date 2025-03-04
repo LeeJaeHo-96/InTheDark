@@ -11,7 +11,8 @@ public class PopUp : MonoBehaviour
 
     private void Start()
     {
-        //Init();
+        if(player != null)
+        Init();
     }
 
     private void OnTriggerEnter(Collider other)

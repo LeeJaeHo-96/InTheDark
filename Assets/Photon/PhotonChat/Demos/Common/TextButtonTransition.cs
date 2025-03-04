@@ -17,11 +17,11 @@ namespace Photon.Chat.UtilityScripts
 	/// <summary>
 	/// Use this on Button texts to have some color transition on the text as well without corrupting button's behaviour.
 	/// </summary>
-	[RequireComponent(typeof(Text))]
+	[RequireComponent(typeof(UnityEngine.UI.Text))]
 	public class TextButtonTransition : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
-		
-		Text _text;
+
+        UnityEngine.UI.Text _text;
 
         /// <summary>
         /// The selectable Component.
@@ -40,7 +40,7 @@ namespace Photon.Chat.UtilityScripts
 
 		public void Awake()
 		{
-			_text = GetComponent<Text>();
+            _text = GetComponent<UnityEngine.UI.Text>();
 		}
 
         public void OnEnable()

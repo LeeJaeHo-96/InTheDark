@@ -17,7 +17,7 @@ namespace Photon.Chat.UtilityScripts
 	/// <summary>
 	/// Use this on toggles texts to have some color transition on the text depending on the isOn State.
 	/// </summary>
-	[RequireComponent(typeof(Text))]
+	[RequireComponent(typeof(UnityEngine.UI.Text))]
 	public class TextToggleIsOnTransition : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
 
@@ -26,7 +26,7 @@ namespace Photon.Chat.UtilityScripts
         /// </summary>
 		public Toggle toggle;
 
-		Text _text;
+        UnityEngine.UI.Text _text;
 
         /// <summary>
         /// The color of the normal on transition state.
@@ -52,7 +52,7 @@ namespace Photon.Chat.UtilityScripts
 
 		public void OnEnable()
 		{
-			_text = GetComponent<Text>();
+            _text = GetComponent<UnityEngine.UI.Text>();
 		
 			OnValueChanged (toggle.isOn);
 
