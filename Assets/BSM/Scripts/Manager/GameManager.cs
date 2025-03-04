@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public int CurVSyncCount;
     [HideInInspector] public int CurWindowMode;
     [HideInInspector] public float CurGammaBrightness;
-
+    
     public static GameManager Instance;
     public FirebaseUser CurUser;
     
@@ -46,8 +46,7 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        Cursor.lockState = CursorLockMode.Locked; 
-        
+
         Init();
     }
 

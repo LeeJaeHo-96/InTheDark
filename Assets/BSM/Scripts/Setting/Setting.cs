@@ -21,6 +21,7 @@ public class Setting : ObjBind
     private Slider _masterVolumeSlider;
     private Slider _sfxVolumeSlider;
     private Slider _bgmVolumeSlider;
+    private Slider _sensitivitySlider;
     private Button _confirmButton;
     private Button _resetButton;
     
@@ -50,7 +51,8 @@ public class Setting : ObjBind
    
     //sfx 슬라이더 값
     private float _sfxSliderValue => _soundManager.GetVolumeSfx() / 20f;
-    
+    private float _sensitivity;
+
     private int _changeDetect => _changeCheck.Count(x => x);
     private Coroutine _changeDetectCo;
     
@@ -66,7 +68,8 @@ public class Setting : ObjBind
         Init();   
         SetFrameDropDown();
         SetWindowDropdown();
-        SetGammaSlider(); 
+        SetGammaSlider();
+        SetSensitivtySlider();
     }
 
 
@@ -85,6 +88,7 @@ public class Setting : ObjBind
         _masterVolumeSlider = GetComponentBind<Slider>("Master_Volume_Slider");
         _sfxVolumeSlider = GetComponentBind<Slider>("SFX_Volume_Slider");
         _bgmVolumeSlider = GetComponentBind<Slider>("BGM_Volume_Slider");
+
         
         _masterVolumeSlider.value = _masterValue;
         _sfxVolumeSlider.value = _sfxSliderValue;
@@ -154,6 +158,19 @@ public class Setting : ObjBind
     {
         _soundManager.SetVolumeSFX(volume);
         _changeCheck[(int)Settings.SFX_VOLUME] = !(Mathf.Approximately(_soundManager.GetVolumeSfx(), _dataManager.UserSettingData.SfxVolume));
+    }
+
+    private void SetSensitivtySlider()
+    {
+        _sensitivitySlider = GetComponentBind<Slider>("Sensitivity_Slider");
+        _sensitivitySlider.onValueChanged.AddListener(x => ChangeSensitivity(x));
+        _sensitivitySlider.value = _dataManager.UserSettingData.Sensitivity; 
+    }
+
+    private void ChangeSensitivity(float value)
+    {
+        _sensitivity = value;
+        _changeCheck[(int)Settings.SENSITIVITY] = !(Mathf.Approximately(_sensitivity, _dataManager.UserSettingData.Sensitivity));     
     }
     
     /// <summary>
@@ -237,6 +254,7 @@ public class Setting : ObjBind
         _dataManager.UserSettingData.BgmVolume = _soundManager.GetVolumeBgm();
         _dataManager.UserSettingData.SfxVolume = _soundManager.GetVolumeSfx();
         _dataManager.UserSettingData.WindowMode = _gameManager.CurWindowMode;
+        _dataManager.UserSettingData.Sensitivity = _sensitivity;
         CheckSetting();
 
 
@@ -259,7 +277,7 @@ public class Setting : ObjBind
         _masterVolumeSlider.value = Mathf.Pow(10, _dataManager.UserSettingData.MasterVolume / 20f);
         _bgmVolumeSlider.value = _dataManager.UserSettingData.BgmVolume / 20f;
         _sfxVolumeSlider.value = _dataManager.UserSettingData.SfxVolume / 20f;
-
+        _sensitivitySlider.value = _dataManager.UserSettingData.Sensitivity;
         CheckSetting();
         
     }
@@ -275,6 +293,7 @@ public class Setting : ObjBind
         _changeCheck[(int)Settings.GAMMA] = !(Mathf.Approximately(_gameManager.CurGammaBrightness, _dataManager.UserSettingData.GammaBrightness));
         _changeCheck[(int)Settings.FRAME] = _frameDropdownValue != _dataManager.UserSettingData.Frame;
         _changeCheck[(int)Settings.WINDOWMODE] = _gameManager.CurWindowMode != _dataManager.UserSettingData.WindowMode;
+        _changeCheck[(int)Settings.SENSITIVITY] = !(Mathf.Approximately(_sensitivity, _dataManager.UserSettingData.Sensitivity));
     }
 
     /// <summary>
@@ -288,6 +307,7 @@ public class Setting : ObjBind
         _masterVolumeSlider.value = Mathf.Pow(10, _dataManager.UserSettingData.MasterVolume / 20f);
         _bgmVolumeSlider.value = _dataManager.UserSettingData.BgmVolume / 20f;
         _sfxVolumeSlider.value = _dataManager.UserSettingData.SfxVolume / 20f;
+        _sensitivitySlider.value = _dataManager.UserSettingData.Sensitivity;
     }
     
 }

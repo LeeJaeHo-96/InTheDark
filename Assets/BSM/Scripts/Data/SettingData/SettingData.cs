@@ -11,11 +11,13 @@ public class SettingData : ScriptableObject
     public float BgmVolume = 5f;
     public float SfxVolume = 5f;
     public float GammaBrightness;
-
+    public float Sensitivity = 0.01f;
+    
     public int Vsync;
     public int WindowMode;
     public int Frame;
-
+    
+    
 }
 
 public static class SettingReset
@@ -31,7 +33,7 @@ public static class SettingReset
         DataManager.Instance.UserSettingData.GammaBrightness = 0f;
         DataManager.Instance.UserSettingData.Vsync = 0;
         DataManager.Instance.UserSettingData.WindowMode = 0;
-        DataManager.Instance.UserSettingData.Frame = 0; 
-        
+        DataManager.Instance.UserSettingData.Frame = 0;
+        DataManager.Instance.UserSettingData.Sensitivity = 0.01f;
     } 
 }

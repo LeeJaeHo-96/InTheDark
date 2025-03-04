@@ -76,7 +76,7 @@ public class PlayerController : MonoBehaviourPun
     private void InputRotate()
     {
         
-        //TODO: 추후 마우스 감도가 들어갈 자리 GetAxis * 마우스 감도
+        //TODO: 추후 마우스 감도가 들어갈 자리 GetAxis * 마우스 감도 * Time.DeltaTime
         _mouseX += Input.GetAxisRaw("Mouse X");
         _mouseY += Input.GetAxisRaw("Mouse Y");
 
