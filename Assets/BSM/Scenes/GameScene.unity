@@ -365,11 +365,11 @@ MonoBehaviour:
   Group: 0
   prefixField: -1
   Synchronization: 3
-  OwnershipTransfer: 0
+  OwnershipTransfer: 1
   observableSearch: 2
   ObservedComponents:
   - {fileID: 102866352}
-  sceneViewId: 1
+  sceneViewId: 999
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!1 &161766603
@@ -549,7 +549,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!81 &759025023
 AudioListener:
   m_ObjectHideFlags: 0

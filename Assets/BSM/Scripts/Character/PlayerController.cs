@@ -17,10 +17,13 @@ public class PlayerController : MonoBehaviourPun
     private Rigidbody _playerRb;
     private Transform _eyePos;
     private Transform _armPos;
+
+    private Item _item;
     
     public Vector3 MoveDir = Vector3.zero;
     private PState _curState = PState.IDLE;
-    
+
+    private bool _isGrab;
     private float _mouseX;
     private float _mouseY;
     private int _itemLayer => LayerMask.GetMask("Item");
@@ -67,6 +70,7 @@ public class PlayerController : MonoBehaviourPun
         InputKey();
         InputRotate();
         CameraToItemRay();
+        DropItem();
     }
 
     private void FixedUpdate()
@@ -114,26 +118,42 @@ public class PlayerController : MonoBehaviourPun
 
         if (Physics.Raycast(ray.origin, ray.direction, out RaycastHit hit, 2f, _itemLayer))
         { 
-            UIManager.Instance.ItemPickObjActive(true);
+            UIManager.Instance.ItemPickObjActive(!_isGrab);
 
             if (Input.GetKeyDown(KeyCode.E))
-            {
-                
-                Item item = hit.collider.GetComponent<Item>(); 
-                ItemPickUp(item);
+            { 
+                _item = hit.collider.GetComponent<Item>();
+                _isGrab = true;
+                ItemPickUp(_item);
                 UIManager.Instance.ItemPickObjActive();
-            }
-            
+            } 
         }
         else
         {
             UIManager.Instance.ItemPickObjActive();
         }
     }
-
+    
+    /// <summary>
+    /// 들고있는 아이템 드랍
+    /// </summary>
+    private void DropItem()
+    {
+        if (_isGrab && Input.GetKeyDown(KeyCode.G))
+        {
+            _item.Drop(transform);
+            _isGrab = false;
+        }
+        
+    }
+    
+    /// <summary>
+    /// 아이템 소유권 및 잡을 위치 지정
+    /// </summary>
+    /// <param name="item"></param>
     private void ItemPickUp(Item item)
     {
-        
+        item.PickUp(PhotonNetwork.LocalPlayer, _armPos);
     }
     
     /// <summary>
