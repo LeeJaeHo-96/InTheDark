@@ -12,8 +12,12 @@ public enum Stage
 public class Lever : MonoBehaviourPun
 {
     public Stage Stage;
+    PopUp popUp;
 
-
+    private void Start()
+    {
+        popUp = GetComponent<PopUp>();
+    }
     private void Update()
     {
         GoingMap();
@@ -21,7 +25,7 @@ public class Lever : MonoBehaviourPun
 
     void GoingMap()
     {
-        if(Input.GetKeyDown(KeyCode.E))
+        if(popUp.hitMe && Input.GetKeyDown(KeyCode.E))
         {
             switch(Stage)
             {

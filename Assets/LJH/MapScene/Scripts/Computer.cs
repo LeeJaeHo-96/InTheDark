@@ -4,7 +4,20 @@ using UnityEngine;
 
 public class Computer : MonoBehaviour
 {
-    Canvas monitor;
+    GameObject computerCanvas;
+    PopUp popUp;
 
-    //void Onea 
+    private void Start()
+    {
+        popUp = GetComponent<PopUp>();
+        computerCanvas = transform.GetChild(0).GetComponent<GameObject>();
+    }
+
+    void ComputerOnOFf()
+    {
+        if(popUp.hitMe && Input.GetKeyDown(KeyCode.E))
+        {
+            computerCanvas.SetActive(!computerCanvas.activeSelf);
+        }
+    }
 }
