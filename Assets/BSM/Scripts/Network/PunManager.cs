@@ -46,6 +46,8 @@ public class PunManager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         OnChangedPlayer?.Invoke();
+        //TODO: 테스트가 끝나면 풀것
+        //Cursor.lockState = CursorLockMode.Locked;
     }
 
     public override void OnLeftRoom()

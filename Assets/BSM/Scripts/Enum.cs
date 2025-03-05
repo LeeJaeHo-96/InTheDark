@@ -16,3 +16,9 @@ public enum PState
 {
     IDLE, WALK, RUN, JUMP , SIZE
 }
+
+[System.Serializable]
+public enum ItemHoldingType
+{
+    ONEHANDED, TWOHANDED
+}
