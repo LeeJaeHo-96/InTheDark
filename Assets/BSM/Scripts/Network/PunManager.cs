@@ -12,9 +12,7 @@ using UnityEngine.SceneManagement;
 public class PunManager : MonoBehaviourPunCallbacks
 {
     private Lobby Lobby => Lobby.Instance;
-
     public static PunManager Instance;
-    
     public UnityAction OnChangedPlayer;
 
     private void Awake()
