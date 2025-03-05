@@ -49,7 +49,11 @@ public class PlayerController : MonoBehaviourPun
 
     private void Start()
     {
-        if (!photonView.IsMine) return;
+        if (!photonView.IsMine)
+        {
+            _cam.gameObject.SetActive(false);
+            return;
+        }
         _cam.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
         
         _playerStates[(int)_curState].Enter();
