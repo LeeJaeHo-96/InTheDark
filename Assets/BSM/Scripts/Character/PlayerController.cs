@@ -1,11 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Photon.Pun;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviourPun
 {
+    [SerializeField] private Camera _cam;
+    
     public PlayerStats PlayerStats => _playerStats;
     public Rigidbody PlayerRb => _playerRb;
     
@@ -13,14 +16,15 @@ public class PlayerController : MonoBehaviourPun
     private PlayerStats _playerStats;
     private Rigidbody _playerRb;
     private Transform _eyePos;
-    private Camera _cam;
+    private Transform _armPos;
     
     public Vector3 MoveDir = Vector3.zero;
     private PState _curState = PState.IDLE;
     
     private float _mouseX;
     private float _mouseY;
-
+    private int _itemLayer => LayerMask.GetMask("Item");
+    
     private float _sensitivity => DataManager.Instance.UserSettingData.Sensitivity;
     
     private void Awake() => Init();
@@ -29,12 +33,11 @@ public class PlayerController : MonoBehaviourPun
     {
         //TODO: 임시로 여기서 잠금 추후 PunManager에서 방 입장 시 커서 모드 변경함
         Cursor.lockState = CursorLockMode.Locked;
-        
-        _cam = Camera.main;
-        
+
         _playerStats = GetComponent<PlayerStats>();
         _playerRb = GetComponent<Rigidbody>();
         _eyePos = transform.GetChild(0).GetChild(0).GetComponent<Transform>();
+        _armPos = transform.GetChild(0).GetChild(1).GetComponent<Transform>();
         
         _playerStates[(int)PState.IDLE] = new PlayerIdle(this);
         _playerStates[(int)PState.WALK] = new PlayerWalk(this);
@@ -44,7 +47,7 @@ public class PlayerController : MonoBehaviourPun
 
     private void Start()
     {
-        _cam.transform.SetParent(_eyePos);
+        if (!photonView.IsMine) return;
         _cam.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
         
         _playerStates[(int)_curState].Enter();
@@ -52,13 +55,17 @@ public class PlayerController : MonoBehaviourPun
 
     private void Update()
     {
+        if (!photonView.IsMine) return;
+        
         _playerStates[(int)_curState].Update();
         InputKey();
         InputRotate();
+        CameraToItemRay();
     }
 
     private void FixedUpdate()
     {
+        if (!photonView.IsMine) return;
         _playerStates[(int)_curState].FixedUpdate();
     }
 
@@ -87,6 +94,40 @@ public class PlayerController : MonoBehaviourPun
         
         //카메라 상하/좌우 회전
         _cam.transform.rotation = Quaternion.Euler(-_mouseY, _mouseX, 0f);
+         
+    }
+
+    /// <summary>
+    /// 카메라 정면 방향으로 레이쏨
+    /// </summary>
+    private void CameraToItemRay()
+    {
+        Ray ray = new Ray(_cam.transform.position, _cam.transform.forward);
+        
+        Debug.DrawRay(ray.origin, ray.direction * 10, Color.red);
+
+        if (Physics.Raycast(ray.origin, ray.direction, out RaycastHit hit, 2f, _itemLayer))
+        { 
+            UIManager.Instance.ItemPickObjActive(true);
+
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                
+                Item item = hit.collider.GetComponent<Item>(); 
+                ItemPickUp(item);
+                UIManager.Instance.ItemPickObjActive();
+            }
+            
+        }
+        else
+        {
+            UIManager.Instance.ItemPickObjActive();
+        }
+    }
+
+    private void ItemPickUp(Item item)
+    {
+        
     }
     
     /// <summary>

@@ -37,9 +37,7 @@ public class GUITest : Editor
         rect.height = lineHeight;
         EditorGUI.DrawRect(rect, new Color(0.5f, 0.5f, 0.5f, 1));
         EditorGUILayout.Space();
-    }
-    
-    
+    } 
 }
 
 #endif
@@ -47,6 +45,9 @@ public class GUITest : Editor
 [CreateAssetMenu(menuName = "Data/CreateInteractableItem")]
 public class InteractableItemData : ScriptableObject
 {
+    [Header("아이템 ID")] 
+    public int ItemID;
+    
     [Header("아이템 무게")]
     public float ItemWeight;
     
@@ -67,4 +68,11 @@ public class InteractableItemData : ScriptableObject
 
     [Header("소모품의 내구도")] 
     public float MaxDurability;
+
+    [Header("공격 속도")] 
+    public float AttackSpeed;
+
+    [Header("공격 범위")] 
+    public float AttackRange;
+
 }
