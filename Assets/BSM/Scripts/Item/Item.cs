@@ -9,14 +9,19 @@ public class Item : MonoBehaviourPun
 {
     [SerializeField] private int _itemID;
     private InteractableItemData _itemData;
+    private Rigidbody _itemRb;
+    public bool IsOwned;
 
-     
+    private void Awake()
+    {
+        _itemRb = GetComponent<Rigidbody>();
+    }
 
     private void OnEnable()
     {
         StartCoroutine(ItemSetDelayRoutine());
     }
-
+    
     private void OnValidate()
     {
         if (_itemID <= 0)
@@ -24,7 +29,11 @@ public class Item : MonoBehaviourPun
             Debug.LogError($"ID 값을 0이상 값으로 입력하세요. -{gameObject.name}-");
         }
     }
-
+    
+    /// <summary>
+    /// 아이템 데이터 셋팅 딜레이 코루틴
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator ItemSetDelayRoutine()
     {
         while (ItemManager.Instance == null)
@@ -42,22 +51,38 @@ public class Item : MonoBehaviourPun
     {
         _itemData = ItemManager.Instance.GetItemData(_itemID);
     }
-
-     
-    public void PickUp(Player player, Transform armTransform)
+    
+    /// <summary>
+    /// 아이템 주운 후 동작
+    /// </summary>
+    /// <param name="player"></param>
+    public void PickUp(Player player)
     {
+        _itemRb.isKinematic = true;
         photonView.TransferOwnership(player);
-        transform.SetParent(armTransform);
-        transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+        photonView.RPC(nameof(SyncOwnershipRPC), RpcTarget.AllViaServer, true);
     }
 
-    public void Drop(Transform dropTransform, Player player = null)
+    /// <summary>
+    /// 아이템 버린 후 동작
+    /// </summary>
+    /// <param name="player"></param>
+    public void Drop(Player player = null)
     {
-        Vector3 dropPos = new Vector3(dropTransform.position.x, 1, dropTransform.position.z);
-        
+        _itemRb.isKinematic = false;
         photonView.TransferOwnership(player);
+        photonView.RPC(nameof(SyncOwnershipRPC), RpcTarget.AllViaServer, false);
         transform.parent = null;
-        transform.SetLocalPositionAndRotation(dropPos, Quaternion.identity);
     }
     
+    /// <summary>
+    /// 소유권 동기화
+    /// </summary>
+    /// <param name="isOwner"></param>
+    [PunRPC]
+    private void SyncOwnershipRPC(bool isOwner = false)
+    {
+        IsOwned = isOwner;
+        _itemRb.isKinematic = isOwner;
+    }
 }

@@ -71,6 +71,7 @@ public class PlayerController : MonoBehaviourPun
         InputRotate();
         CameraToItemRay();
         DropItem();
+        ItemPositionToArm();
     }
 
     private void FixedUpdate()
@@ -85,10 +86,24 @@ public class PlayerController : MonoBehaviourPun
     private void InputKey()
     {
         MoveDir.x = Input.GetAxisRaw("Horizontal");
-        MoveDir.z = Input.GetAxisRaw("Vertical"); 
+        MoveDir.z = Input.GetAxisRaw("Vertical");
+        
+
     }
-
-
+    
+    /// <summary>
+    /// 현재 아이템의 소유권자를 확인 후 위치 동기화
+    /// </summary>
+    private void ItemPositionToArm()
+    {
+        if(_item == null) return;
+        if (!_item.IsOwned) return;
+        if (!_item.photonView.Owner.Equals(photonView.Owner)) return;
+        
+        //TODO: 추후 팔 위치 조정 필요
+        _item.transform.position = _armPos.position;
+    }
+    
     /// <summary>
     /// 마우스 회전 입력
     /// </summary>
@@ -101,10 +116,20 @@ public class PlayerController : MonoBehaviourPun
         
         //캐릭터 몸체 회전
         transform.rotation = Quaternion.Euler(0, _mouseX, 0f);
-        
+        photonView.RPC(nameof(SyncCharacterRotate), RpcTarget.AllBuffered, _mouseX);
         //카메라 상하/좌우 회전
         _cam.transform.rotation = Quaternion.Euler(-_mouseY, _mouseX, 0f);
          
+    }
+
+    /// <summary>
+    /// 캐릭터 회전 동기화
+    /// </summary>
+    /// <param name="x"></param>
+    [PunRPC]
+    private void SyncCharacterRotate(float x)
+    {
+        transform.rotation = Quaternion.Euler(0, x, 0);        
     }
 
     /// <summary>
@@ -118,14 +143,19 @@ public class PlayerController : MonoBehaviourPun
 
         if (Physics.Raycast(ray.origin, ray.direction, out RaycastHit hit, 2f, _itemLayer))
         { 
-            UIManager.Instance.ItemPickObjActive(!_isGrab);
+            _item = hit.collider.GetComponent<Item>();
 
-            if (Input.GetKeyDown(KeyCode.E))
-            { 
-                _item = hit.collider.GetComponent<Item>();
-                _isGrab = true;
-                ItemPickUp(_item);
-                UIManager.Instance.ItemPickObjActive();
+            //해당 아이템을 누가 들고있는지 확인
+            if (!_item.IsOwned)
+            {
+                UIManager.Instance.ItemPickObjActive(!_isGrab);
+
+                if (Input.GetKeyDown(KeyCode.E))
+                { 
+                    _isGrab = true;
+                    ItemPickUp(_item);
+                    UIManager.Instance.ItemPickObjActive();
+                } 
             } 
         }
         else
@@ -141,19 +171,20 @@ public class PlayerController : MonoBehaviourPun
     {
         if (_isGrab && Input.GetKeyDown(KeyCode.G))
         {
-            _item.Drop(transform);
+            _item.Drop(); 
+            _item = null;
             _isGrab = false;
         }
         
     }
-    
+
     /// <summary>
     /// 아이템 소유권 및 잡을 위치 지정
     /// </summary>
     /// <param name="item"></param>
     private void ItemPickUp(Item item)
     {
-        item.PickUp(PhotonNetwork.LocalPlayer, _armPos);
+        item.PickUp(PhotonNetwork.LocalPlayer); 
     }
     
     /// <summary>
