@@ -31,6 +31,8 @@ public class PlayerController : MonoBehaviourPun
     
     private void Init()
     {
+        if(!photonView.IsMine) return;
+        
         //TODO: 임시로 여기서 잠금 추후 PunManager에서 방 입장 시 커서 모드 변경함
         Cursor.lockState = CursorLockMode.Locked;
 
