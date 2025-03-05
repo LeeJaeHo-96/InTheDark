@@ -4,41 +4,20 @@ using UnityEngine;
 
 public class PopUp : MonoBehaviour
 {
-    GameObject player;
-    Collider playerCol;
+    public GameObject player;
+    public Collider playerCol;
 
     [SerializeField] GameObject keyInfo;
 
-    private void Start()
+    public bool hitMe;
+
+    private void Update()
     {
-        if(player != null)
-        Init();
+        KeyInfoOnOff(hitMe);
     }
 
-    private void OnTriggerEnter(Collider other)
+    void KeyInfoOnOff(bool tf)
     {
-        KeyInfoOnOff(other);
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        KeyInfoOnOff(other);
-    }
-
-    void KeyInfoOnOff(Collider other)
-    {
-        if (other == playerCol)
-        {
-                Debug.Log("�����");
-                keyInfo.SetActive(!keyInfo.activeSelf);
-        }
-    }
-
-
-    void Init()
-    {
-        player = GameObject.FindWithTag(Tag.Player); 
-        playerCol = player.GetComponent<Collider>();
-
+        keyInfo.SetActive(tf);
     }
 }

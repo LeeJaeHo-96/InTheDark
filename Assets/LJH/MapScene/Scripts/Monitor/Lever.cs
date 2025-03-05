@@ -14,7 +14,6 @@ public class Lever : MonoBehaviourPun
     public Stage Stage;
 
 
-
     private void Update()
     {
         GoingMap();

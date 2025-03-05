@@ -1,11 +1,17 @@
 using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class DoorController : MonoBehaviourPun, IPunObservable
 {
+    //플레이어
+    GameObject player;
+    Collider playerColl;
+
     [SerializeField] GameObject leftDoor;
     [SerializeField] GameObject rightDoor;
     [SerializeField] TMP_Text gasText;
@@ -21,18 +27,15 @@ public class DoorController : MonoBehaviourPun, IPunObservable
     public Coroutine DoorCloseCoL;
     public Coroutine DoorCloseCoR;
 
-    public bool doorOpend = true;
+    public bool doorOpened = true;
 
-    //�� ����� ����
-    bool canDoorControll = true;
+    //문 제어권 변수
+    [SerializeField] bool canDoorControll = true;
+    DoorPopUp popUp;
+
     private void Start()
     {
-        doorScriptL = leftDoor.GetComponent<Door>();
-        doorScriptR = rightDoor.GetComponent<Door>();
-
-        StartCoroutine(GasCheck());
-
-
+        Init();
     }
 
     private void Update()
@@ -45,28 +48,29 @@ public class DoorController : MonoBehaviourPun, IPunObservable
 
     void DoorOpen()
     {
-        if (canDoorControll && Input.GetKeyDown(KeyCode.E))
+        if (canDoorControll && Input.GetKeyDown(KeyCode.E) && popUp.hitMe)
         {
+            Debug.Log("E버튼 눌림");
             photonView.RPC("RPCDoorOpenAndClose", RpcTarget.AllViaServer, photonView.ViewID);
         }
     }
 
     /// <summary>
-    /// �� ����Ǵ� �Լ�
+    /// 문 열고 닫는 RPC 함수
     /// </summary>
     [PunRPC]
     void RPCDoorOpenAndClose(int playerID)
     {
-        // E��ư ���������� ���� �ڷ�ƾ �ʱ�ȭ ��Ŵ
+        // gasCo 초기화
         if (gasCo != null)
             StopCoroutine(gasCo);
         gasCo = null;
 
 
-        // �� �����ִ� ������ �� E������ ������
-        if (!doorOpend)
+        // 문이 닫혀있을 때 열어주는 기능
+        if (!doorOpened)
         {
-            // ���ݱ⸦ ���߰� ���� ����
+            // 코루틴 변수 비워주고 다시 초기화
             if (DoorCloseCoL != null)
             {
                 StopCoroutine(DoorCloseCoL);
@@ -75,23 +79,23 @@ public class DoorController : MonoBehaviourPun, IPunObservable
                 DoorCloseCoL = null;
                 DoorCloseCoR = null;
             }
-            doorOpend = true;
+            doorOpened = true;
             DoorOpenCoL = StartCoroutine(doorScriptL.DoorOpenCoroutine());
             DoorOpenCoR = StartCoroutine(doorScriptR.DoorOpenCoroutine());
         }
-        // �� �����ִ� ������ �� E������ ������
-        else if (doorOpend)
+        // 문이 열려있을 때 닫아주는 기능
+        else if (doorOpened)
         {
             if (DoorOpenCoL != null)
             {
-                // �����⸦ ���߰� �ݱ� ����
+                // 코루틴 변수 비워주고 다시 초기화
                 StopCoroutine(DoorOpenCoL);
                 StopCoroutine(DoorOpenCoR);
 
                 DoorOpenCoL = null;
                 DoorOpenCoR = null;
             }
-            doorOpend = false;
+            doorOpened = false;
             DoorCloseCoL = StartCoroutine(doorScriptL.DoorCloseCoroutine());
             DoorCloseCoR = StartCoroutine(doorScriptR.DoorCloseCoroutine());
         }
@@ -100,7 +104,7 @@ public class DoorController : MonoBehaviourPun, IPunObservable
 
 
     /// <summary>
-    /// �� ���� ���¿� ���� ������ ����, ���� ��Ű�� �Լ�
+    /// 가스양에 체크해주는 코루틴
     /// </summary>
     IEnumerator GasCheck()
     {
@@ -114,7 +118,7 @@ public class DoorController : MonoBehaviourPun, IPunObservable
                 gasCo = null;
                 canDoorControll = true;
             }
-            //���� 0�Ǹ� ������ �� �����
+            // 가스가 0일 때, 자동으로 열리는
             if (gas <= 0)
             {
                 if (DoorOpenCoL == null)
@@ -122,7 +126,7 @@ public class DoorController : MonoBehaviourPun, IPunObservable
                 if (DoorOpenCoR == null)
                     DoorOpenCoR = StartCoroutine(doorScriptR.DoorOpenCoroutine());
 
-                //������ 100�� �� ������ ����� ���
+                // 가스 0이되면 일정 시간 지나고 나서 충전 가능
                 if (canDoorControll)
                 {
                     canDoorControll = false;
@@ -135,13 +139,12 @@ public class DoorController : MonoBehaviourPun, IPunObservable
                 }
             }
 
-            //�� ���� ���ο� ���� �ڷ�ƾ ����
+            //문 개방 여부에 따라 가스 충전/감소 시켜주는
             if (gasCo == null)
             {
-                switch (doorOpend)
+                switch (doorOpened)
                 {
                     case false:
-                        Debug.Log("�������ҹߵ�");
                         gasCo = StartCoroutine(DoorGasDeCoroutine());
                         break;
 
@@ -159,19 +162,18 @@ public class DoorController : MonoBehaviourPun, IPunObservable
     {
         yield return new WaitForSeconds(2f);
 
-        doorOpend = true;
+        doorOpened = true;
         gasCo = StartCoroutine(DoorGasCoroutine());
     }
 
     /// <summary>
-    /// �� �������� ��, ���� �����Ǵ� �ڷ�ƾ
+    /// 가스 충전해주는 코루틴
     /// </summary>
     /// <returns></returns>
     IEnumerator DoorGasCoroutine()
     {
         while (gas < 100f)
         {
-            Debug.Log("��������");
             gas += 25f * Time.deltaTime;
 
             if (gas >= 100f)
@@ -185,14 +187,13 @@ public class DoorController : MonoBehaviourPun, IPunObservable
     }
 
     /// <summary>
-    /// �� �������� �� ���� ���ҵǴ� �ڷ�ƾ
+    /// 가스 감소해주는 코루틴
     /// </summary>
     /// <returns></returns>
     IEnumerator DoorGasDeCoroutine()
     {
         while (gas > 0)
         {
-            Debug.Log("��������");
             gas -= 25f * Time.deltaTime;
 
             if (gas <= 0)
@@ -203,6 +204,16 @@ public class DoorController : MonoBehaviourPun, IPunObservable
 
             yield return null;
         }
+    }
+
+    void Init()
+    {
+        doorScriptL = leftDoor.GetComponent<Door>();
+        doorScriptR = rightDoor.GetComponent<Door>();
+
+        StartCoroutine(GasCheck());
+
+        popUp = GetComponent<DoorPopUp>();
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
