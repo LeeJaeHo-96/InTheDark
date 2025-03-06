@@ -6,6 +6,8 @@ using UnityEngine.Events;
 
 public class PlayerStats : MonoBehaviourPun
 {
+    public bool CanCarry = true;
+    
     //TODO: 전체적인 수치는 조정 필요
     private float _walkSpeed = 5f;
 

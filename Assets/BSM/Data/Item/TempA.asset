@@ -14,9 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemID: 4
   ItemWeight: 0
-  ItemHoldingType: 0
+  ItemHoldingType: 1
   ItemName: 
   ItemIcon: {fileID: 0}
   IsAttack: 0
   IsConsumable: 0
   MaxDurability: 0
+  AttackSpeed: 0
+  AttackRange: 0

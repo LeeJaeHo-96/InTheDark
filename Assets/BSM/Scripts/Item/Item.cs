@@ -5,6 +5,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody), typeof(PhotonTransformView), typeof(PhotonView))]
 public class Item : MonoBehaviourPun
 {
     [SerializeField] private int _itemID;
@@ -95,6 +96,20 @@ public class Item : MonoBehaviourPun
     public float GetItemWeight()
     {
         return _itemWeight;
+    }
+
+    /// <summary>
+    /// 아이템 타입
+    /// </summary>
+    /// <returns></returns>
+    public ItemHoldingType GetHoldingType()
+    {
+        return _itemData.ItemHoldingType;
+    }
+
+    public Sprite GetItemImage()
+    {
+        return _itemData.ItemIcon;
     }
     
 }

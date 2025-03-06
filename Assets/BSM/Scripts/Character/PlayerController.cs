@@ -22,7 +22,8 @@ public class PlayerController : MonoBehaviourPun
     private Rigidbody _playerRb;
     private Transform _eyePos;
     private Transform _armPos;
-    
+
+    private Inventory _inventory;
     private Item _item;
 
     private PState _curState = PState.IDLE;
@@ -43,6 +44,7 @@ public class PlayerController : MonoBehaviourPun
         //TODO: 임시로 여기서 잠금 추후 PunManager에서 방 입장 시 커서 모드 변경함
         Cursor.lockState = CursorLockMode.Locked;
 
+        _inventory = GetComponent<Inventory>();
         _playerStats = GetComponent<PlayerStats>();
         _playerRb = GetComponent<Rigidbody>();
         _eyePos = transform.GetChild(0).GetChild(0).GetComponent<Transform>();
@@ -69,7 +71,7 @@ public class PlayerController : MonoBehaviourPun
     private void Update()
     {
         if (!photonView.IsMine) return;
-        Debug.Log($"스테미나 :{_playerStats.Stamina} / 상태 :{_curState}");
+        
         _playerStates[(int)_curState].Update();
         InputKey();
         InputRotate();
@@ -146,12 +148,12 @@ public class PlayerController : MonoBehaviourPun
         if (Physics.Raycast(ray.origin, ray.direction, out RaycastHit hit, 2f, _itemLayer))
         { 
             _item = hit.collider.GetComponent<Item>();
-
+            
             //해당 아이템을 누가 들고있는지 확인
             if (!_item.IsOwned)
             {
                 UIManager.Instance.ItemPickObjActive(!_isGrab);
-
+                
                 if (Input.GetKeyDown(KeyCode.E))
                 { 
                     _isGrab = true;
@@ -186,7 +188,9 @@ public class PlayerController : MonoBehaviourPun
     /// <param name="item"></param>
     private void ItemPickUp(Item item)
     {
-        item.PickUp(PhotonNetwork.LocalPlayer); 
+        //TODO: 한 손으로 들 수 있는 아이템인 경우 인벤토리에 넣어줘야 함
+        _inventory.GetItem(item);
+        item.PickUp(PhotonNetwork.LocalPlayer);
         _playerStats.IsHoldingItem(_item.GetItemWeight());
     }
     
