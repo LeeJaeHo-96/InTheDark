@@ -31,6 +31,7 @@ public class PlayerController : MonoBehaviourPun
     
     private PState _curState = PState.IDLE;
 
+    private int _curInventoryIndex = 0;
     private bool _isGrab;
     private float _mouseX;
     private float _mouseY;
@@ -98,7 +99,10 @@ public class PlayerController : MonoBehaviourPun
         MoveDir.x = Input.GetAxisRaw("Horizontal");
         MoveDir.z = Input.GetAxisRaw("Vertical");
     }
-
+    
+    /// <summary>
+    /// 인벤토리 키 입력
+    /// </summary>
     private void SelectInventoryInItem()
     {
         if (Input.GetKeyDown(KeyCode.Keypad1) || Input.GetKeyDown(KeyCode.Alpha1))
@@ -118,14 +122,39 @@ public class PlayerController : MonoBehaviourPun
             CarryItemChange(3);
         } 
     }
-
+    
+    /// <summary>
+    /// 들고있는 아이템 변경
+    /// </summary>
+    /// <param name="index"></param>
     private void CarryItemChange(int index)
     {
-        if (_curCarryItem == null)
-        {
-            return;
+        _curInventoryIndex = index;
+    
+        //들고 있는 아이템이 있는지 확인
+        if (_curCarryItem != null)
+        {  
+            _curCarryItem.gameObject.SetActive(false);
+                
+            //변경할 슬롯의 아이템이 있는지 확인
+            if (_inventory.SelectedItem(index) != null)
+            {
+                _curCarryItem = _inventory.SelectedItem(index);
+                _curCarryItem.gameObject.SetActive(true); 
+            }
+            else
+            {
+                _curCarryItem = null;
+            }
         }
- 
+        else
+        {
+            if (_inventory.SelectedItem(index) != null)
+            {
+                _curCarryItem = _inventory.SelectedItem(index);
+                _curCarryItem.gameObject.SetActive(true); 
+            }
+        }  
     }
     
     
@@ -134,12 +163,12 @@ public class PlayerController : MonoBehaviourPun
     /// </summary>
     private void ItemPositionToArm()
     {
-        if(_item == null) return;
-        if (!_item.IsOwned) return;
-        if (!_item.photonView.Owner.Equals(photonView.Owner)) return;
+        if(_curCarryItem == null) return;
+        if (!_curCarryItem.IsOwned) return;
+        if (!_curCarryItem.photonView.Owner.Equals(photonView.Owner)) return;
         
         //TODO: 추후 팔 위치 조정 필요
-        _item.transform.position = _armPos.position;
+        _curCarryItem.transform.position = _armPos.position;
     }
     
     /// <summary>
@@ -206,12 +235,12 @@ public class PlayerController : MonoBehaviourPun
     /// </summary>
     private void DropItem()
     {
-        if (_isGrab && Input.GetKeyDown(KeyCode.G))
+        if (_curCarryItem != null && Input.GetKeyDown(KeyCode.G))
         {
-            _item.Drop(); 
+            _inventory.DropItem(_curInventoryIndex);
+            _curCarryItem.Drop(); 
             _playerStats.IsNotHoldingItem(_item.GetItemWeight());
-            _item = null;
-            _isGrab = false; 
+            _curCarryItem = null;
         } 
     }
 
@@ -234,8 +263,8 @@ public class PlayerController : MonoBehaviourPun
             }
         }
          
-        _inventory.GetItem(item);
-        item.PickUp(PhotonNetwork.LocalPlayer);
+        _inventory.GetItem(_curCarryItem);
+        _curCarryItem.PickUp(PhotonNetwork.LocalPlayer);
         _playerStats.IsHoldingItem(_item.GetItemWeight());
     }
     

@@ -333,7 +333,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d321bd1cc51e4ba4880f48a64da1bbc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _itemID: 1
+  _itemID: 4
   IsOwned: 0
 --- !u!114 &102866352
 MonoBehaviour:
@@ -529,7 +529,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d321bd1cc51e4ba4880f48a64da1bbc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _itemID: 3
+  _itemID: 2
   IsOwned: 0
 --- !u!65 &200476417
 BoxCollider:
@@ -1322,7 +1322,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d321bd1cc51e4ba4880f48a64da1bbc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _itemID: 2
+  _itemID: 1
   IsOwned: 0
 --- !u!65 &1623468813
 BoxCollider:
@@ -1541,7 +1541,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d321bd1cc51e4ba4880f48a64da1bbc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _itemID: 4
+  _itemID: 3
   IsOwned: 0
 --- !u!65 &1717094847
 BoxCollider:

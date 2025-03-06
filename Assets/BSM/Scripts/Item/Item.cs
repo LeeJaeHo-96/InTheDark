@@ -73,9 +73,8 @@ public class Item : MonoBehaviourPun
     public void Drop(Player player = null)
     {
         _itemRb.isKinematic = false;
-        photonView.TransferOwnership(player);
+        photonView.TransferOwnership(null);
         photonView.RPC(nameof(SyncOwnershipRPC), RpcTarget.AllViaServer, false);
-        transform.parent = null;
     }
     
     /// <summary>

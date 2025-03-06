@@ -26,6 +26,11 @@ public class Inventory : InventoryController
         } 
     }
 
+    public void DropItem(int index)
+    {
+        _slots[index].RemoveItem();
+    }
+    
     public Item SelectedItem(int index)
     {
         if (_slots[index]._item != null)
