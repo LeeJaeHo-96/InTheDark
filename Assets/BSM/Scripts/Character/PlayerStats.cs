@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
@@ -6,7 +7,7 @@ using UnityEngine.Events;
 
 public class PlayerStats : MonoBehaviourPun
 {
-    public bool CanCarry = true;
+    public bool CanCarry;
     
     //TODO: 전체적인 수치는 조정 필요
     private float _walkSpeed = 5f;
@@ -38,7 +39,12 @@ public class PlayerStats : MonoBehaviourPun
     }
 
     public UnityAction<float> OnChangedStamina;
-    
+
+    private void Awake()
+    {
+        CanCarry = true;
+    }
+
     /// <summary>
     /// 아이템을 들었을 때 이동 속도 감소
     /// </summary>
