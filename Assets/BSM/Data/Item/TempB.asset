@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TempB
   m_EditorClassIdentifier: 
   ItemID: 2
-  ItemWeight: 0
+  ItemWeight: 9
   ItemHoldingType: 0
   ItemName: 
   ItemIcon: {fileID: 21300000, guid: 7136708986a5cbf448278d13055e3dc7, type: 3}

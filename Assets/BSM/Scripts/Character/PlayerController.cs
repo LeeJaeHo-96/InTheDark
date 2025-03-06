@@ -74,7 +74,7 @@ public class PlayerController : MonoBehaviourPun
     private void Update()
     {
         if (!photonView.IsMine) return;
-
+        Debug.Log(_playerStats.WalkSpeed);
         _playerStates[(int)_curState].Update();
         InputKey();
         InputRotate();

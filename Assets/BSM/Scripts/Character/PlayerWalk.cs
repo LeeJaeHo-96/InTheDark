@@ -9,6 +9,7 @@ public class PlayerWalk : PlayerState
 
     public override void Enter()
     {
+        //TODO: 스태미너 회복 로직 수정 필요
         if (_controller.PlayerStats.Stamina < 100f && _controller.RecoverStaminaCo == null)
         {
             _controller.RecoverStaminaCo = _controller.StartCoroutine(RecoverStaminaRoutine());
