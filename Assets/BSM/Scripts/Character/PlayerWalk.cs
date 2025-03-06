@@ -9,6 +9,10 @@ public class PlayerWalk : PlayerState
 
     public override void Enter()
     {
+        if (_controller.PlayerStats.Stamina < 100f && _controller.RecoverStaminaCo == null)
+        {
+            _controller.RecoverStaminaCo = _controller.StartCoroutine(RecoverStaminaRoutine());
+        }
     }
 
     public override void Update()
@@ -33,5 +37,16 @@ public class PlayerWalk : PlayerState
         
         _controller.PlayerRb.MovePosition(_controller.transform.position + dir.normalized * _controller.PlayerStats.WalkSpeed * Time.fixedDeltaTime);   
     }
-    
+
+    public override void Exit()
+    {
+        //회복 코루틴이 != null
+        if (_controller.RecoverStaminaCo != null)
+        {
+            _controller.StopCoroutine(_controller.RecoverStaminaCo);
+            _controller.RecoverStaminaCo = null;
+        }
+    }
+
+
 }

@@ -19,7 +19,16 @@ public class PlayerJump : PlayerState
         {
             _controller.ChangeState(PState.IDLE);
         }
-        
+    
+       
+         
     }
     
+    //TODO: 이동 중 점프했을 때 처리를 해주는게 자연스럽나?
+    // public override void FixedUpdate()
+    // {
+    //     Vector3 dir = _controller.transform.TransformDirection(_controller.MoveDir);
+    //     
+    //     _controller.PlayerRb.MovePosition(_controller.transform.position + dir.normalized * _controller.PlayerStats.WalkSpeed * Time.fixedDeltaTime);   
+    // }
 }

@@ -9,6 +9,7 @@ public class PlayerRun : PlayerState
 
     public override void Enter()
     {
+        _controller.ConsumeStaminaCo = _controller.StartCoroutine(UseStaminaRoutine());
     }
 
     public override void Update()
@@ -17,7 +18,7 @@ public class PlayerRun : PlayerState
         {
             _controller.ChangeState(PState.IDLE);
         }
-        else if (_controller.MoveDir != Vector3.zero && !Input.GetKey(KeyCode.LeftShift))
+        else if ((_controller.MoveDir != Vector3.zero && !Input.GetKey(KeyCode.LeftShift)) || _controller.PlayerStats.Stamina <= 0f)
         {
             _controller.ChangeState(PState.WALK);
         }
@@ -34,5 +35,13 @@ public class PlayerRun : PlayerState
         _controller.PlayerRb.MovePosition(_controller.PlayerRb.position + dir.normalized * _controller.PlayerStats.RunSpeed * Time.fixedDeltaTime);
         
     }
+
+    public override void Exit()
+    {
+        _controller.StopCoroutine(_controller.ConsumeStaminaCo);
+        _controller.ConsumeStaminaCo = null;
+    }
+    
+
     
 }
