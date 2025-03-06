@@ -25,5 +25,15 @@ public class Inventory : InventoryController
             } 
         } 
     }
+
+    public Item SelectedItem(int index)
+    {
+        if (_slots[index]._item != null)
+        {
+            return _slots[index]._item;
+        }
+
+        return null;
+    }
     
 }

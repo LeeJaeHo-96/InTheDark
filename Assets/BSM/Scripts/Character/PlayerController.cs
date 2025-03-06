@@ -8,6 +8,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviourPun
 {
     [SerializeField] private Camera _cam;
+    [SerializeField] private Transform _inventoryPoint;
     
     public PlayerStats PlayerStats => _playerStats;
     public Rigidbody PlayerRb => _playerRb;
@@ -25,7 +26,9 @@ public class PlayerController : MonoBehaviourPun
 
     private Inventory _inventory;
     private Item _item;
-
+    public Item _curCarryItem;
+    
+    
     private PState _curState = PState.IDLE;
 
     private bool _isGrab;
@@ -78,6 +81,7 @@ public class PlayerController : MonoBehaviourPun
         CameraToItemRay();
         DropItem();
         ItemPositionToArm();
+        SelectInventoryInItem();
     }
 
     private void FixedUpdate()
@@ -94,6 +98,36 @@ public class PlayerController : MonoBehaviourPun
         MoveDir.x = Input.GetAxisRaw("Horizontal");
         MoveDir.z = Input.GetAxisRaw("Vertical");
     }
+
+    private void SelectInventoryInItem()
+    {
+        if (Input.GetKeyDown(KeyCode.Keypad1) || Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            CarryItemChange(0);
+        }
+        else if (Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            CarryItemChange(1);
+        }
+        else if (Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            CarryItemChange(2);
+        }
+        else if (Input.GetKeyDown(KeyCode.Keypad4) || Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            CarryItemChange(3);
+        } 
+    }
+
+    private void CarryItemChange(int index)
+    {
+        if (_curCarryItem == null)
+        {
+            return;
+        }
+ 
+    }
+    
     
     /// <summary>
     /// 현재 아이템의 소유권자를 확인 후 위치 동기화
@@ -152,20 +186,13 @@ public class PlayerController : MonoBehaviourPun
             //해당 아이템을 누가 들고있는지 확인
             if (!_item.IsOwned)
             {
-                Debug.Log(_item.IsOwned);
-                //UIManager.Instance.ItemPickObjActive(!_inventory.IsFull && !_item.IsOwned);
-                  
                 if (!_inventory.IsFull && Input.GetKeyDown(KeyCode.E))
                 { 
                     _isGrab = true;
                     ItemPickUp(_item);
-                    //UIManager.Instance.ItemPickObjActive();
                 } 
             }
-            else
-            {
-                //UIManager.Instance.ItemPickObjActive();
-            }
+
             UIManager.Instance.ItemPickObjActive(!_inventory.IsFull && !_item.IsOwned);
         }
         else
@@ -194,6 +221,19 @@ public class PlayerController : MonoBehaviourPun
     /// <param name="item"></param>
     private void ItemPickUp(Item item)
     {
+        if (_curCarryItem == null)
+        {
+            _curCarryItem = item;
+        }
+        else
+        {
+            if (_curCarryItem != item)
+            {
+                _curCarryItem.gameObject.SetActive(false);
+                _curCarryItem = item;
+            }
+        }
+         
         _inventory.GetItem(item);
         item.PickUp(PhotonNetwork.LocalPlayer);
         _playerStats.IsHoldingItem(_item.GetItemWeight());
