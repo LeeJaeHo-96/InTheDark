@@ -71,7 +71,7 @@ public class PlayerController : MonoBehaviourPun
     private void Update()
     {
         if (!photonView.IsMine) return;
-        
+
         _playerStates[(int)_curState].Update();
         InputKey();
         InputRotate();
@@ -152,15 +152,21 @@ public class PlayerController : MonoBehaviourPun
             //해당 아이템을 누가 들고있는지 확인
             if (!_item.IsOwned)
             {
-                UIManager.Instance.ItemPickObjActive(!_isGrab);
-                
-                if (Input.GetKeyDown(KeyCode.E))
+                Debug.Log(_item.IsOwned);
+                //UIManager.Instance.ItemPickObjActive(!_inventory.IsFull && !_item.IsOwned);
+                  
+                if (!_inventory.IsFull && Input.GetKeyDown(KeyCode.E))
                 { 
                     _isGrab = true;
                     ItemPickUp(_item);
-                    UIManager.Instance.ItemPickObjActive();
+                    //UIManager.Instance.ItemPickObjActive();
                 } 
-            } 
+            }
+            else
+            {
+                //UIManager.Instance.ItemPickObjActive();
+            }
+            UIManager.Instance.ItemPickObjActive(!_inventory.IsFull && !_item.IsOwned);
         }
         else
         {
@@ -188,7 +194,6 @@ public class PlayerController : MonoBehaviourPun
     /// <param name="item"></param>
     private void ItemPickUp(Item item)
     {
-        //TODO: 한 손으로 들 수 있는 아이템인 경우 인벤토리에 넣어줘야 함
         _inventory.GetItem(item);
         item.PickUp(PhotonNetwork.LocalPlayer);
         _playerStats.IsHoldingItem(_item.GetItemWeight());

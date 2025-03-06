@@ -1,10 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Inventory : InventoryController
 {
 
+    public bool IsFull => _slots.Where(x => x._item != null).Count() >= _slots.Count;
+    
+    
     void Awake()
     {
         base.Awake();
