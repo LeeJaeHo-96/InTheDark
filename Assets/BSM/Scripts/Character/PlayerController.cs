@@ -11,16 +11,20 @@ public class PlayerController : MonoBehaviourPun
     
     public PlayerStats PlayerStats => _playerStats;
     public Rigidbody PlayerRb => _playerRb;
+    public Coroutine ConsumeStaminaCo;
+    public Coroutine RecoverStaminaCo;
+    public PState CurState => _curState;
+    
+    public Vector3 MoveDir = Vector3.zero;
     
     private PlayerState[] _playerStates = new PlayerState[(int)PState.SIZE];
     private PlayerStats _playerStats;
     private Rigidbody _playerRb;
     private Transform _eyePos;
     private Transform _armPos;
-
-    private Item _item;
     
-    public Vector3 MoveDir = Vector3.zero;
+    private Item _item;
+
     private PState _curState = PState.IDLE;
 
     private bool _isGrab;
@@ -65,7 +69,7 @@ public class PlayerController : MonoBehaviourPun
     private void Update()
     {
         if (!photonView.IsMine) return;
-        
+        Debug.Log($"스테미나 :{_playerStats.Stamina} / 상태 :{_curState}");
         _playerStates[(int)_curState].Update();
         InputKey();
         InputRotate();
@@ -87,8 +91,6 @@ public class PlayerController : MonoBehaviourPun
     {
         MoveDir.x = Input.GetAxisRaw("Horizontal");
         MoveDir.z = Input.GetAxisRaw("Vertical");
-        
-
     }
     
     /// <summary>
@@ -172,10 +174,10 @@ public class PlayerController : MonoBehaviourPun
         if (_isGrab && Input.GetKeyDown(KeyCode.G))
         {
             _item.Drop(); 
+            _playerStats.IsNotHoldingItem(_item.GetItemWeight());
             _item = null;
-            _isGrab = false;
-        }
-        
+            _isGrab = false; 
+        } 
     }
 
     /// <summary>
@@ -185,6 +187,7 @@ public class PlayerController : MonoBehaviourPun
     private void ItemPickUp(Item item)
     {
         item.PickUp(PhotonNetwork.LocalPlayer); 
+        _playerStats.IsHoldingItem(_item.GetItemWeight());
     }
     
     /// <summary>
@@ -198,6 +201,5 @@ public class PlayerController : MonoBehaviourPun
         _playerStates[(int)_curState].Exit();
         _curState = newState;
         _playerStates[(int)_curState].Enter();
-    }
-    
+    } 
 }

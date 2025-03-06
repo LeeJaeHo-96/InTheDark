@@ -11,7 +11,8 @@ public class Item : MonoBehaviourPun
     private InteractableItemData _itemData;
     private Rigidbody _itemRb;
     public bool IsOwned;
-
+    private float _itemWeight;
+    
     private void Awake()
     {
         _itemRb = GetComponent<Rigidbody>();
@@ -50,6 +51,7 @@ public class Item : MonoBehaviourPun
     private void SetItemData()
     {
         _itemData = ItemManager.Instance.GetItemData(_itemID);
+        _itemWeight = _itemData.ItemWeight;
     }
     
     /// <summary>
@@ -85,4 +87,14 @@ public class Item : MonoBehaviourPun
         IsOwned = isOwner;
         _itemRb.isKinematic = isOwner;
     }
+
+    /// <summary>
+    /// 현재 들고 있는 아이템의 무게 반환
+    /// </summary>
+    /// <returns></returns>
+    public float GetItemWeight()
+    {
+        return _itemWeight;
+    }
+    
 }

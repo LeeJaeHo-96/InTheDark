@@ -10,6 +10,10 @@ public class PlayerIdle : PlayerState
 
     public override void Enter()
     {
+        if (_controller.PlayerStats.Stamina < 100f && _controller.RecoverStaminaCo == null)
+        {
+            _controller.RecoverStaminaCo = _controller.StartCoroutine(RecoverStaminaRoutine());
+        }
     }
 
     public override void Update()
@@ -32,5 +36,10 @@ public class PlayerIdle : PlayerState
     public override void Exit()
     {
         //Idle 애니메이션 종료
+        if (_controller.RecoverStaminaCo != null)
+        {
+            _controller.StopCoroutine(_controller.RecoverStaminaCo);
+            _controller.RecoverStaminaCo = null;
+        }
     }
 }
