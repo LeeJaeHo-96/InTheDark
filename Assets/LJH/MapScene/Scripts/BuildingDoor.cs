@@ -13,6 +13,9 @@ public class BuildingDoor : MonoBehaviourPun, IPunObservable
 
     Coroutine doorIncreaseCo;
 
+    GameObject player;
+    [SerializeField] Vector3 buildingSpawner;
+
     private void Update()
     {
         if (!photonView.IsMine)
@@ -26,6 +29,7 @@ public class BuildingDoor : MonoBehaviourPun, IPunObservable
         if (isClosed && Input.GetKeyDown(KeyCode.E) && doorIncreaseCo == null)
         {
             doorIncreaseCo = StartCoroutine(DoorIncreaseCoRoutine());
+            player = GameObject.FindWithTag(Tag.Player);
         }
 
         if (isClosed && Input.GetKeyUp(KeyCode.E) && doorIncreaseCo != null)
@@ -44,7 +48,7 @@ public class BuildingDoor : MonoBehaviourPun, IPunObservable
             yield return null;
 
             if (progressBar.fillAmount >= 1)
-                SceneManager.LoadScene("WaitingScene");
+                player.transform.position = buildingSpawner;
         }
     }
 
