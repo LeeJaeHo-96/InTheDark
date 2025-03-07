@@ -1,9 +1,10 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro.EditorUtilities;
 using UnityEngine;
 
-public class CreateBuidlingRoom : MonoBehaviour
+public class CreateBuidlingRoom : MonoBehaviourPun
 {
     // Room2 
     [SerializeField] List<GameObject> roomList_Depth1 = new List<GameObject>();
@@ -17,13 +18,33 @@ public class CreateBuidlingRoom : MonoBehaviour
     private void Start()
     {
         Init();
-        CreateRandomDepth1();
-        CreateRandomDepth2();
-        CreateRandomDepth3();
+        Coroutine finderCo = StartCoroutine(PhotonFinder());
+
+
     }
+
+    IEnumerator PhotonFinder()
+    {
+        yield return new WaitForSeconds(5f);
+
+        if (PhotonNetwork.IsMasterClient)
+                    RPCCreaTeRandomToTal();
+    }
+
+
+    [PunRPC]
+    void RPCCreaTeRandomToTal()
+    {
+        Debug.Log("에이");
+        photonView.RPC("CreateRandomDepth1", RpcTarget.AllViaServer);
+        photonView.RPC("CreateRandomDepth2", RpcTarget.AllViaServer);
+        photonView.RPC("CreateRandomDepth3", RpcTarget.AllViaServer);
+    }
+
 
     void CreateRandomDepth1()
     {
+        Debug.Log("비");
         //depth1Check가 0일 경우 == 모든 방이 막힌 경우 이기 때문에 doWhile로 0이 아닐때까지 반복시킴
         do
         {
@@ -36,7 +57,7 @@ public class CreateBuidlingRoom : MonoBehaviour
                     depth1Check--;
                 }
             }
-        } while (depth1Check == 0);
+        } while (depth1Check < 2);
     }
 
     void CreateRandomDepth2()
