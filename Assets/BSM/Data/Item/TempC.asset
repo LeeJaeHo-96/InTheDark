@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e1c8b6861f7e924390ed06c71d067d0, type: 3}
   m_Name: TempC
   m_EditorClassIdentifier: 
-  ItemID: 2
+  ItemID: 3
   ItemWeight: 0
   ItemHoldingType: 1
   ItemName: 
-  ItemIcon: {fileID: 0}
+  ItemIcon: {fileID: 21300000, guid: b202e26aa802f144e948505449d442bb, type: 3}
   IsAttack: 0
   IsConsumable: 0
   MaxDurability: 0

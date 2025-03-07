@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-//TODO: 감도, 키바인드, 마우스 반전 추가
+//TODO: 키바인드, 마우스 반전 추가
 [System.Serializable]
 public enum Settings
 {

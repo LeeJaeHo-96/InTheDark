@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e1c8b6861f7e924390ed06c71d067d0, type: 3}
   m_Name: TempFlashLight
   m_EditorClassIdentifier: 
-  ItemID: 1
+  ItemID: 4
   ItemWeight: 2.5
   ItemHoldingType: 0
   ItemName: "\uC784\uC2DC \uC190\uC804\uB4F1"

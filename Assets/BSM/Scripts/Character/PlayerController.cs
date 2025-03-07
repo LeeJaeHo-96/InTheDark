@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviourPun
     
     private PState _curState = PState.IDLE;
 
-    private bool _isGrab;
+    private int _curInventoryIndex = 0;
     private float _mouseX;
     private float _mouseY;
     private int _itemLayer => LayerMask.GetMask("Item");
@@ -74,7 +74,7 @@ public class PlayerController : MonoBehaviourPun
     private void Update()
     {
         if (!photonView.IsMine) return;
-
+        Debug.Log(_playerStats.WalkSpeed);
         _playerStates[(int)_curState].Update();
         InputKey();
         InputRotate();
@@ -98,7 +98,10 @@ public class PlayerController : MonoBehaviourPun
         MoveDir.x = Input.GetAxisRaw("Horizontal");
         MoveDir.z = Input.GetAxisRaw("Vertical");
     }
-
+    
+    /// <summary>
+    /// 인벤토리 키 입력
+    /// </summary>
     private void SelectInventoryInItem()
     {
         if (Input.GetKeyDown(KeyCode.Keypad1) || Input.GetKeyDown(KeyCode.Alpha1))
@@ -118,14 +121,42 @@ public class PlayerController : MonoBehaviourPun
             CarryItemChange(3);
         } 
     }
-
+    
+    /// <summary>
+    /// 들고있는 아이템 변경
+    /// </summary>
+    /// <param name="index"></param>
     private void CarryItemChange(int index)
     {
-        if (_curCarryItem == null)
+        _curInventoryIndex = index;
+        
+        //들고 있는 아이템이 있는지 확인
+        if (_curCarryItem != null)
         {
-            return;
+            if (_curCarryItem.GetHoldingType() == ItemHoldingType.ONEHANDED)
+            {
+                _curCarryItem.gameObject.SetActive(false);
+                
+                //변경할 슬롯의 아이템이 있는지 확인
+                if (_inventory.SelectedItem(index) != null)
+                {
+                    _curCarryItem = _inventory.SelectedItem(index);
+                    _curCarryItem.gameObject.SetActive(true); 
+                }
+                else
+                {
+                    _curCarryItem = null;
+                }
+            } 
         }
- 
+        else
+        {
+            if (_inventory.SelectedItem(index) != null)
+            {
+                _curCarryItem = _inventory.SelectedItem(index);
+                _curCarryItem.gameObject.SetActive(true); 
+            }
+        }  
     }
     
     
@@ -134,12 +165,12 @@ public class PlayerController : MonoBehaviourPun
     /// </summary>
     private void ItemPositionToArm()
     {
-        if(_item == null) return;
-        if (!_item.IsOwned) return;
-        if (!_item.photonView.Owner.Equals(photonView.Owner)) return;
+        if(_curCarryItem == null) return;
+        if (!_curCarryItem.IsOwned) return;
+        if (!_curCarryItem.photonView.Owner.Equals(photonView.Owner)) return;
         
         //TODO: 추후 팔 위치 조정 필요
-        _item.transform.position = _armPos.position;
+        _curCarryItem.transform.position = _armPos.position;
     }
     
     /// <summary>
@@ -186,14 +217,18 @@ public class PlayerController : MonoBehaviourPun
             //해당 아이템을 누가 들고있는지 확인
             if (!_item.IsOwned)
             {
-                if (!_inventory.IsFull && Input.GetKeyDown(KeyCode.E))
-                { 
-                    _isGrab = true;
+                if (!_inventory.IsFull && Input.GetKeyDown(KeyCode.E) && _playerStats.CanCarry)
+                {
+                    if (_item.GetHoldingType() == ItemHoldingType.TWOHANDED)
+                    {
+                        _playerStats.CanCarry = false;
+                    }
+                    
                     ItemPickUp(_item);
                 } 
             }
 
-            UIManager.Instance.ItemPickObjActive(!_inventory.IsFull && !_item.IsOwned);
+            UIManager.Instance.ItemPickObjActive(!_inventory.IsFull && !_item.IsOwned && _playerStats.CanCarry);
         }
         else
         {
@@ -206,12 +241,20 @@ public class PlayerController : MonoBehaviourPun
     /// </summary>
     private void DropItem()
     {
-        if (_isGrab && Input.GetKeyDown(KeyCode.G))
+        if (_curCarryItem != null && Input.GetKeyDown(KeyCode.G))
         {
-            _item.Drop(); 
+            if (_curCarryItem.GetHoldingType() == ItemHoldingType.TWOHANDED)
+            {
+                _playerStats.CanCarry = true;
+            }
+            else
+            {
+                _inventory.DropItem(_curInventoryIndex);
+            }
+             
+            _curCarryItem.Drop(); 
             _playerStats.IsNotHoldingItem(_item.GetItemWeight());
-            _item = null;
-            _isGrab = false; 
+            _curCarryItem = null;
         } 
     }
 
@@ -228,14 +271,18 @@ public class PlayerController : MonoBehaviourPun
         else
         {
             if (_curCarryItem != item)
-            {
+            { 
                 _curCarryItem.gameObject.SetActive(false);
                 _curCarryItem = item;
             }
         }
-         
-        _inventory.GetItem(item);
-        item.PickUp(PhotonNetwork.LocalPlayer);
+
+        if (_curCarryItem.GetHoldingType() == ItemHoldingType.ONEHANDED)
+        {
+            _inventory.GetItem(_curCarryItem);
+        }
+        
+        _curCarryItem.PickUp(PhotonNetwork.LocalPlayer);
         _playerStats.IsHoldingItem(_item.GetItemWeight());
     }
     
