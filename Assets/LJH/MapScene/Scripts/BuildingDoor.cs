@@ -56,7 +56,9 @@ public class BuildingDoor : MonoBehaviourPun, IPunObservable
     {
         if (other.CompareTag(Tag.Player))
         {
+            player = other.gameObject;
             isClosed = true;
+            player.transform.position = buildingSpawner;
         }
     }
 
