@@ -13,6 +13,7 @@ public class Tag
     public static string GameController = "GameController";
     public static string Pill = "Pill";
     public static string ShipDoor = "ShipDoor";
+    public static string MonsterSpawner = "MonsterSpawner";
 
 
 

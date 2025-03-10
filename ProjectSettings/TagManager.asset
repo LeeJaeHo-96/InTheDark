@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Pill
   - ShipDoor
+  - MonsterSpawner
   layers:
   - Default
   - TransparentFX

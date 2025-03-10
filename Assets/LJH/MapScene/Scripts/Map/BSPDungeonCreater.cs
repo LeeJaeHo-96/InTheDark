@@ -1,14 +1,13 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class BSPDungeonCreater : MonoBehaviour
 {
-    public Vector3 dungeonSize = new Vector3(50, 5, 50); // 맵 크기
+    private Vector3 dungeonSize = new Vector3(30, 1, 30); // 던전 전체 크기
     private BSPNode rootNode;
 
-    [SerializeField] GameObject roomPrefab;
-    [SerializeField] GameObject corriderPrefab;
+    [SerializeField] private List<GameObject> rooms = new List<GameObject>();
+    [SerializeField] private GameObject corridorPrefab;
 
     private void Start()
     {
@@ -16,7 +15,6 @@ public class BSPDungeonCreater : MonoBehaviour
         Split(rootNode);
         CreateRooms(rootNode);
         RenderDungeon(rootNode);
-
     }
 
     void Split(BSPNode node)
@@ -26,28 +24,28 @@ public class BSPDungeonCreater : MonoBehaviour
 
         bool splitHorizontally = Random.value > 0.5f;
         float splitPoint = splitHorizontally ?
-            Random.Range(5, node.Area.size.z - 5) :
-            Random.Range(5, node.Area.size.x - 5);
+            Random.Range(6, node.Area.size.z - 6) :
+            Random.Range(6, node.Area.size.x - 6);
 
         if (splitHorizontally)
         {
             node.Left = new BSPNode(new Bounds(
-            node.Area.center + new Vector3(0, 0, -splitPoint / 2),
-            new Vector3(node.Area.size.x, node.Area.size.y, splitPoint)));
+                node.Area.center + new Vector3(0, 0, -splitPoint / 2),
+                new Vector3(node.Area.size.x, 1, splitPoint)));
 
             node.Right = new BSPNode(new Bounds(
                 node.Area.center + new Vector3(0, 0, splitPoint / 2),
-                new Vector3(node.Area.size.x, node.Area.size.y, node.Area.size.z - splitPoint)));
+                new Vector3(node.Area.size.x, 1, node.Area.size.z - splitPoint)));
         }
         else
         {
             node.Left = new BSPNode(new Bounds(
                 node.Area.center + new Vector3(-splitPoint / 2, 0, 0),
-                new Vector3(splitPoint, node.Area.size.y, node.Area.size.z)));
+                new Vector3(splitPoint, 1, node.Area.size.z)));
 
             node.Right = new BSPNode(new Bounds(
                 node.Area.center + new Vector3(splitPoint / 2, 0, 0),
-                new Vector3(node.Area.size.x - splitPoint, node.Area.size.y, node.Area.size.z)));
+                new Vector3(node.Area.size.x - splitPoint, 1, node.Area.size.z)));
         }
 
         Split(node.Left);
@@ -56,22 +54,17 @@ public class BSPDungeonCreater : MonoBehaviour
 
     void CreateRooms(BSPNode node)
     {
-        if (node.Left == null && node.Right == null) // Leaf 노드인 경우 방 생성
+        if (node.Left == null && node.Right == null) // Leaf 노드일 경우 방 생성
         {
-            node.Room = new Bounds(
-                node.Area.center,
-                new Vector3(Mathf.Max(1, 1), 0.3f, Mathf.Max(1, 1)));
+            float roomWidth = Mathf.Min(6, node.Area.size.x - 2);
+            float roomDepth = Mathf.Min(6, node.Area.size.z - 2);
+
+            node.Room = new Bounds(node.Area.center, new Vector3(roomWidth, 5, roomDepth));
             return;
         }
 
         if (node.Left != null) CreateRooms(node.Left);
         if (node.Right != null) CreateRooms(node.Right);
-
-        //Todo: 복도는 현재 이상한 상태 추후 수정하여 추가
-        //if (node.Left != null && node.Right != null)
-        //{
-        //    CreateCorridor(node.Left.Room.center, node.Right.Room.center);  // 방과 방을 연결하는 복도 추가
-        //}
     }
 
     void RenderDungeon(BSPNode node)
@@ -79,10 +72,7 @@ public class BSPDungeonCreater : MonoBehaviour
         if (node == null) return;
 
         if (node.Room != null)
-        {
-            //여기서 방 크기에 따라 다른 프리팹을 뽑으면 다른 방들이 나오지 않을까?
             CreateRoom(node.Room);
-        }
 
         RenderDungeon(node.Left);
         RenderDungeon(node.Right);
@@ -90,24 +80,14 @@ public class BSPDungeonCreater : MonoBehaviour
 
     void CreateRoom(Bounds room)
     {
-        if (roomPrefab == null)
+        if (rooms == null || rooms.Count == 0)
         {
-            Debug.LogError("방 프리팹이 할당되지 않았습니다!");
+            Debug.LogError("방 프리팹이 없습니다!");
             return;
         }
 
-        GameObject newRoom = Instantiate(roomPrefab, room.center, Quaternion.identity); // 프리팹 생성
-        newRoom.transform.localScale = new Vector3(Mathf.Max(room.size.x, 6), 3, Mathf.Max(room.size.z, 6)); // 크기 조정
+        GameObject roomPrefab = rooms[Random.Range(0, rooms.Count)];
+        GameObject newRoom = Instantiate(roomPrefab, room.center, Quaternion.identity);
+        newRoom.transform.localScale = new Vector3(room.size.x, 5, room.size.z);
     }
-
-    void CreateCorridor(Vector3 start, Vector3 end)
-    {
-        Vector3 corridorPosition = (start + end) / 2;
-        Vector3 corridorSize = new Vector3(Mathf.Abs(start.x - end.x) + 2, 0.1f, Mathf.Abs(start.z - end.z) + 2);
-
-        GameObject corridor = Instantiate(corriderPrefab, corridorPosition, Quaternion.identity);
-        corridor.transform.position = corridorPosition;
-        corridor.transform.localScale = corridorSize;
-    }
-
 }
