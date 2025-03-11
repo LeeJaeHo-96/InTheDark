@@ -74,7 +74,7 @@ public class PlayerController : MonoBehaviourPun
     private void Update()
     {
         if (!photonView.IsMine) return;
-        Debug.Log(_playerStats.WalkSpeed);
+
         _playerStates[(int)_curState].Update();
         InputKey();
         InputRotate();
@@ -82,6 +82,12 @@ public class PlayerController : MonoBehaviourPun
         DropItem();
         ItemPositionToArm();
         SelectInventoryInItem();
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            UseItem();
+        }
+        
     }
 
     private void FixedUpdate()
@@ -211,9 +217,9 @@ public class PlayerController : MonoBehaviourPun
         Debug.DrawRay(ray.origin, ray.direction * 10, Color.red);
 
         if (Physics.Raycast(ray.origin, ray.direction, out RaycastHit hit, 2f, _itemLayer))
-        { 
+        {  
             _item = hit.collider.GetComponent<Item>();
-            
+
             //해당 아이템을 누가 들고있는지 확인
             if (!_item.IsOwned)
             {
@@ -284,6 +290,13 @@ public class PlayerController : MonoBehaviourPun
         
         _curCarryItem.PickUp(PhotonNetwork.LocalPlayer);
         _playerStats.IsHoldingItem(_item.GetItemWeight());
+    }
+
+    private void UseItem()
+    {
+        if (_curCarryItem == null) return;
+        
+        _curCarryItem.ItemUse();
     }
     
     /// <summary>

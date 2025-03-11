@@ -9,19 +9,21 @@ using UnityEngine;
 public class Item : MonoBehaviourPun
 {
     [SerializeField] private int _itemID;
-    private InteractableItemData _itemData;
+    protected InteractableItemData _itemData;
     private Rigidbody _itemRb;
     public bool IsOwned;
     private float _itemWeight;
     
-    private void Awake()
+    protected void Awake()
     {
         _itemRb = GetComponent<Rigidbody>();
     }
 
-    private void OnEnable()
+    protected virtual void OnEnable()
     {
+        Debug.Log("아이템 부모 enable");
         StartCoroutine(ItemSetDelayRoutine());
+        
     }
     
     private void OnValidate()
@@ -43,7 +45,8 @@ public class Item : MonoBehaviourPun
             yield return null; 
         }
         
-        SetItemData(); 
+        SetItemData();
+        ItemRestore();
     }
     
     /// <summary>
@@ -53,6 +56,11 @@ public class Item : MonoBehaviourPun
     {
         _itemData = ItemManager.Instance.GetItemData(_itemID);
         _itemWeight = _itemData.ItemWeight;
+    }
+
+    protected virtual void ItemRestore()
+    {
+        
     }
     
     /// <summary>
@@ -82,7 +90,7 @@ public class Item : MonoBehaviourPun
     /// </summary>
     /// <param name="isOwner"></param>
     [PunRPC]
-    private void SyncOwnershipRPC(bool isOwner = false)
+    protected void SyncOwnershipRPC(bool isOwner = false)
     {
         IsOwned = isOwner;
         _itemRb.isKinematic = isOwner;
@@ -106,9 +114,21 @@ public class Item : MonoBehaviourPun
         return _itemData.ItemHoldingType;
     }
 
+    /// <summary>
+    /// 아이템 이미지 반환
+    /// </summary>
+    /// <returns></returns>
     public Sprite GetItemImage()
     {
         return _itemData.ItemIcon;
+    }
+
+    /// <summary>
+    /// 각 아이템별 능력 사용
+    /// </summary>
+    public virtual void ItemUse()
+    {
+        
     }
     
 }
