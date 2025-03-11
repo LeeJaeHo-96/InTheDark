@@ -15,12 +15,19 @@ public class InventorySlot : MonoBehaviour
         _slotItemImage = GetComponent<Image>();
     }
 
+    /// <summary>
+    /// 아이템 추가
+    /// </summary>
+    /// <param name="item"></param>
     public void AddItem(Item item)
     {
         _item = item;
         _slotItemImage.sprite = _item.GetItemImage();
     }
 
+    /// <summary>
+    /// 아이템 제거
+    /// </summary>
     public void RemoveItem()
     {
         if (_item == null) return;

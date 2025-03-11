@@ -14,6 +14,10 @@ public class Inventory : InventoryController
         base.Awake();
     }
     
+    /// <summary>
+    /// 주운 아이템 슬롯에 추가
+    /// </summary>
+    /// <param name="item"></param>
     public void GetItem(Item item)
     {
         for (int i = 0; i < _slots.Count; i++)
@@ -26,11 +30,20 @@ public class Inventory : InventoryController
         } 
     }
 
+    /// <summary>
+    /// 인벤토리에 들어있는 아이템 드랍
+    /// </summary>
+    /// <param name="index"></param>
     public void DropItem(int index)
     {
         _slots[index].RemoveItem();
     }
     
+    /// <summary>
+    /// 아이템 선택
+    /// </summary>
+    /// <param name="index"></param>
+    /// <returns></returns>
     public Item SelectedItem(int index)
     {
         if (_slots[index]._item != null)
