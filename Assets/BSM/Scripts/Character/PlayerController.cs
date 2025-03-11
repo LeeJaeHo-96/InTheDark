@@ -238,7 +238,7 @@ public class PlayerController : MonoBehaviourPun
         }
         else
         {
-            UIManager.Instance.ItemPickObjActive();
+            //UIManager.Instance.ItemPickObjActive();
         }
     }
     

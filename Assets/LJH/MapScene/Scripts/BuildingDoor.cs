@@ -14,7 +14,14 @@ public class BuildingDoor : MonoBehaviourPun, IPunObservable
     Coroutine doorIncreaseCo;
 
     GameObject player;
-    [SerializeField] Vector3 buildingSpawner;
+    [SerializeField] GameObject buildingSpawner;
+    Vector3 buildingSpawnerPos;
+
+
+    void Start()
+    {
+        buildingSpawnerPos = buildingSpawner.transform.position;
+    }
 
     private void Update()
     {
@@ -48,7 +55,7 @@ public class BuildingDoor : MonoBehaviourPun, IPunObservable
             yield return null;
 
             if (progressBar.fillAmount >= 1)
-                player.transform.position = buildingSpawner;
+                player.transform.position = buildingSpawnerPos;
         }
     }
 
@@ -58,7 +65,7 @@ public class BuildingDoor : MonoBehaviourPun, IPunObservable
         {
             player = other.gameObject;
             isClosed = true;
-            player.transform.position = buildingSpawner;
+            player.transform.position = buildingSpawnerPos;
         }
     }
 
