@@ -75,4 +75,7 @@ public class InteractableItemData : ScriptableObject
     [Header("공격 범위")] 
     public float AttackRange;
 
+    [Header("아이템 공격력")] 
+    public int Damage;
+
 }

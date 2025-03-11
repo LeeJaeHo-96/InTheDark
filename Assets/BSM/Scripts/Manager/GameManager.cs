@@ -22,7 +22,9 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     public FirebaseUser CurUser;
     
-    private static int _refreshRate; 
+    private static int _refreshRate;
+    private int _itemLayer;
+    
     private ColorGrading PostVolume; 
     private PostProcessProfile _postProfile;
     private Dictionary<int, int> _frameDict = new Dictionary<int, int>()
@@ -57,9 +59,10 @@ public class GameManager : MonoBehaviour
         CurUser = FirebaseManager.Auth.CurrentUser; 
         StartFrame();
         StartWindowMode();
-        StartGammaBrightness();
+        StartGammaBrightness(); 
     }
 
+    
     /// <summary>
     /// 게임 매니저 초기화 작업
     /// </summary>
@@ -67,8 +70,11 @@ public class GameManager : MonoBehaviour
     { 
         _postProfile = transform.GetChild(0).GetComponent<PostProcessVolume>().profile;
         _postProfile.TryGetSettings<ColorGrading>(out PostVolume);
+        
+        _itemLayer = LayerMask.NameToLayer("Item"); 
+        Physics.IgnoreLayerCollision(_itemLayer,_itemLayer);
     }
-    
+     
     /// <summary>
     /// 게임 시작 시 설정한 프레임으로 변경
     /// </summary>

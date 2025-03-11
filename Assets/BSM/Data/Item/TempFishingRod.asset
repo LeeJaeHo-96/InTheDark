@@ -10,15 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9e1c8b6861f7e924390ed06c71d067d0, type: 3}
-  m_Name: TempB
+  m_Name: TempFishingRod
   m_EditorClassIdentifier: 
   ItemID: 2
   ItemWeight: 9
   ItemHoldingType: 0
-  ItemName: 
+  ItemName: "\uC784\uC2DC \uB09A\uC2DC\uB300"
   ItemIcon: {fileID: 21300000, guid: 7136708986a5cbf448278d13055e3dc7, type: 3}
-  IsAttack: 0
+  IsAttack: 1
   IsConsumable: 0
   MaxDurability: 0
-  AttackSpeed: 0
-  AttackRange: 0
+  AttackSpeed: 0.8
+  AttackRange: 0.2
+  Damage: 0

@@ -35,6 +35,9 @@ public class PlayerController : MonoBehaviourPun
     private float _mouseX;
     private float _mouseY;
     private int _itemLayer => LayerMask.GetMask("Item");
+
+    private int _tempLayerIndex;
+    private int _tempPlayerIndex;
     
     private float _sensitivity => DataManager.Instance.UserSettingData.Sensitivity;
     
@@ -46,7 +49,14 @@ public class PlayerController : MonoBehaviourPun
         
         //TODO: 임시로 여기서 잠금 추후 PunManager에서 방 입장 시 커서 모드 변경함
         Cursor.lockState = CursorLockMode.Locked;
-
+        
+        //TODO: 테스트씬용 Layer 무시 코드 -> GameManager에서 담당할 예정
+        _tempLayerIndex = LayerMask.NameToLayer("Item");
+        _tempPlayerIndex = LayerMask.NameToLayer("Player");
+        Physics.IgnoreLayerCollision(_tempLayerIndex,_tempLayerIndex); 
+        Physics.IgnoreLayerCollision(_tempLayerIndex,_tempPlayerIndex); 
+        //-----------------
+        
         _inventory = GetComponent<Inventory>();
         _playerStats = GetComponent<PlayerStats>();
         _playerRb = GetComponent<Rigidbody>();
@@ -57,10 +67,13 @@ public class PlayerController : MonoBehaviourPun
         _playerStates[(int)PState.WALK] = new PlayerWalk(this);
         _playerStates[(int)PState.RUN] = new PlayerRun(this);
         _playerStates[(int)PState.JUMP] = new PlayerJump(this);
+         
     }
 
     private void Start()
     {
+
+        
         if (!photonView.IsMine)
         {
             _cam.gameObject.SetActive(false);
@@ -176,7 +189,17 @@ public class PlayerController : MonoBehaviourPun
         if (!_curCarryItem.photonView.Owner.Equals(photonView.Owner)) return;
         
         //TODO: 추후 팔 위치 조정 필요
+        if (_curCarryItem.AttackItem())
+        {
+            //공격 아이템인지 아닌지에 따라 잡는 모션 다르게 처리하면 될듯
+        }
+        else
+        {
+            
+        }
+        
         _curCarryItem.transform.position = _armPos.position;
+        _curCarryItem.transform.rotation = Quaternion.Euler(-_mouseY, _mouseX, 0);
     }
     
     /// <summary>
@@ -238,7 +261,7 @@ public class PlayerController : MonoBehaviourPun
         }
         else
         {
-            //UIManager.Instance.ItemPickObjActive();
+            UIManager.Instance.ItemPickObjActive();
         }
     }
     
