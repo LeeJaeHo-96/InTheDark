@@ -20,7 +20,7 @@ public class Lever : MonoBehaviourPun
     }
     private void Update()
     {
-        GoingMap();
+        //GoingMap();
     }
 
     void GoingMap()

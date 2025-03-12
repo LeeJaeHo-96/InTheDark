@@ -29,7 +29,7 @@ public class MonsterSpawner : MonoBehaviour
 
     void MonsterSpawn()
     {
-        Vector3 monPos = gameObject.transform.position + new Vector3(Random.Range(0, 11), 0, Random.Range(0, 11));
+        Vector3 monPos = gameObject.transform.position + new Vector3(Random.Range(0, 11), 1f, Random.Range(0, 11));
         if(Random.Range(0,2) > 0.5f)
             Instantiate(monsterList[Random.Range(0, monsterList.Count)], monPos, Quaternion.identity);
     }
