@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
 public class Item_FlashLight : Item
@@ -20,7 +21,7 @@ public class Item_FlashLight : Item
     public override void ItemUse()
     {
         isPower = !isPower;
-        _flashLight.enabled = isPower && _battery >= 0f;
+        photonView.RPC(nameof(SyncLight),RpcTarget.AllViaServer, isPower && _battery >= 0f);
         
         if (_flashCo == null)
         {
@@ -32,6 +33,12 @@ public class Item_FlashLight : Item
             _flashCo = null;
         }
     }
+
+    [PunRPC]
+    private void SyncLight(bool isOn)
+    {
+        _flashLight.enabled = isOn;
+    }
     
     //TODO: 슬롯 체인지 하면 배터리가 초기화 되는데 이거 수정해야함
     
@@ -42,7 +49,7 @@ public class Item_FlashLight : Item
             _battery -= Time.deltaTime; 
             if (!isPower || _battery < 0f)
             {
-                _flashLight.enabled = false;
+                photonView.RPC(nameof(SyncLight),RpcTarget.AllViaServer, false);
                 yield break;
             }
 
@@ -57,9 +64,9 @@ public class Item_FlashLight : Item
 
     protected override void ItemDrop()
     {
-        isPower = false;
-        _flashLight.enabled = isPower;
-
+        isPower = false; 
+        photonView.RPC(nameof(SyncLight),RpcTarget.AllViaServer, false);
+        
         if (_flashCo != null)
         {
             StopCoroutine(_flashCo);

@@ -30,13 +30,14 @@ public class TempMonster : MonoBehaviourPun
 
     public void TakeDamage(int damage)
     {
-        photonView.RPC(nameof(TakeDamageRPC), RpcTarget.AllViaServer, damage);
+        _hp -= damage;
+        photonView.RPC(nameof(TakeDamageRPC), RpcTarget.AllBuffered, _hp);
     }
 
     [PunRPC]
     private void TakeDamageRPC(int damage)
     {
-        _hp -= damage;
+        _hp = damage;
         Debug.Log($"남은 체력 :{_hp}");
     }
     
