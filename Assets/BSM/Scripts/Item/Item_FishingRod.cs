@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Item_FishingRod : Item
 {
-    private CapsuleCollider _fishingRodCollider;
+    private BoxCollider _fishingRodCollider;
     private Coroutine _attackCo;
 
     private Vector3 _originPos;
@@ -14,7 +14,7 @@ public class Item_FishingRod : Item
     protected override void Awake()
     {
         base.Awake();
-        _fishingRodCollider = GetComponent<CapsuleCollider>(); 
+        _fishingRodCollider = GetComponent<BoxCollider>(); 
     }
      
     public override void ItemUse()
@@ -35,14 +35,12 @@ public class Item_FishingRod : Item
             if (Input.GetMouseButton(0))
             {
                 //TODO: 임시 모션
-                Debug.Log("공격 대기중");
                 transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y - 90f, 0);
             } 
             else if (Input.GetMouseButtonUp(0))
             {
                 _isReady = true; 
                 photonView.RPC(nameof(SyncAttackingRPC), RpcTarget.AllBuffered, true);
-                Debug.Log($"공격 시작 : IsAtacking:{IsAttacking}");
             }
 
             yield return null;
@@ -50,24 +48,25 @@ public class Item_FishingRod : Item
         
         yield return new WaitForSeconds(0.1f);
         photonView.RPC(nameof(SyncAttackingRPC), RpcTarget.AllBuffered, false);
-        Debug.Log($"IsAtacking:{IsAttacking}");
         
         while (elapsedTime < duration)
         {
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-        
-        Debug.Log("공격 끝남");
+
         _isReady = false;
         //콜라이더 범위 복구
-        _fishingRodCollider.center = new Vector3(0, 0, 0.18f); 
+        _fishingRodCollider.center = new Vector3(0, 0, 0.1f); 
     }
      
     protected override void ItemDrop()
     {
         if (_attackCo != null)
         {
+            _fishingRodCollider.center = new Vector3(0, 0, 0.1f); 
+            photonView.RPC(nameof(SyncAttackingRPC), RpcTarget.AllBuffered, false);
+            _isReady = false;
             StopCoroutine(_attackCo);
             _attackCo = null;
         } 

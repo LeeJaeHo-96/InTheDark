@@ -11,7 +11,7 @@ public class Item : MonoBehaviourPun
     [SerializeField] private int _itemID;
     
     private Rigidbody _itemRb;
-    private Collider _itemCollider;
+    protected Collider _itemCollider;
     
     protected InteractableItemData _itemData; 
  
@@ -37,7 +37,16 @@ public class Item : MonoBehaviourPun
     {
         StartCoroutine(ItemSetDelayRoutine());
     }
-    
+ 
+    private void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.CompareTag(Tag.Ground))
+        {
+            _itemCollider.isTrigger = true;
+            _itemRb.isKinematic = true; 
+        }
+    }
+ 
     private void OnValidate()
     {
         if (_itemID <= 0)
@@ -79,9 +88,7 @@ public class Item : MonoBehaviourPun
     /// <param name="player"></param>
     public void PickUp(Player player)
     {
-        _itemRb.isKinematic = true;
         photonView.TransferOwnership(player);
-        photonView.RPC(nameof(SyncItemTriggerRPC), RpcTarget.AllViaServer, true);
         photonView.RPC(nameof(SyncOwnershipRPC), RpcTarget.AllViaServer, true);
     }
 
@@ -91,13 +98,13 @@ public class Item : MonoBehaviourPun
     /// <param name="player"></param>
     public void Drop(Player player = null)
     {
+        transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
         _itemRb.isKinematic = false;
         ItemDrop();
         photonView.TransferOwnership(null);
         photonView.RPC(nameof(SyncItemTriggerRPC), RpcTarget.AllViaServer, false);
-        photonView.RPC(nameof(SyncOwnershipRPC), RpcTarget.AllViaServer, false);
-    }
-    
+        photonView.RPC(nameof(SyncOwnershipRPC), RpcTarget.AllViaServer, false); 
+    } 
     
     [PunRPC]
     protected void SyncItemTriggerRPC(bool isTrigger)
