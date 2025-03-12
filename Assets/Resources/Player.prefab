@@ -1869,8 +1869,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _cam: {fileID: 4320101015367577889}
   _inventoryPoint: {fileID: 7011117762228069136}
+  OnTriggerOther: {fileID: 0}
   MoveDir: {x: 0, y: 0, z: 0}
-  _curCarryItem: {fileID: 0}
+  CurCarryItem: {fileID: 0}
 --- !u!114 &2829151007137977279
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1884,6 +1885,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CanCarry: 0
+  TempHP: 10
 --- !u!114 &6993973597765713380
 MonoBehaviour:
   m_ObjectHideFlags: 0

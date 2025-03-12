@@ -35,12 +35,14 @@ public class Item_FishingRod : Item
             if (Input.GetMouseButton(0))
             {
                 //TODO: 임시 모션
+                Debug.Log("공격 대기중");
                 transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y - 90f, 0);
             } 
             else if (Input.GetMouseButtonUp(0))
             {
                 _isReady = true; 
                 photonView.RPC(nameof(SyncAttackingRPC), RpcTarget.AllViaServer, true);
+                Debug.Log($"공격 시작 : IsAtacking:{IsAttacking}");
             }
 
             yield return null;
@@ -48,13 +50,15 @@ public class Item_FishingRod : Item
         
         yield return new WaitForSeconds(0.1f);
         photonView.RPC(nameof(SyncAttackingRPC), RpcTarget.AllViaServer, false);
-
+        Debug.Log($"IsAtacking:{IsAttacking}");
+        
         while (elapsedTime < duration)
         {
             elapsedTime += Time.deltaTime;
             yield return null;
         }
         
+        Debug.Log("공격 끝남");
         _isReady = false;
         //콜라이더 범위 복구
         _fishingRodCollider.center = new Vector3(0, 0, 0.18f); 
