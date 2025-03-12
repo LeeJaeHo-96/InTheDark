@@ -12,6 +12,15 @@ public class PlayerStats : MonoBehaviourPun
     //TODO: 전체적인 수치는 조정 필요
     private float _walkSpeed = 5f;
 
+    private int _curHP;
+
+    public int CurHP
+    {
+        get => _curHP;
+    }
+    
+    private int _maxHP = 100;
+    
     public float WalkSpeed
     {
         get => _walkSpeed;
@@ -39,10 +48,14 @@ public class PlayerStats : MonoBehaviourPun
     }
 
     public UnityAction<float> OnChangedStamina;
-
+    public UnityAction<int> OnChangedHealth;
+    
     private void Awake()
     {
         CanCarry = true;
+
+        //TODO: 임시HP 추후 DB에 저장되어 있는 정보가 있는지 확인 후 현재 hp를 반영하면 될듯
+        _curHP = _maxHP; 
     }
 
     /// <summary>
@@ -90,4 +103,22 @@ public class PlayerStats : MonoBehaviourPun
         _stamina = Mathf.Clamp(_stamina, 0, _stamina); 
         OnChangedStamina?.Invoke(_stamina);
     }
+    
+    /// <summary>
+    /// 현재 체력 감소
+    /// </summary>
+    /// <param name="damage"></param>
+    public void TakeDamage(int damage)
+    {
+        _curHP -= damage;
+        OnChangedHealth?.Invoke(_curHP);
+        photonView.RPC(nameof(SyncHealthRPC), RpcTarget.AllViaServer, _curHP); 
+    }
+
+    [PunRPC]
+    private void SyncHealthRPC(int hp)
+    {
+        _curHP = hp;
+    }
+    
 }

@@ -84,6 +84,9 @@ MonoBehaviour:
   - 
   - 
   - 
+  - TakeDamageRPC
+  - SyncItemTriggerRPC
+  - SyncHealthRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

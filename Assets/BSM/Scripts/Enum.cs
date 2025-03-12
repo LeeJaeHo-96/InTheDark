@@ -14,7 +14,7 @@ public enum Settings
 [System.Serializable]
 public enum PState
 {
-    IDLE, WALK, RUN, JUMP , SIZE
+    IDLE, WALK, RUN, JUMP , DEATH, SIZE
 }
 
 [System.Serializable]

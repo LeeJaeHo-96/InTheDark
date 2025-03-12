@@ -9,19 +9,28 @@ using UnityEngine;
 public class Item : MonoBehaviourPun
 {
     [SerializeField] private int _itemID;
-    protected InteractableItemData _itemData;
+    
     private Rigidbody _itemRb;
+    private Collider _itemCollider;
+    
+    protected InteractableItemData _itemData; 
+ 
     public bool IsOwned;
-    private float _itemWeight;
-
+    public bool IsAttacking;
+    
     protected float _attackRange;
     protected float _damage;
     protected float _battery;
     protected bool isPower = false;
     
+    private float _itemWeight;
+    
+
+    
     protected virtual void Awake()
     {
         _itemRb = GetComponent<Rigidbody>();
+        _itemCollider = GetComponent<Collider>();
     }
 
     protected void OnEnable()
@@ -72,6 +81,7 @@ public class Item : MonoBehaviourPun
     {
         _itemRb.isKinematic = true;
         photonView.TransferOwnership(player);
+        photonView.RPC(nameof(SyncItemTriggerRPC), RpcTarget.AllViaServer, true);
         photonView.RPC(nameof(SyncOwnershipRPC), RpcTarget.AllViaServer, true);
     }
 
@@ -84,7 +94,15 @@ public class Item : MonoBehaviourPun
         _itemRb.isKinematic = false;
         ItemDrop();
         photonView.TransferOwnership(null);
+        photonView.RPC(nameof(SyncItemTriggerRPC), RpcTarget.AllViaServer, false);
         photonView.RPC(nameof(SyncOwnershipRPC), RpcTarget.AllViaServer, false);
+    }
+    
+    
+    [PunRPC]
+    protected void SyncItemTriggerRPC(bool isTrigger)
+    {
+        _itemCollider.isTrigger = isTrigger;
     }
     
     /// <summary>
@@ -121,6 +139,8 @@ public class Item : MonoBehaviourPun
     /// </summary>
     /// <returns></returns>
     public bool AttackItem() => _itemData.IsAttack;
+
+    public int GetItemDamage() => _itemData.Damage;
     
     /// <summary>
     /// 각 아이템별 능력 사용
@@ -137,5 +157,11 @@ public class Item : MonoBehaviourPun
     /// 아이템 버린 후 동작
     /// </summary>
     protected virtual void ItemDrop() {}
+
+    [PunRPC]
+    protected void SyncAttackingRPC(bool isAttacking)
+    {
+        IsAttacking = isAttacking;
+    }
     
 }

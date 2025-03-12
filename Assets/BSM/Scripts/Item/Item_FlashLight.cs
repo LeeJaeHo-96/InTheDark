@@ -40,7 +40,6 @@ public class Item_FlashLight : Item
         while (isPower && _battery >= 0)
         {
             _battery -= Time.deltaTime; 
-            Debug.Log(_battery);
             if (!isPower || _battery < 0f)
             {
                 _flashLight.enabled = false;

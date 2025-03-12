@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
 public class Item_FishingRod : Item
@@ -7,6 +8,7 @@ public class Item_FishingRod : Item
     private CapsuleCollider _fishingRodCollider;
     private Coroutine _attackCo;
 
+    private Vector3 _originPos;
     private bool _isReady;
     
     protected override void Awake()
@@ -14,14 +16,10 @@ public class Item_FishingRod : Item
         base.Awake();
         _fishingRodCollider = GetComponent<CapsuleCollider>(); 
     }
-    
-    
-    
+     
     public override void ItemUse()
     {
-        Debug.Log("휘두를 준비"); 
         _attackCo = StartCoroutine(AttackRoutine());
-
     }
 
     private IEnumerator AttackRoutine()
@@ -34,27 +32,29 @@ public class Item_FishingRod : Item
 
         while (!_isReady)
         {
-            Debug.Log("공격 대기중");
+            if (Input.GetMouseButton(0))
+            {
+                //TODO: 임시 모션
+                transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y - 90f, 0);
+            }
             
             if (Input.GetMouseButtonUp(0))
             {
-                _isReady = true;
+                _isReady = true; 
+                photonView.RPC(nameof(SyncAttackingRPC), RpcTarget.AllViaServer, true);
             }
 
             yield return null;
         }
-        
-        Debug.Log("공격 완료 + 데미지 줌");
-        
+
+        yield return new WaitForSeconds(0.1f);
+        photonView.RPC(nameof(SyncAttackingRPC), RpcTarget.AllViaServer, false);
+
         while (elapsedTime < duration)
         {
             elapsedTime += Time.deltaTime;
-            Debug.Log("공격 애니메이션 완료 처리");
             yield return null;
         }
-        
-        //휘두름
-        
         
         _isReady = false;
         
@@ -64,6 +64,10 @@ public class Item_FishingRod : Item
      
     protected override void ItemDrop()
     {
-        Debug.Log("삽 버림");
+        if (_attackCo != null)
+        {
+            StopCoroutine(_attackCo);
+            _attackCo = null;
+        } 
     }
 }

@@ -28,7 +28,6 @@ public class PlayerController : MonoBehaviourPun
     private Item _item;
     public Item _curCarryItem;
     
-    
     private PState _curState = PState.IDLE;
 
     private int _curInventoryIndex = 0;
@@ -36,8 +35,7 @@ public class PlayerController : MonoBehaviourPun
     private float _mouseY;
     private int _itemLayer => LayerMask.GetMask("Item");
 
-    private int _tempLayerIndex;
-    private int _tempPlayerIndex;
+    private int _itemLayerIndexValue => LayerMask.NameToLayer("Item");
     
     private float _sensitivity => DataManager.Instance.UserSettingData.Sensitivity;
     
@@ -51,11 +49,7 @@ public class PlayerController : MonoBehaviourPun
         Cursor.lockState = CursorLockMode.Locked;
         
         //TODO: 테스트씬용 Layer 무시 코드 -> GameManager에서 담당할 예정
-        _tempLayerIndex = LayerMask.NameToLayer("Item");
-        _tempPlayerIndex = LayerMask.NameToLayer("Player");
-        Physics.IgnoreLayerCollision(_tempLayerIndex,_tempLayerIndex); 
-        Physics.IgnoreLayerCollision(_tempLayerIndex,_tempPlayerIndex); 
-        //-----------------
+        Physics.IgnoreLayerCollision(_itemLayerIndexValue,_itemLayerIndexValue); 
         
         _inventory = GetComponent<Inventory>();
         _playerStats = GetComponent<PlayerStats>();
@@ -72,8 +66,6 @@ public class PlayerController : MonoBehaviourPun
 
     private void Start()
     {
-
-        
         if (!photonView.IsMine)
         {
             _cam.gameObject.SetActive(false);
@@ -82,6 +74,13 @@ public class PlayerController : MonoBehaviourPun
         _cam.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
         
         _playerStates[(int)_curState].Enter();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!photonView.IsMine) return;
+        
+        AttackItemCheck(other); 
     }
 
     private void Update()
@@ -95,12 +94,11 @@ public class PlayerController : MonoBehaviourPun
         DropItem();
         ItemPositionToArm();
         SelectInventoryInItem();
-
+        
         if (Input.GetMouseButtonDown(0))
         {
             UseItem();
-        }
-        
+        } 
     }
 
     private void FixedUpdate()
@@ -214,7 +212,7 @@ public class PlayerController : MonoBehaviourPun
         
         //캐릭터 몸체 회전
         transform.rotation = Quaternion.Euler(0, _mouseX, 0f);
-        photonView.RPC(nameof(SyncCharacterRotate), RpcTarget.AllBuffered, _mouseX);
+        photonView.RPC(nameof(SyncCharacterRotate), RpcTarget.AllViaServer, _mouseX);
         //카메라 상하/좌우 회전
         _cam.transform.rotation = Quaternion.Euler(-_mouseY, _mouseX, 0f);
          
@@ -315,11 +313,30 @@ public class PlayerController : MonoBehaviourPun
         _playerStats.IsHoldingItem(_item.GetItemWeight());
     }
 
+    /// <summary>
+    /// 아이템 사용, 공격
+    /// </summary>
     private void UseItem()
     {
         if (_curCarryItem == null) return;
         
         _curCarryItem.ItemUse();
+    }
+
+    /// <summary>
+    /// 무기에 공격 받았는지 확인
+    /// </summary>
+    private void AttackItemCheck(Collider other)
+    {
+        if (_itemLayerIndexValue == other.gameObject.layer)
+        {
+            Item item = other.GetComponent<Item>();
+
+            if (item.IsAttacking && item.AttackItem())
+            {
+                _playerStats.TakeDamage(item.GetItemDamage());  
+            }  
+        }
     }
     
     /// <summary>

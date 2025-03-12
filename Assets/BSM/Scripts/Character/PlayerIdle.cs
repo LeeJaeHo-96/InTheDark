@@ -31,6 +31,12 @@ public class PlayerIdle : PlayerState
         {
             _controller.ChangeState(PState.JUMP);
         }
+        else if (_controller.PlayerStats.CurHP <= 0)
+        {
+            //TODO: 각 상태별 HP 체크 로직 추가 필요
+            _controller.ChangeState(PState.DEATH);
+        }
+        
         
     }
     
