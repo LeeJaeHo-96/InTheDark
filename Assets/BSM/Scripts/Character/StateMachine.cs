@@ -5,6 +5,8 @@ using UnityEngine;
 public class StateMachine
 {
     public virtual void Enter(){}
+
+    public virtual void OnTrigger() {}
     
     public virtual void Update(){}
     
@@ -12,4 +14,5 @@ public class StateMachine
 
     public virtual void Exit(){}
 
+   
 }

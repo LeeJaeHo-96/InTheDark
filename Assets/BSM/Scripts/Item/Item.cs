@@ -9,21 +9,33 @@ using UnityEngine;
 public class Item : MonoBehaviourPun
 {
     [SerializeField] private int _itemID;
-    protected InteractableItemData _itemData;
+    
     private Rigidbody _itemRb;
+    private Collider _itemCollider;
+    
+    protected InteractableItemData _itemData; 
+ 
     public bool IsOwned;
+    public bool IsAttacking;
+    
+    protected float _attackRange;
+    protected float _damage;
+    protected float _battery;
+    protected bool isPower = false;
+    
     private float _itemWeight;
     
-    protected void Awake()
+
+    
+    protected virtual void Awake()
     {
         _itemRb = GetComponent<Rigidbody>();
+        _itemCollider = GetComponent<Collider>();
     }
 
-    protected virtual void OnEnable()
+    protected void OnEnable()
     {
-        Debug.Log("아이템 부모 enable");
         StartCoroutine(ItemSetDelayRoutine());
-        
     }
     
     private void OnValidate()
@@ -56,13 +68,11 @@ public class Item : MonoBehaviourPun
     {
         _itemData = ItemManager.Instance.GetItemData(_itemID);
         _itemWeight = _itemData.ItemWeight;
+        _attackRange = _itemData.AttackRange;
+        _damage = _itemData.Damage;
+        _battery = _itemData.MaxDurability; 
     }
-
-    protected virtual void ItemRestore()
-    {
-        
-    }
-    
+ 
     /// <summary>
     /// 아이템 주운 후 동작
     /// </summary>
@@ -71,6 +81,7 @@ public class Item : MonoBehaviourPun
     {
         _itemRb.isKinematic = true;
         photonView.TransferOwnership(player);
+        photonView.RPC(nameof(SyncItemTriggerRPC), RpcTarget.AllViaServer, true);
         photonView.RPC(nameof(SyncOwnershipRPC), RpcTarget.AllViaServer, true);
     }
 
@@ -81,8 +92,17 @@ public class Item : MonoBehaviourPun
     public void Drop(Player player = null)
     {
         _itemRb.isKinematic = false;
+        ItemDrop();
         photonView.TransferOwnership(null);
+        photonView.RPC(nameof(SyncItemTriggerRPC), RpcTarget.AllViaServer, false);
         photonView.RPC(nameof(SyncOwnershipRPC), RpcTarget.AllViaServer, false);
+    }
+    
+    
+    [PunRPC]
+    protected void SyncItemTriggerRPC(bool isTrigger)
+    {
+        _itemCollider.isTrigger = isTrigger;
     }
     
     /// <summary>
@@ -100,35 +120,48 @@ public class Item : MonoBehaviourPun
     /// 현재 들고 있는 아이템의 무게 반환
     /// </summary>
     /// <returns></returns>
-    public float GetItemWeight()
-    {
-        return _itemWeight;
-    }
+    public float GetItemWeight() => _itemWeight; 
 
     /// <summary>
     /// 아이템 타입
     /// </summary>
     /// <returns></returns>
-    public ItemHoldingType GetHoldingType()
-    {
-        return _itemData.ItemHoldingType;
-    }
-
+    public ItemHoldingType GetHoldingType() => _itemData.ItemHoldingType;
+ 
     /// <summary>
     /// 아이템 이미지 반환
     /// </summary>
     /// <returns></returns>
-    public Sprite GetItemImage()
-    {
-        return _itemData.ItemIcon;
-    }
+    public Sprite GetItemImage() => _itemData.ItemIcon;
 
+    /// <summary>
+    /// 아이템 공격 타입 여부 반환
+    /// </summary>
+    /// <returns></returns>
+    public bool AttackItem() => _itemData.IsAttack;
+
+    public int GetItemDamage() => _itemData.Damage;
+    
     /// <summary>
     /// 각 아이템별 능력 사용
     /// </summary>
-    public virtual void ItemUse()
+    public virtual void ItemUse() {}
+
+     
+    /// <summary>
+    /// 아이템 별 초기화 작업
+    /// </summary>
+    protected virtual void ItemRestore() {}
+    
+    /// <summary>
+    /// 아이템 버린 후 동작
+    /// </summary>
+    protected virtual void ItemDrop() {}
+
+    [PunRPC]
+    protected void SyncAttackingRPC(bool isAttacking)
     {
-        
+        IsAttacking = isAttacking;
     }
     
 }

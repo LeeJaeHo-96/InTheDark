@@ -4,21 +4,68 @@ using UnityEngine;
 
 public class Item_FlashLight : Item
 {
-    private float _battery;
+    private Coroutine _flashCo;
     
-    private bool isPower;
-     
+    private Light _flashLight;
     
-    protected override void OnEnable()
+    protected override void Awake()
     {
-        base.OnEnable();
-        Debug.Log("자식 OnEnable");
+        base.Awake();
+        _flashLight = GetComponentInChildren<Light>(); 
+    }
+    
+    /// <summary>
+    /// 아이템 사용
+    /// </summary>
+    public override void ItemUse()
+    {
+        isPower = !isPower;
+        _flashLight.enabled = isPower && _battery >= 0f;
+        
+        if (_flashCo == null)
+        {
+            _flashCo = StartCoroutine(FlashLightRoutine());
+        }
+        else
+        {
+            StopCoroutine(_flashCo);
+            _flashCo = null;
+        }
+    }
+    
+    //TODO: 슬롯 체인지 하면 배터리가 초기화 되는데 이거 수정해야함
+    
+    private IEnumerator FlashLightRoutine()
+    {
+        while (isPower && _battery >= 0)
+        {
+            _battery -= Time.deltaTime; 
+            if (!isPower || _battery < 0f)
+            {
+                _flashLight.enabled = false;
+                yield break;
+            }
+
+            yield return null;
+        } 
+    }
+    
+    protected override void ItemRestore()
+    {
         _battery = _itemData.MaxDurability;
     }
 
-    public override void ItemUse()
+    protected override void ItemDrop()
     {
-        Debug.Log("손전등 사용");
+        isPower = false;
+        _flashLight.enabled = isPower;
+
+        if (_flashCo != null)
+        {
+            StopCoroutine(_flashCo);
+            _flashCo = null;
+        }
+        
     }
     
 }
