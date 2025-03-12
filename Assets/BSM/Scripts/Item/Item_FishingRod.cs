@@ -41,7 +41,7 @@ public class Item_FishingRod : Item
             else if (Input.GetMouseButtonUp(0))
             {
                 _isReady = true; 
-                photonView.RPC(nameof(SyncAttackingRPC), RpcTarget.AllViaServer, true);
+                photonView.RPC(nameof(SyncAttackingRPC), RpcTarget.AllBuffered, true);
                 Debug.Log($"공격 시작 : IsAtacking:{IsAttacking}");
             }
 
@@ -49,7 +49,7 @@ public class Item_FishingRod : Item
         }
         
         yield return new WaitForSeconds(0.1f);
-        photonView.RPC(nameof(SyncAttackingRPC), RpcTarget.AllViaServer, false);
+        photonView.RPC(nameof(SyncAttackingRPC), RpcTarget.AllBuffered, false);
         Debug.Log($"IsAtacking:{IsAttacking}");
         
         while (elapsedTime < duration)
