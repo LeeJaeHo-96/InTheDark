@@ -17,6 +17,11 @@ public class PlayerIdle : PlayerState
         }
     }
 
+    public override void OnTrigger()
+    {
+        _controller.ChangeState(PState.HURT);
+    }
+    
     public override void Update()
     {
         if (_controller.MoveDir != Vector3.zero && !Input.GetKey(KeyCode.LeftShift))
@@ -31,12 +36,10 @@ public class PlayerIdle : PlayerState
         {
             _controller.ChangeState(PState.JUMP);
         }
-        else if (_controller.PlayerStats.CurHP <= 0)
+        else if (_controller.MoveDir == Vector3.zero && Input.GetMouseButtonDown(0))
         {
-            //TODO: 각 상태별 HP 체크 로직 추가 필요
-            _controller.ChangeState(PState.DEATH);
+            _controller.ChangeState(PState.ATTACK);
         }
-        
         
     }
     
@@ -49,4 +52,8 @@ public class PlayerIdle : PlayerState
             _controller.RecoverStaminaCo = null;
         }
     }
+    
+    //TODO: 가만히 있는 상태이고 체력이 20이하이면 20까지 체력이 차야함
+    
+    
 }

@@ -26,7 +26,6 @@ public class TempMonster : MonoBehaviourPun
                 TakeDamage(item.GetItemDamage());  
             } 
         }
-        
     }
 
     public void TakeDamage(int damage)

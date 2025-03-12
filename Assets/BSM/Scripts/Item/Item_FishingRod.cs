@@ -36,9 +36,8 @@ public class Item_FishingRod : Item
             {
                 //TODO: 임시 모션
                 transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y - 90f, 0);
-            }
-            
-            if (Input.GetMouseButtonUp(0))
+            } 
+            else if (Input.GetMouseButtonUp(0))
             {
                 _isReady = true; 
                 photonView.RPC(nameof(SyncAttackingRPC), RpcTarget.AllViaServer, true);
@@ -46,7 +45,7 @@ public class Item_FishingRod : Item
 
             yield return null;
         }
-
+        
         yield return new WaitForSeconds(0.1f);
         photonView.RPC(nameof(SyncAttackingRPC), RpcTarget.AllViaServer, false);
 
@@ -57,7 +56,6 @@ public class Item_FishingRod : Item
         }
         
         _isReady = false;
-        
         //콜라이더 범위 복구
         _fishingRodCollider.center = new Vector3(0, 0, 0.18f); 
     }

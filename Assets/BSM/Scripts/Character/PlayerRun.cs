@@ -11,6 +11,11 @@ public class PlayerRun : PlayerState
     {
         _controller.ConsumeStaminaCo = _controller.StartCoroutine(UseStaminaRoutine());
     }
+    
+    public override void OnTrigger()
+    {
+        _controller.ChangeState(PState.HURT);
+    }
 
     public override void Update()
     {
@@ -25,6 +30,10 @@ public class PlayerRun : PlayerState
         else if (Input.GetKeyDown(KeyCode.Space))
         {
             _controller.ChangeState(PState.JUMP);
+        }
+        else if (Input.GetMouseButtonDown(0) && _controller.CurCarryItem != null)
+        {
+            _controller.CurCarryItem.ItemUse();
         }
     }
 

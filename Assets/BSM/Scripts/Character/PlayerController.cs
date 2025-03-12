@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class PlayerController : MonoBehaviourPun
 {
@@ -12,6 +13,7 @@ public class PlayerController : MonoBehaviourPun
     
     public PlayerStats PlayerStats => _playerStats;
     public Rigidbody PlayerRb => _playerRb;
+    public Collider OnTriggerOther;
     public Coroutine ConsumeStaminaCo;
     public Coroutine RecoverStaminaCo;
     public PState CurState => _curState;
@@ -26,7 +28,7 @@ public class PlayerController : MonoBehaviourPun
 
     private Inventory _inventory;
     private Item _item;
-    public Item _curCarryItem;
+    public Item CurCarryItem;
     
     private PState _curState = PState.IDLE;
 
@@ -35,7 +37,7 @@ public class PlayerController : MonoBehaviourPun
     private float _mouseY;
     private int _itemLayer => LayerMask.GetMask("Item");
 
-    private int _itemLayerIndexValue => LayerMask.NameToLayer("Item");
+    public int ItemLayerIndexValue => LayerMask.NameToLayer("Item");
     
     private float _sensitivity => DataManager.Instance.UserSettingData.Sensitivity;
     
@@ -49,7 +51,7 @@ public class PlayerController : MonoBehaviourPun
         Cursor.lockState = CursorLockMode.Locked;
         
         //TODO: 테스트씬용 Layer 무시 코드 -> GameManager에서 담당할 예정
-        Physics.IgnoreLayerCollision(_itemLayerIndexValue,_itemLayerIndexValue); 
+        Physics.IgnoreLayerCollision(ItemLayerIndexValue,ItemLayerIndexValue); 
         
         _inventory = GetComponent<Inventory>();
         _playerStats = GetComponent<PlayerStats>();
@@ -61,7 +63,10 @@ public class PlayerController : MonoBehaviourPun
         _playerStates[(int)PState.WALK] = new PlayerWalk(this);
         _playerStates[(int)PState.RUN] = new PlayerRun(this);
         _playerStates[(int)PState.JUMP] = new PlayerJump(this);
-         
+        _playerStates[(int)PState.ATTACK] = new PlayerAttack(this);
+        _playerStates[(int)PState.HURT] = new PlayerHurt(this);
+        _playerStates[(int)PState.DEATH] = new PlayerDeath(this);
+
     }
 
     private void Start()
@@ -78,11 +83,22 @@ public class PlayerController : MonoBehaviourPun
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!photonView.IsMine) return;
+        if (photonView.IsMine)
+        { 
+            OnTriggerOther = other;
+        }
         
-        AttackItemCheck(other); 
+        if (!photonView.IsMine) return; 
+        _playerStates[(int)_curState].OnTrigger(); 
     }
 
+    private void OnTriggerExit(Collider other)
+    {
+        if (!photonView.IsMine) return;
+        OnTriggerOther = null;
+    }
+    
+    
     private void Update()
     {
         if (!photonView.IsMine) return;
@@ -94,11 +110,6 @@ public class PlayerController : MonoBehaviourPun
         DropItem();
         ItemPositionToArm();
         SelectInventoryInItem();
-        
-        if (Input.GetMouseButtonDown(0))
-        {
-            UseItem();
-        } 
     }
 
     private void FixedUpdate()
@@ -148,21 +159,21 @@ public class PlayerController : MonoBehaviourPun
         _curInventoryIndex = index;
         
         //들고 있는 아이템이 있는지 확인
-        if (_curCarryItem != null)
+        if (CurCarryItem != null)
         {
-            if (_curCarryItem.GetHoldingType() == ItemHoldingType.ONEHANDED)
+            if (CurCarryItem.GetHoldingType() == ItemHoldingType.ONEHANDED)
             {
-                _curCarryItem.gameObject.SetActive(false);
+                CurCarryItem.gameObject.SetActive(false);
                 
                 //변경할 슬롯의 아이템이 있는지 확인
                 if (_inventory.SelectedItem(index) != null)
                 {
-                    _curCarryItem = _inventory.SelectedItem(index);
-                    _curCarryItem.gameObject.SetActive(true); 
+                    CurCarryItem = _inventory.SelectedItem(index);
+                    CurCarryItem.gameObject.SetActive(true); 
                 }
                 else
                 {
-                    _curCarryItem = null;
+                    CurCarryItem = null;
                 }
             } 
         }
@@ -170,8 +181,8 @@ public class PlayerController : MonoBehaviourPun
         {
             if (_inventory.SelectedItem(index) != null)
             {
-                _curCarryItem = _inventory.SelectedItem(index);
-                _curCarryItem.gameObject.SetActive(true); 
+                CurCarryItem = _inventory.SelectedItem(index);
+                CurCarryItem.gameObject.SetActive(true); 
             }
         }  
     }
@@ -182,12 +193,12 @@ public class PlayerController : MonoBehaviourPun
     /// </summary>
     private void ItemPositionToArm()
     {
-        if(_curCarryItem == null) return;
-        if (!_curCarryItem.IsOwned) return;
-        if (!_curCarryItem.photonView.Owner.Equals(photonView.Owner)) return;
+        if(CurCarryItem == null) return;
+        if (!CurCarryItem.IsOwned) return;
+        if (!CurCarryItem.photonView.Owner.Equals(photonView.Owner)) return;
         
         //TODO: 추후 팔 위치 조정 필요
-        if (_curCarryItem.AttackItem())
+        if (CurCarryItem.AttackItem())
         {
             //공격 아이템인지 아닌지에 따라 잡는 모션 다르게 처리하면 될듯
         }
@@ -196,8 +207,8 @@ public class PlayerController : MonoBehaviourPun
             
         }
         
-        _curCarryItem.transform.position = _armPos.position;
-        _curCarryItem.transform.rotation = Quaternion.Euler(-_mouseY, _mouseX, 0);
+        CurCarryItem.transform.position = _armPos.position;
+        CurCarryItem.transform.rotation = Quaternion.Euler(-_mouseY, _mouseX, 0);
     }
     
     /// <summary>
@@ -268,9 +279,9 @@ public class PlayerController : MonoBehaviourPun
     /// </summary>
     private void DropItem()
     {
-        if (_curCarryItem != null && Input.GetKeyDown(KeyCode.G))
+        if (CurCarryItem != null && Input.GetKeyDown(KeyCode.G))
         {
-            if (_curCarryItem.GetHoldingType() == ItemHoldingType.TWOHANDED)
+            if (CurCarryItem.GetHoldingType() == ItemHoldingType.TWOHANDED)
             {
                 _playerStats.CanCarry = true;
             }
@@ -279,9 +290,9 @@ public class PlayerController : MonoBehaviourPun
                 _inventory.DropItem(_curInventoryIndex);
             }
              
-            _curCarryItem.Drop(); 
+            CurCarryItem.Drop(); 
             _playerStats.IsNotHoldingItem(_item.GetItemWeight());
-            _curCarryItem = null;
+            CurCarryItem = null;
         } 
     }
 
@@ -291,54 +302,28 @@ public class PlayerController : MonoBehaviourPun
     /// <param name="item"></param>
     private void ItemPickUp(Item item)
     {
-        if (_curCarryItem == null)
+        if (CurCarryItem == null)
         {
-            _curCarryItem = item;
+            CurCarryItem = item;
         }
         else
         {
-            if (_curCarryItem != item)
+            if (CurCarryItem != item)
             { 
-                _curCarryItem.gameObject.SetActive(false);
-                _curCarryItem = item;
+                CurCarryItem.gameObject.SetActive(false);
+                CurCarryItem = item;
             }
         }
 
-        if (_curCarryItem.GetHoldingType() == ItemHoldingType.ONEHANDED)
+        if (CurCarryItem.GetHoldingType() == ItemHoldingType.ONEHANDED)
         {
-            _inventory.GetItem(_curCarryItem);
+            _inventory.GetItem(CurCarryItem);
         }
         
-        _curCarryItem.PickUp(PhotonNetwork.LocalPlayer);
+        CurCarryItem.PickUp(PhotonNetwork.LocalPlayer);
         _playerStats.IsHoldingItem(_item.GetItemWeight());
     }
-
-    /// <summary>
-    /// 아이템 사용, 공격
-    /// </summary>
-    private void UseItem()
-    {
-        if (_curCarryItem == null) return;
-        
-        _curCarryItem.ItemUse();
-    }
-
-    /// <summary>
-    /// 무기에 공격 받았는지 확인
-    /// </summary>
-    private void AttackItemCheck(Collider other)
-    {
-        if (_itemLayerIndexValue == other.gameObject.layer)
-        {
-            Item item = other.GetComponent<Item>();
-
-            if (item.IsAttacking && item.AttackItem())
-            {
-                _playerStats.TakeDamage(item.GetItemDamage());  
-            }  
-        }
-    }
-    
+  
     /// <summary>
     /// 현재 플레이어의 상태 전환
     /// </summary>
