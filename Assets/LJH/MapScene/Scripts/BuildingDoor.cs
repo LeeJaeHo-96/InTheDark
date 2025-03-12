@@ -28,7 +28,7 @@ public class BuildingDoor : MonoBehaviourPun, IPunObservable
         if (!photonView.IsMine)
             return;
 
-        OpenDoor();
+        //OpenDoor();
     }
 
     void OpenDoor()
