@@ -1402,6 +1402,7 @@ GameObject:
   - component: {fileID: 1880706080790118632}
   - component: {fileID: 1880706080791118376}
   - component: {fileID: 508323480649263232}
+  - component: {fileID: 3658329928036444373}
   m_Layer: 0
   m_Name: NPC_Tools_Axe_004
   m_TagString: Untagged
@@ -1487,6 +1488,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: accb72fbcb694384eb47e9e6563f4ce1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pirate: {fileID: 1880706080789126466}
+--- !u!64 &3658329928036444373
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1880706080789126384}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300004, guid: 1b7945602ded3ec43804b120aa9ed037, type: 3}
 --- !u!1 &1880706080789126386
 GameObject:
   m_ObjectHideFlags: 0
@@ -1719,6 +1735,7 @@ GameObject:
   - component: {fileID: 2854320954804297981}
   - component: {fileID: 3950325757147834253}
   - component: {fileID: 2864769590415092603}
+  - component: {fileID: 8655203185300316647}
   m_Layer: 0
   m_Name: Lumberjack2
   m_TagString: Untagged
@@ -1747,6 +1764,7 @@ Transform:
   - {fileID: 1880706080789348526}
   - {fileID: 1880706080789348520}
   - {fileID: 1880706080789348548}
+  - {fileID: 5713783886328923063}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1836,7 +1854,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95d34d4627f8ea147809ea70845d009f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  state: 0
+  playerList: []
   spawnPoint: {fileID: 0}
+--- !u!135 &8655203185300316647
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1880706080789126466}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 15
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1880706080789126472
 GameObject:
   m_ObjectHideFlags: 0
@@ -2112,3 +2145,48 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.24343483, y: -0.13401431, z: 0.0043094456}
     m_Extent: {x: 0.22080742, y: 0.25989, z: 0.16961822}
   m_DirtyAABB: 0
+--- !u!1 &6612845200501641824
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5713783886328923063}
+  - component: {fileID: 1106982965676788398}
+  m_Layer: 0
+  m_Name: AttackCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5713783886328923063
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6612845200501641824}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.55, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1880706080789348514}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &1106982965676788398
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6612845200501641824}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.78
+  m_Center: {x: 0, y: 0, z: 0}

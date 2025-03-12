@@ -4,15 +4,22 @@ using UnityEngine;
 
 public class MonsterAttack : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] GameObject pirate;
+    Monster monster;
+
+    private void Start()
     {
-        
+        monster = pirate.GetComponent<Monster>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter(Collider other)
     {
-        
+        if(monster.state == monsterState.attack)
+            if(other.CompareTag(Tag.Player))
+            {
+                //Todo : 플레이어의 체력을 감소해야함
+                //other.GetComponent<PlayerStat>().hp -= 1;
+                Debug.Log("몬스터가 플레이어 공격");
+            }
     }
 }

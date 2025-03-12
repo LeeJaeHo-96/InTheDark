@@ -30,6 +30,9 @@ public class Monster : MonoBehaviourPun
 
     private void OnTriggerEnter(Collider other)
     {
+        if (!PhotonNetwork.IsMasterClient)
+            return;
+
         if(other.CompareTag(Tag.Player))
         {
             Debug.Log("인식 완료");
@@ -40,17 +43,25 @@ public class Monster : MonoBehaviourPun
 
     private void OnTriggerStay(Collider other)
     {
+        if (!PhotonNetwork.IsMasterClient)
+            return;
+
         //플레이어 추격
-        if(other.CompareTag(Tag.Player))
+        if (other.CompareTag(Tag.Player))
         {
             Debug.Log("추격중");
             agent.SetDestination(other.gameObject.transform.position);
+            agent.SetDestination(playerList[0].transform.position);
+
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if(other.CompareTag(Tag.Player))
+        if (!PhotonNetwork.IsMasterClient)
+            return;
+
+        if (other.CompareTag(Tag.Player))
         {
             Debug.Log("추격 종료");
             playerList.Remove(other.gameObject);
