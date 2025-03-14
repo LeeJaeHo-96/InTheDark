@@ -39,7 +39,7 @@ public class PunManager : MonoBehaviourPunCallbacks
     }
 
     public override void OnCreatedRoom()
-    {
+    { 
         GoToWaitingScene();
     }
 
@@ -66,12 +66,12 @@ public class PunManager : MonoBehaviourPunCallbacks
     /// <param name="newPlayer"></param>
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        
+        //TODO: 방장일 때 한명씩 추가?
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
- 
+        //TODO: 방장일 때 한명씩 삭제
     }
 
     public override void OnMasterClientSwitched(Player newMasterClient)
@@ -108,6 +108,7 @@ public class PunManager : MonoBehaviourPunCallbacks
     private void GoToStartScene()
     {
         PhotonNetwork.LoadLevel(SceneUtility.GetBuildIndexByScenePath("StartScene"));
+
     }
     
 }

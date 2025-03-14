@@ -31,20 +31,22 @@ public class PlayerHurt : PlayerState
             
             if (item.IsAttacking && item.AttackItem())
             {
-                TakeDamage(item.GetItemDamage());
+                TakeDamage(item.GetItemDamage());  
+            } 
+        }
+    }
 
-                if (_controller.PlayerStats.CurHP <= 0)
-                {
-                    _controller.ChangeState(PState.DEATH);
-                }
-                else
-                {
-                    _controller.ChangeState(PState.IDLE);
-                }
-            }
-
+    public override void Update()
+    {
+        if (_controller.PlayerStats.CurHP <= 0)
+        {
+            _controller.ChangeState(PState.DEATH);
+        }
+        else
+        {
             _controller.ChangeState(PState.IDLE);
         }
+        
     }
 
     /// <summary>
