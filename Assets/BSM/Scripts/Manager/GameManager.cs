@@ -69,9 +69,9 @@ public class GameManager : MonoBehaviour
     private void Init()
     { 
         Physics.IgnoreLayerCollision(ItemLayerIndexValue,ItemLayerIndexValue); 
+        _postProfile = transform.GetChild(0).GetComponent<PostProcessVolume>().profile;
+        _postProfile.TryGetSettings<ColorGrading>(out PostVolume);
         _postProfile = transform.GetChild(0).GetComponent<PostProcessVolume>().profile; 
-        _itemLayer = LayerMask.NameToLayer("Item"); 
-        Physics.IgnoreLayerCollision(_itemLayer,_itemLayer);
     }
     
     //TODO: 추후 게임 도중 나가기 옵션에 달아놓을 것
