@@ -21,6 +21,26 @@ public class MapDoorOnOff : MonoBehaviourPun
         else { Debug.Log("게스트따리라 실행안됨"); }
     }
 
+    /// <summary>
+    /// 만약에 네트워크 연결이 늦을 시 이걸로 지연시간 줘야함
+    /// </summary>
+    /// <param name="lockList"></param>
+    /// <param name="openList"></param>
+    //IEnumerator SettingCoroutine()
+    //{
+    //    yield return new WaitForTime(5f); 
+    //
+    //    if (PhotonNetwork.IsMasterClient)
+    //    {
+    //        Debug.Log("방장이라 실행됨");
+    //        if (openDoorList.Count > 0)
+    //            CreateDoor(lockDoorList, openDoorList);
+    //        else
+    //            CreateDoor(lockDoorList);
+    //    }
+    //    else { Debug.Log("게스트따리라 실행안됨"); }
+    //}
+
     void CreateDoor(List<GameObject> lockList, List<GameObject> openList)
     {
         bool[] lockStates = new bool[lockList.Count];

@@ -1729,6 +1729,11 @@ PrefabInstance:
       propertyPath: sceneViewId
       value: 89
       objectReference: {fileID: 0}
+    - target: {fileID: 8833955163990320214, guid: b6e4f1057a45d694ea72d38dc01299df,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9069076526452282232, guid: b6e4f1057a45d694ea72d38dc01299df,
         type: 3}
       propertyPath: sceneViewId
@@ -1927,6 +1932,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   progressBar: {fileID: 0}
   buildingSpawner: {fileID: 1335699278}
+  sun: {fileID: 0}
 --- !u!114 &1368071136
 MonoBehaviour:
   m_ObjectHideFlags: 0

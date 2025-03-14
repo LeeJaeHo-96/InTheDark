@@ -1,16 +1,21 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.PackageManager;
 using UnityEngine;
 
-public class ItemSpawner : MonoBehaviour
+public class ItemSpawner : MonoBehaviourPun
 {
-    [SerializeField] List<GameObject> itemList;
+    List<string> itemList = new List<string>();
     Vector3 rayPos;
     float xDistance;
     float zDistance;
     private void Start()
     {
+        //아이템 담아줘야함
+        itemList.Add("Item1");
+        itemList.Add("Item2");
+
         rayPos = transform.position + new Vector3(0, 1, 0);
 
         xDistance = DistanceCal(Vector3.forward);
@@ -57,10 +62,11 @@ public class ItemSpawner : MonoBehaviour
         for (int i = 0; i < items; i++)
         {
             // 랜덤으로 아이템과 생성위치 지정해줌
-            GameObject item = itemList[Random.Range(0, itemList.Count)];
+            string item = itemList[Random.Range(0, itemList.Count)];
             Vector3 pos = transform.position + new Vector3(Random.Range(-xDistance, xDistance), 0, Random.Range(-zDistance, zDistance));
-            
-            Instantiate(item, pos, Quaternion.identity);
+
+            //Instantiate(item, pos, Quaternion.identity);
+            PhotonNetwork.Instantiate(item, pos, Quaternion.identity);
         }
     }
 }
