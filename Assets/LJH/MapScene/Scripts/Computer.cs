@@ -4,16 +4,21 @@ using UnityEngine;
 
 public class Computer : MonoBehaviour
 {
-    GameObject computerCanvas;
+    [SerializeField] GameObject computerCanvas;
     PopUp popUp;
 
     private void Start()
     {
         popUp = GetComponent<PopUp>();
-        computerCanvas = transform.GetChild(0).GetComponent<GameObject>();
+        //computerCanvas = transform.GetChild(0).GetComponent<GameObject>();
     }
 
-    void ComputerOnOFf()
+    private void Update()
+    {
+        ComputerOnOff();
+    }
+
+    void ComputerOnOff()
     {
         if(popUp.hitMe && Input.GetKeyDown(KeyCode.E))
         {
