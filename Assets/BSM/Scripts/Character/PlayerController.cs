@@ -50,6 +50,7 @@ public class PlayerController : MonoBehaviourPun
     private void Init()
     {
         if(!photonView.IsMine) return;
+        DontDestroyOnLoad(gameObject);
         
         _inventory = GetComponent<Inventory>();
         _playerStats = GetComponent<PlayerStats>();
