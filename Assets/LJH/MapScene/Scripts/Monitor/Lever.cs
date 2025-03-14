@@ -30,7 +30,7 @@ public class Lever : MonoBehaviourPun
             switch(Stage)
             {
                 case Stage.startLand:
-                    //Todo : 스테이지 채워야함 SceneManager.LoadScene("");
+                    SceneManager.LoadScene("MapScene1");
                     Debug.Log("시작의 섬으로 갑니다");
                     break;
 
