@@ -8,25 +8,27 @@ using UnityEngine.Serialization;
 
 public class PlayerController : MonoBehaviourPun
 {
-    [SerializeField] private Camera _cam;
-    [SerializeField] private Transform _inventoryPoint;
-    [SerializeField] private Canvas _playerCanvas;
+    public float PosX;
+    public float PosY;
+    public float PosZ;
     
+    public bool IsDeath;
+    public GameObject PlayerBody;
+    public Canvas PlayerCanvas;
+    public Camera PlayerCam;
     public PlayerStats PlayerStats => _playerStats;
     public Rigidbody PlayerRb => _playerRb;
     public Collider OnTriggerOther;
     public Coroutine ConsumeStaminaCo;
     public Coroutine RecoverStaminaCo;
     public PState CurState => _curState;
-    
     public Vector3 MoveDir = Vector3.zero;
-    
+     
     private PlayerState[] _playerStates = new PlayerState[(int)PState.SIZE];
     private PlayerStats _playerStats;
     private Rigidbody _playerRb;
-    private Transform _eyePos;
     private Transform _armPos;
-
+    
     private Inventory _inventory;
     private Item _item;
     public Item CurCarryItem;
@@ -38,7 +40,7 @@ public class PlayerController : MonoBehaviourPun
     private float _mouseY;
     private int _itemLayer => LayerMask.GetMask("Item");
 
-    public int ItemLayerIndexValue => LayerMask.NameToLayer("Item");
+    
     
     private float _sensitivity => DataManager.Instance.UserSettingData.Sensitivity;
     
@@ -48,16 +50,9 @@ public class PlayerController : MonoBehaviourPun
     {
         if(!photonView.IsMine) return;
         
-        //TODO: 임시로 여기서 잠금 추후 PunManager에서 방 입장 시 커서 모드 변경함
-        Cursor.lockState = CursorLockMode.Locked;
-        
-        //TODO: 테스트씬용 Layer 무시 코드 -> GameManager에서 담당할 예정
-        Physics.IgnoreLayerCollision(ItemLayerIndexValue,ItemLayerIndexValue); 
-        
         _inventory = GetComponent<Inventory>();
         _playerStats = GetComponent<PlayerStats>();
         _playerRb = GetComponent<Rigidbody>();
-        _eyePos = transform.GetChild(0).GetChild(0).GetComponent<Transform>();
         _armPos = transform.GetChild(0).GetChild(1).GetComponent<Transform>();
         
         _playerStates[(int)PState.IDLE] = new PlayerIdle(this);
@@ -75,12 +70,12 @@ public class PlayerController : MonoBehaviourPun
         if (!photonView.IsMine)
         {
             //캐릭터가 생성됐을 때, 중복 카메라 및 UI 제거
-            _cam.gameObject.SetActive(false);
-            _playerCanvas.gameObject.SetActive(false);
+            PlayerCam.gameObject.SetActive(false);
+            PlayerCanvas.gameObject.SetActive(false);
             return;
-        }
+        } 
         
-        _cam.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity); 
+        PlayerCam.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity); 
         _playerStates[(int)_curState].Enter();
     }
 
@@ -108,6 +103,7 @@ public class PlayerController : MonoBehaviourPun
 
         _playerStates[(int)_curState].Update();
         InputKey();
+        PositionUpdate();
         InputRotate();
         CameraToItemRay();
         DropItem();
@@ -128,6 +124,23 @@ public class PlayerController : MonoBehaviourPun
     {
         MoveDir.x = Input.GetAxisRaw("Horizontal");
         MoveDir.z = Input.GetAxisRaw("Vertical");
+    }
+
+    private void PositionUpdate()
+    {
+        float x = transform.position.x;
+        float y = transform.position.y;
+        float z = transform.position.z;
+        
+        photonView.RPC(nameof(SyncPositionUpdate), RpcTarget.AllViaServer, x, y, z); 
+    }
+    
+    [PunRPC]
+    private void SyncPositionUpdate(float posX, float posY, float posZ)
+    {
+        PosX = posX;
+        PosY = posY;
+        PosZ = posZ;
     }
     
     /// <summary>
@@ -219,6 +232,8 @@ public class PlayerController : MonoBehaviourPun
     /// </summary>
     private void InputRotate()
     {
+        if (IsDeath) return;
+        
         _mouseX += Input.GetAxisRaw("Mouse X") * _sensitivity * Time.deltaTime;
         _mouseY += Input.GetAxisRaw("Mouse Y");
 
@@ -228,7 +243,7 @@ public class PlayerController : MonoBehaviourPun
         transform.rotation = Quaternion.Euler(0, _mouseX, 0f);
         photonView.RPC(nameof(SyncCharacterRotate), RpcTarget.AllViaServer, _mouseX);
         //카메라 상하/좌우 회전
-        _cam.transform.rotation = Quaternion.Euler(-_mouseY, _mouseX, 0f);
+        PlayerCam.transform.rotation = Quaternion.Euler(-_mouseY, _mouseX, 0f);
          
     }
 
@@ -247,7 +262,7 @@ public class PlayerController : MonoBehaviourPun
     /// </summary>
     private void CameraToItemRay()
     {
-        Ray ray = new Ray(_cam.transform.position, _cam.transform.forward);
+        Ray ray = new Ray(PlayerCam.transform.position, PlayerCam.transform.forward);
         
         Debug.DrawRay(ray.origin, ray.direction * 10, Color.red);
 
@@ -328,9 +343,12 @@ public class PlayerController : MonoBehaviourPun
     }
   
     [PunRPC]
-    public void SyncDeathRPC(bool isActive)
+    public void SyncDeathRPC(bool isDeath, bool isActive, bool isEnable, bool isKinematic)
     {
-        gameObject.SetActive(isActive);
+        IsDeath = isDeath;
+        PlayerBody.SetActive(isActive);
+        gameObject.GetComponent<CapsuleCollider>().enabled = isEnable;
+        gameObject.GetComponent<Rigidbody>().isKinematic = isKinematic;
     }
     
     /// <summary>
