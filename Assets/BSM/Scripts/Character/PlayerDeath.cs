@@ -49,11 +49,16 @@ public class PlayerDeath : PlayerState
             {
                 _camIndex = 0;
             }
-            
+             
             if (DataManager.Instance.PlayerObjects[_camIndex].IsDeath)
             {
-                for (int i = _camIndex; i < DataManager.Instance.PlayerObjects.Count; i++)
+                if (_camIndex >= DataManager.Instance.PlayerObjects.Count - 1)
                 {
+                    _camIndex = 0;
+                }
+                
+                for (int i = _camIndex; i < DataManager.Instance.PlayerObjects.Count; i++)
+                { 
                     if (!DataManager.Instance.PlayerObjects[i].IsDeath)
                     {
                         _camIndex = i;
@@ -63,7 +68,10 @@ public class PlayerDeath : PlayerState
             } 
         }
     }
-
+ 
+    /// <summary>
+    /// 3인칭 시점
+    /// </summary>
     private void TPS()
     {
         _mouseX += Input.GetAxisRaw("Mouse X");

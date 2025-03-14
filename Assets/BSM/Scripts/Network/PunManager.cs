@@ -14,12 +14,14 @@ public class PunManager : MonoBehaviourPunCallbacks
     private Lobby Lobby => Lobby.Instance;
     public static PunManager Instance;
     public UnityAction OnChangedPlayer;
-
+    public List<PlayerController> Players => DataManager.Instance.PlayerObjects;
+    
     private void Awake()
     {
         if (Instance == null)
         {
-            Instance = this; 
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -48,6 +50,8 @@ public class PunManager : MonoBehaviourPunCallbacks
         OnChangedPlayer?.Invoke();
         //TODO: 테스트가 끝나면 풀것
         //Cursor.lockState = CursorLockMode.Locked;
+        
+        //TODO: 방장이 하나 추가하고
     }
 
     public override void OnLeftRoom()
@@ -72,6 +76,7 @@ public class PunManager : MonoBehaviourPunCallbacks
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
         //TODO: 방장일 때 한명씩 삭제
+        
     }
 
     public override void OnMasterClientSwitched(Player newMasterClient)
@@ -100,6 +105,8 @@ public class PunManager : MonoBehaviourPunCallbacks
     private void GoToWaitingScene()
     {
         PhotonNetwork.LoadLevel(SceneUtility.GetBuildIndexByScenePath("WaitingScene"));
+        
+        //TODO: 게임 넘어갈 때, 다른 유저들도 lIST 업데이트 하면 될 것 같음
     }
     
     /// <summary>
