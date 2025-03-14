@@ -286,7 +286,7 @@ public class PlayerController : MonoBehaviourPun
                 }
             }
 
-            if (hit.collider.TryGetComponent(out _popup))
+            if (hit.collider.TryGetComponent<PopUp>(out _popup))
             {
                 _popup.hitMe = true;
             }
