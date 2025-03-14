@@ -17,6 +17,8 @@ public class BuildingDoor : MonoBehaviourPun, IPunObservable
     [SerializeField] GameObject buildingSpawner;
     Vector3 buildingSpawnerPos;
 
+    [SerializeField] GameObject sun;
+
 
     void Start()
     {
@@ -66,6 +68,7 @@ public class BuildingDoor : MonoBehaviourPun, IPunObservable
             player = other.gameObject;
             isClosed = true;
             player.transform.position = buildingSpawnerPos;
+            sun.transform.rotation = Quaternion.Euler(192, -30, 0);
         }
     }
 
