@@ -90,6 +90,8 @@ MonoBehaviour:
   - SyncAttackingRPC
   - SyncLight
   - SyncDeathRPC
+  - PunDoorSync
+  - RPCSyncDoors
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
