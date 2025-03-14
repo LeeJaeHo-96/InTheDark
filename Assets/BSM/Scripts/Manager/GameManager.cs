@@ -19,9 +19,10 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public int CurWindowMode;
     [HideInInspector] public float CurGammaBrightness;
     
+    public List<PlayerController> PlayerObjects = new List<PlayerController>();
     public static GameManager Instance;
     public FirebaseUser CurUser;
-    
+    public int ItemLayerIndexValue => LayerMask.NameToLayer("Item");
     private static int _refreshRate;
     private int _itemLayer;
     
@@ -61,20 +62,31 @@ public class GameManager : MonoBehaviour
         StartWindowMode();
         StartGammaBrightness(); 
     }
-
-    
+ 
     /// <summary>
     /// 게임 매니저 초기화 작업
     /// </summary>
     private void Init()
     { 
-        _postProfile = transform.GetChild(0).GetComponent<PostProcessVolume>().profile;
-        _postProfile.TryGetSettings<ColorGrading>(out PostVolume);
-        
+        Physics.IgnoreLayerCollision(ItemLayerIndexValue,ItemLayerIndexValue); 
+        _postProfile = transform.GetChild(0).GetComponent<PostProcessVolume>().profile; 
         _itemLayer = LayerMask.NameToLayer("Item"); 
         Physics.IgnoreLayerCollision(_itemLayer,_itemLayer);
     }
-     
+    
+    //TODO: 추후 게임 도중 나가기 옵션에 달아놓을 것
+    /// <summary>
+    /// 게임 도중 유저 나갔을 때 리스트 삭제
+    /// </summary>
+    /// <param name="player"></param>
+    public void PlayerRemove(PlayerController player)
+    {
+        if (PlayerObjects.Contains(player))
+        {
+            PlayerObjects.Remove(player);
+        }
+    }
+    
     /// <summary>
     /// 게임 시작 시 설정한 프레임으로 변경
     /// </summary>

@@ -40,7 +40,7 @@ public class PlayerController : MonoBehaviourPun
     private float _mouseY;
     private int _itemLayer => LayerMask.GetMask("Item");
 
-    public int ItemLayerIndexValue => LayerMask.NameToLayer("Item");
+    
     
     private float _sensitivity => DataManager.Instance.UserSettingData.Sensitivity;
     
@@ -49,12 +49,6 @@ public class PlayerController : MonoBehaviourPun
     private void Init()
     {
         if(!photonView.IsMine) return;
-        
-        //TODO: 임시로 여기서 잠금 추후 PunManager에서 방 입장 시 커서 모드 변경함
-        Cursor.lockState = CursorLockMode.Locked;
-        
-        //TODO: 테스트씬용 Layer 무시 코드 -> GameManager에서 담당할 예정
-        Physics.IgnoreLayerCollision(ItemLayerIndexValue,ItemLayerIndexValue); 
         
         _inventory = GetComponent<Inventory>();
         _playerStats = GetComponent<PlayerStats>();
@@ -79,7 +73,7 @@ public class PlayerController : MonoBehaviourPun
             PlayerCam.gameObject.SetActive(false);
             PlayerCanvas.gameObject.SetActive(false);
             return;
-        }
+        } 
         
         PlayerCam.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity); 
         _playerStates[(int)_curState].Enter();
@@ -106,7 +100,7 @@ public class PlayerController : MonoBehaviourPun
     private void Update()
     {
         if (!photonView.IsMine) return;
-     
+
         _playerStates[(int)_curState].Update();
         InputKey();
         PositionUpdate();

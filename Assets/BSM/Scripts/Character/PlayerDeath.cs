@@ -25,9 +25,9 @@ public class PlayerDeath : PlayerState
             _controller.PlayerCam.transform.SetParent(null);
         }
 
-        for (int i = 0; i < DataManager.Instance.PlayerObjects.Count; i++)
+        for (int i = 0; i < GameManager.Instance.PlayerObjects.Count; i++)
         {
-            if (!DataManager.Instance.PlayerObjects[i].IsDeath)
+            if (!GameManager.Instance.PlayerObjects[i].IsDeath)
             {
                 _camIndex = i;
                 break;
@@ -41,25 +41,23 @@ public class PlayerDeath : PlayerState
 
         if (Input.GetMouseButtonDown(0))
         {
-            Debug.Log("시점 변경");
-
             _camIndex++;
             
-            if (_camIndex > DataManager.Instance.PlayerObjects.Count - 1)
+            if (_camIndex > GameManager.Instance.PlayerObjects.Count - 1)
             {
                 _camIndex = 0;
             }
              
-            if (DataManager.Instance.PlayerObjects[_camIndex].IsDeath)
+            if (GameManager.Instance.PlayerObjects[_camIndex].IsDeath)
             {
-                if (_camIndex >= DataManager.Instance.PlayerObjects.Count - 1)
+                if (_camIndex >= GameManager.Instance.PlayerObjects.Count - 1)
                 {
                     _camIndex = 0;
                 }
                 
-                for (int i = _camIndex; i < DataManager.Instance.PlayerObjects.Count; i++)
+                for (int i = _camIndex; i < GameManager.Instance.PlayerObjects.Count; i++)
                 { 
-                    if (!DataManager.Instance.PlayerObjects[i].IsDeath)
+                    if (!GameManager.Instance.PlayerObjects[i].IsDeath)
                     {
                         _camIndex = i;
                         break;
@@ -78,16 +76,20 @@ public class PlayerDeath : PlayerState
         _mouseY -= Input.GetAxisRaw("Mouse Y");
         
         Vector3 charPos = new Vector3(
-            DataManager.Instance.PlayerObjects[_camIndex].PosX,
-            DataManager.Instance.PlayerObjects[_camIndex].PosY, 
-            DataManager.Instance.PlayerObjects[_camIndex].PosZ
+            GameManager.Instance.PlayerObjects[_camIndex].PosX,
+            GameManager.Instance.PlayerObjects[_camIndex].PosY, 
+            GameManager.Instance.PlayerObjects[_camIndex].PosZ
             );
         
+        //카메라 상,하 제한
         _mouseY = Mathf.Clamp(_mouseY, -50f, 20f);
         Quaternion rot = Quaternion.Euler(_mouseY, _mouseX, 0);
+        
+        //캐릭터와 카메라의 여유 거리
         Vector3 direction = new Vector3(0, 3f, -3f);
         _controller.PlayerCam.transform.position = charPos + rot * direction;
         
+        //카메라 고정
         _controller.PlayerCam.transform.LookAt(charPos);
     }
 

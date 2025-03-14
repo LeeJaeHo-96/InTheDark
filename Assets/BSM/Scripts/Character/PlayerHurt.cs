@@ -11,7 +11,7 @@ public class PlayerHurt : PlayerState
 
     public override void Enter()
     {
-        if (_controller.OnTriggerOther.gameObject.layer == _controller.ItemLayerIndexValue)
+        if (_controller.OnTriggerOther.gameObject.layer == GameManager.Instance.ItemLayerIndexValue)
         {
             Item item = _controller.OnTriggerOther.gameObject.GetComponent<Item>();
             

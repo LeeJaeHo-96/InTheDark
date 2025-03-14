@@ -6,9 +6,7 @@ using UnityEngine;
 
 public class DataManager : MonoBehaviour
 {
-    //TODO: 테스트용
     public List<PlayerController> PlayerObjects = new List<PlayerController>();
-    
     public static DataManager Instance;
 
     public SettingData UserSettingData;

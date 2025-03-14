@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -28,9 +29,6 @@ public class PlayerSpawner : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
         _player = PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity);
-        
-        //TODO: 방장일 때 Add하고
-        
     }
     
 }
