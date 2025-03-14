@@ -8,7 +8,7 @@ public class PlayerDeath : PlayerState
     private float _mouseX;
     private float _mouseY;
 
-    private int _camIndex = 0;
+    private int _camIndex = -1;
 
     public PlayerDeath(PlayerController controller) : base(controller)
     {
@@ -25,14 +25,7 @@ public class PlayerDeath : PlayerState
             _controller.PlayerCam.transform.SetParent(null);
         }
 
-        for (int i = 0; i < GameManager.Instance.PlayerObjects.Count; i++)
-        {
-            if (!GameManager.Instance.PlayerObjects[i].IsDeath)
-            {
-                _camIndex = i;
-                break;
-            } 
-        } 
+        AliveCharacterSearch();
     }
 
     public override void Update()
@@ -41,32 +34,22 @@ public class PlayerDeath : PlayerState
 
         if (Input.GetMouseButtonDown(0))
         {
-            _camIndex++;
-            
-            if (_camIndex > GameManager.Instance.PlayerObjects.Count - 1)
-            {
-                _camIndex = 0;
-            }
-             
-            if (GameManager.Instance.PlayerObjects[_camIndex].IsDeath)
-            {
-                if (_camIndex >= GameManager.Instance.PlayerObjects.Count - 1)
-                {
-                    _camIndex = 0;
-                }
-                
-                for (int i = _camIndex; i < GameManager.Instance.PlayerObjects.Count; i++)
-                { 
-                    if (!GameManager.Instance.PlayerObjects[i].IsDeath)
-                    {
-                        _camIndex = i;
-                        break;
-                    }
-                }  
-            } 
+            AliveCharacterSearch();
         }
     }
- 
+    
+    /// <summary>
+    /// 생존 캐릭터 검색
+    /// </summary>
+    private void AliveCharacterSearch()
+    {
+        do
+        {
+            _camIndex = (_camIndex + 1) % GameManager.Instance.PlayerObjects.Count;
+            
+        } while (GameManager.Instance.PlayerObjects[_camIndex].IsDeath);
+    }
+    
     /// <summary>
     /// 3인칭 시점
     /// </summary>
