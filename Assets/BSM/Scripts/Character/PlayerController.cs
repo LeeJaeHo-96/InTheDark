@@ -268,29 +268,22 @@ public class PlayerController : MonoBehaviourPun
         Debug.DrawRay(ray.origin, ray.direction * 10, Color.red);
 
         if (Physics.Raycast(ray.origin, ray.direction, out RaycastHit hit, 2f, _itemLayer))
-        {
-            if (hit.collider.TryGetComponent<Item>(out _item))
-            {
-                //해당 아이템을 누가 들고있는지 확인
-                if (!_item.IsOwned)
-                {
-                    if (!_inventory.IsFull && Input.GetKeyDown(KeyCode.E) && _playerStats.CanCarry)
-                    {
-                        if (_item.GetHoldingType() == ItemHoldingType.TWOHANDED)
-                        {
-                            _playerStats.CanCarry = false;
-                        }
-                    
-                        ItemPickUp(_item);
-                    } 
-                }
-            }
-
-            if (hit.collider.TryGetComponent<PopUp>(out _popup))
-            {
-                _popup.hitMe = true;
-            }
+        { 
+            _item = hit.collider.GetComponent<Item>();
             
+            if (!_item.IsOwned)
+            {
+                if (!_inventory.IsFull && Input.GetKeyDown(KeyCode.E) && _playerStats.CanCarry)
+                {
+                    if (_item.GetHoldingType() == ItemHoldingType.TWOHANDED)
+                    {
+                        _playerStats.CanCarry = false;
+                    }
+                    
+                    ItemPickUp(_item);
+                } 
+            }
+             
             UIManager.Instance.ItemPickObjActive(!_inventory.IsFull && !_item.IsOwned && _playerStats.CanCarry);
         }
         else
@@ -303,6 +296,31 @@ public class PlayerController : MonoBehaviourPun
             
             UIManager.Instance.ItemPickObjActive();
         }
+        
+        if(Physics.Raycast(ray.origin, ray.direction, out RaycastHit popUp, 5f))
+        {
+            if (popUp.collider.TryGetComponent<PopUp>(out _popup))
+            {
+                _popup.hitMe = true;
+            }
+            else
+            {
+                if (_popup != null)
+                {
+                    _popup.hitMe = false;
+                    _popup = null;
+                }
+            }
+        }
+        else
+        {
+            if (_popup != null)
+            {
+                _popup.hitMe = false;
+                _popup = null;
+            }
+        }
+        
     }
     
     /// <summary>
