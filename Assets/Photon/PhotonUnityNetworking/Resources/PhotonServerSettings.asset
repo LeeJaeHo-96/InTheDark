@@ -90,6 +90,7 @@ MonoBehaviour:
   - SyncAttackingRPC
   - SyncLight
   - SyncDeathRPC
+  - SyncPositionUpdate
   - PunDoorSync
   - RPCSyncDoors
   DisableAutoOpenWizard: 1

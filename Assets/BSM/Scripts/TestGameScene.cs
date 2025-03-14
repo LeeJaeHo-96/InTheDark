@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
@@ -8,9 +9,22 @@ using UnityEngine.SceneManagement;
 
 public class TestGameScene : MonoBehaviourPunCallbacks
 {
+    private int temp = 0;
+    
     private void Start()
     {
         PhotonNetwork.ConnectUsingSettings();
+    }
+    
+    //TODO: 테스트용 
+    private void Update()
+    {
+        if (temp != DataManager.Instance.PlayerObjects.Count)
+        {
+            DataManager.Instance.PlayerObjects.Clear();
+            DataManager.Instance.PlayerObjects = FindObjectsOfType<PlayerController>().ToList();
+        } 
+         
     }
 
     public override void OnConnectedToMaster()
@@ -25,7 +39,7 @@ public class TestGameScene : MonoBehaviourPunCallbacks
     {
         StartCoroutine(SpawnRoutine());
     }
-
+  
     private IEnumerator SpawnRoutine()
     {
         yield return new WaitForSeconds(1f);
@@ -34,6 +48,7 @@ public class TestGameScene : MonoBehaviourPunCallbacks
     
     private void Spawn()
     {
-        PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity);
+       GameObject player = PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity);
+       DataManager.Instance.PlayerObjects = FindObjectsOfType<PlayerController>().ToList();
     } 
 }

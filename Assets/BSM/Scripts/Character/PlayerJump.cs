@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class PlayerJump : PlayerState
 {
+    private bool canJump;
     
     public PlayerJump(PlayerController controller) : base(controller) {}
 
     public override void Enter()
     {
-        _controller.PlayerRb.AddForce(Vector3.up * _controller.PlayerStats.JumpPower ,ForceMode.Impulse);
+        if (_controller.PlayerRb.velocity == Vector3.zero)
+        {
+            _controller.PlayerRb.AddForce(Vector3.up * _controller.PlayerStats.JumpPower ,ForceMode.Impulse);
+        } 
     }
 
     public override void OnTrigger()
@@ -19,7 +23,7 @@ public class PlayerJump : PlayerState
     
     public override void Update()
     {
-        if (_controller.PlayerRb.position.y <= 0f)
+        if (_controller.MoveDir == Vector3.zero)
         {
             _controller.ChangeState(PState.IDLE);
         }

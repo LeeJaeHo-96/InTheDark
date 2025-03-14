@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class PlayerIdle : PlayerState
 {
-
     public PlayerIdle(PlayerController controller) : base(controller) {}
 
     public override void Enter()

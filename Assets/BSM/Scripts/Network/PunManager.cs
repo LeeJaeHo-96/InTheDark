@@ -14,12 +14,14 @@ public class PunManager : MonoBehaviourPunCallbacks
     private Lobby Lobby => Lobby.Instance;
     public static PunManager Instance;
     public UnityAction OnChangedPlayer;
+    public List<PlayerController> Players => GameManager.Instance.PlayerObjects;
 
     private void Awake()
     {
         if (Instance == null)
         {
-            Instance = this; 
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -29,13 +31,12 @@ public class PunManager : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        PhotonNetwork.AutomaticallySyncScene = true; 
+        PhotonNetwork.AutomaticallySyncScene = true;
     }
 
 
     public override void OnConnectedToMaster()
     {
-
     }
 
     public override void OnCreatedRoom()
@@ -45,43 +46,43 @@ public class PunManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
+        //방 입장 시 캐릭터 스폰 
         OnChangedPlayer?.Invoke();
-        //TODO: 테스트가 끝나면 풀것
-        //Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     public override void OnLeftRoom()
     {
         GoToStartScene();
     }
-    
+
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
+        //TODO: 입장 실패 오류 만들어도 ㄱㅊ을듯
         Debug.Log("방 입장 실패");
     }
-    
+
     /// <summary>
     /// 방에 입장한 상태에서 다른 플레이어가 입장했을 때 호출
     /// </summary>
     /// <param name="newPlayer"></param>
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        
+
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
- 
+
     }
 
     public override void OnMasterClientSwitched(Player newMasterClient)
     {
         PhotonNetwork.LeaveRoom();
     }
-    
+
     public override void OnJoinedLobby()
     {
-        
     }
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
@@ -99,9 +100,9 @@ public class PunManager : MonoBehaviourPunCallbacks
     /// </summary>
     private void GoToWaitingScene()
     {
-        PhotonNetwork.LoadLevel(SceneUtility.GetBuildIndexByScenePath("WaitingScene"));
+        PhotonNetwork.LoadLevel(SceneUtility.GetBuildIndexByScenePath("WaitingScene")); 
     }
-    
+
     /// <summary>
     /// 시작 화면으로 이동
     /// </summary>
@@ -109,5 +110,4 @@ public class PunManager : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.LoadLevel(SceneUtility.GetBuildIndexByScenePath("StartScene"));
     }
-    
 }

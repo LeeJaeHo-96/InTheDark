@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
 public class PlayerWalk : PlayerState
@@ -39,6 +40,7 @@ public class PlayerWalk : PlayerState
         {
             _controller.CurCarryItem.ItemUse();
         }
+
     }
     
     public override void FixedUpdate()
@@ -47,7 +49,7 @@ public class PlayerWalk : PlayerState
         
         _controller.PlayerRb.MovePosition(_controller.transform.position + dir.normalized * _controller.PlayerStats.WalkSpeed * Time.fixedDeltaTime);   
     }
-
+    
     public override void Exit()
     {
         //회복 코루틴이 != null

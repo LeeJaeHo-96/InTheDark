@@ -15,6 +15,19 @@ public class TempMonster : MonoBehaviourPun
         _itemLayer = LayerMask.NameToLayer("Item");
     }
 
+    private void Start()
+    {
+        
+        if (PhotonNetwork.IsMasterClient)
+        {
+            Debug.Log("난 마스터");
+        }
+        else
+        {
+            Debug.Log("나는 게스트");
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     { 
         if (_itemLayer.value == other.gameObject.layer)
