@@ -595,7 +595,7 @@ GameObject:
   - component: {fileID: 3023389347541939483}
   m_Layer: 0
   m_Name: BigRoomPrefab
-  m_TagString: Untagged
+  m_TagString: MonsterSpawner
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -633,8 +633,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monsterList:
-  - {fileID: 5372951929632139086, guid: b5c935bc5c380d14da75228c7ad47335, type: 3}
-  - {fileID: 8894953773266506103, guid: 064b46f2c9559dc4ebe6b77c81f815ac, type: 3}
+  - {fileID: 1880706080789126466, guid: a23ad488ebb0bdf41891cbc7644e14fa, type: 3}
   Timer: 10
 --- !u!114 &3023389347541939483
 MonoBehaviour:
@@ -650,13 +649,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lockDoorList:
   - {fileID: 7631960542418453542}
-  - {fileID: 4875506069242851171}
   - {fileID: 4599739380792513936}
+  - {fileID: 4875506069242851171}
   - {fileID: 3566938957838693694}
   openDoorList:
   - {fileID: 2210872049078824245}
-  - {fileID: 2858378015719792858}
   - {fileID: 1606719436101432471}
+  - {fileID: 2858378015719792858}
   - {fileID: 2669333973892716686}
 --- !u!1 &1627282945673266771
 GameObject:

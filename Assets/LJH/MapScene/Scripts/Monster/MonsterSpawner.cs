@@ -29,8 +29,15 @@ public class MonsterSpawner : MonoBehaviour
 
     void MonsterSpawn()
     {
-        Vector3 monPos = gameObject.transform.position + new Vector3(Random.Range(0, 11), 1f, Random.Range(0, 11));
-        if(Random.Range(0,2) > 0.5f)
-            Instantiate(monsterList[Random.Range(0, monsterList.Count)], monPos, Quaternion.identity);
+        List<GameObject> list = new List<GameObject>();
+
+        Vector3 monPos = gameObject.transform.position + new Vector3(Random.Range(0, 11), 0, Random.Range(0, 11));
+        if (Random.Range(0, 2) > 0.5f)
+        {
+            list.Add(Instantiate(monsterList[Random.Range(0, monsterList.Count)], monPos, Quaternion.identity));
+        }
+        //0마리 소환되었을 경우 다시 소환
+        if (list.Count == 0)
+            MonsterSpawn();
     }
 }
