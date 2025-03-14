@@ -12,11 +12,13 @@ public class MapDoorOnOff : MonoBehaviourPun
     {
         if (PhotonNetwork.IsMasterClient)
         {
+            Debug.Log("방장이라 실행됨");
             if (openDoorList.Count > 0)
                 CreateDoor(lockDoorList, openDoorList);
             else
                 CreateDoor(lockDoorList);
         }
+        else { Debug.Log("게스트따리라 실행안됨"); }
     }
 
     void CreateDoor(List<GameObject> lockList, List<GameObject> openList)
