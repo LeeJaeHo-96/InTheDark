@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviourPun
     private Inventory _inventory;
     private Item _item;
     public Item CurCarryItem;
+    private PopUp _popup;
     
     private PState _curState = PState.IDLE;
 
@@ -267,27 +268,39 @@ public class PlayerController : MonoBehaviourPun
         Debug.DrawRay(ray.origin, ray.direction * 10, Color.red);
 
         if (Physics.Raycast(ray.origin, ray.direction, out RaycastHit hit, 2f, _itemLayer))
-        {  
-            _item = hit.collider.GetComponent<Item>();
-
-            //해당 아이템을 누가 들고있는지 확인
-            if (!_item.IsOwned)
+        {
+            if (hit.collider.TryGetComponent<Item>(out _item))
             {
-                if (!_inventory.IsFull && Input.GetKeyDown(KeyCode.E) && _playerStats.CanCarry)
+                //해당 아이템을 누가 들고있는지 확인
+                if (!_item.IsOwned)
                 {
-                    if (_item.GetHoldingType() == ItemHoldingType.TWOHANDED)
+                    if (!_inventory.IsFull && Input.GetKeyDown(KeyCode.E) && _playerStats.CanCarry)
                     {
-                        _playerStats.CanCarry = false;
-                    }
+                        if (_item.GetHoldingType() == ItemHoldingType.TWOHANDED)
+                        {
+                            _playerStats.CanCarry = false;
+                        }
                     
-                    ItemPickUp(_item);
-                } 
+                        ItemPickUp(_item);
+                    } 
+                }
             }
 
+            if (hit.collider.TryGetComponent(out _popup))
+            {
+                _popup.hitMe = true;
+            }
+            
             UIManager.Instance.ItemPickObjActive(!_inventory.IsFull && !_item.IsOwned && _playerStats.CanCarry);
         }
         else
         {
+            if (_popup != null)
+            {
+                _popup.hitMe = false;
+                _popup = null;
+            }
+            
             UIManager.Instance.ItemPickObjActive();
         }
     }
