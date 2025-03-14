@@ -14,7 +14,7 @@ public class PlayerView : ObjBind
     private void Awake()
     {
         Bind(); 
-        _playerStats = GetComponent<PlayerStats>(); 
+        _playerStats = GetComponent<PlayerStats>();
         _staminaSlider = GetComponentBind<Slider>("StaminaSlider");
         _healthSlider = GetComponentBind<Slider>("HealthSlider");
     }

@@ -88,6 +88,8 @@ MonoBehaviour:
   - SyncItemTriggerRPC
   - SyncHealthRPC
   - SyncAttackingRPC
+  - SyncLight
+  - SyncDeathRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
