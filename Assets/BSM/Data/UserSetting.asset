@@ -16,7 +16,7 @@ MonoBehaviour:
   BgmVolume: 5
   SfxVolume: 5
   GammaBrightness: 0
-  Sensitivity: 80
+  Sensitivity: 800
   Vsync: 0
   WindowMode: 0
   Frame: 0

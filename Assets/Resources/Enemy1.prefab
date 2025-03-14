@@ -1724,7 +1724,7 @@ GameObject:
   - component: {fileID: 8655203185300316647}
   - component: {fileID: -6546435785562437164}
   m_Layer: 0
-  m_Name: Lumberjack2
+  m_Name: Enemy1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
