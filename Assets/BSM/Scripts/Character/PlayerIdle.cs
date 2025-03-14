@@ -10,7 +10,6 @@ public class PlayerIdle : PlayerState
 
     public override void Enter()
     { 
-        Debug.Log("아이들 상태 진입");
         //TODO: 스태미너 회복 로직 수정 필요
         if (_controller.PlayerStats.Stamina < 100f && _controller.RecoverStaminaCo == null)
         {

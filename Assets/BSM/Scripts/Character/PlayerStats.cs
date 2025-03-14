@@ -24,6 +24,10 @@ public class PlayerStats : MonoBehaviourPun
     public int CurHP
     {
         get => _curHP;
+        set
+        {
+            _curHP = value; 
+        }
     }
     
     private int _maxHP = 100;
@@ -47,11 +51,17 @@ public class PlayerStats : MonoBehaviourPun
         get => _jumpPower;
     }
 
+    public float MaxStamina => 100f;
+    
     private float _stamina = 100f;
 
     public float Stamina
     {
         get => _stamina;
+        set
+        {
+            _stamina = value;
+        }
     }
 
     public UnityAction<float> OnChangedStamina;
@@ -88,42 +98,9 @@ public class PlayerStats : MonoBehaviourPun
         _walkSpeed += speedRecovery;
         _runSpeed += speedRecovery;
     }
-
-    /// <summary>
-    /// 스태미너 감소
-    /// </summary>
-    /// <param name="value"></param>
-    public void ConsumeStamina(float value)
-    {
-        _stamina -= value;
-        _stamina = Mathf.Clamp(_stamina, 0, _stamina);
-        OnChangedStamina?.Invoke(_stamina);
-    }
-
-    /// <summary>
-    /// 스태미너 회복
-    /// </summary>
-    /// <param name="value"></param>
-    public void RecoverStamina(float value)
-    {
-        _stamina += value;
-        _stamina = Mathf.Clamp(_stamina, 0, _stamina); 
-        OnChangedStamina?.Invoke(_stamina);
-    }
-    
-    /// <summary>
-    /// 현재 체력 감소
-    /// </summary>
-    /// <param name="damage"></param>
-    public void TakeDamage(int damage)
-    {
-        _curHP -= damage;
-        OnChangedHealth?.Invoke(_curHP);
-        photonView.RPC(nameof(SyncHealthRPC), RpcTarget.AllViaServer, _curHP); 
-    }
-
+  
     [PunRPC]
-    private void SyncHealthRPC(int hp)
+    public void SyncHealthRPC(int hp)
     {
         _curHP = hp;
     }

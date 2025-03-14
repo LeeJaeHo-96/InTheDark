@@ -8,12 +8,6 @@ public class Inventory : InventoryController
 
     public bool IsFull => _slots.Where(x => x._item != null).Count() >= _slots.Count;
     
-    
-    void Awake()
-    {
-        base.Awake();
-    }
-    
     /// <summary>
     /// 주운 아이템 슬롯에 추가
     /// </summary>

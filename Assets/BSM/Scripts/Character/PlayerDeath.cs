@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
 public class PlayerDeath : PlayerState
@@ -8,7 +9,12 @@ public class PlayerDeath : PlayerState
 
     public override void Enter()
     {
-        _controller.gameObject.SetActive(false);
+        if (_controller.photonView.IsMine)
+        {
+            Debug.Log("죽었음");
+            _controller.photonView.RPC(nameof(_controller.SyncDeathRPC), RpcTarget.AllViaServer, false);
+        }
+       
     }
-    
+ 
 }
