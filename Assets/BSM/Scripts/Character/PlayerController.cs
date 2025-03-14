@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviourPun
 {
     [SerializeField] private Camera _cam;
     [SerializeField] private Transform _inventoryPoint;
+    [SerializeField] private Canvas _playerCanvas;
     
     public PlayerStats PlayerStats => _playerStats;
     public Rigidbody PlayerRb => _playerRb;
@@ -73,11 +74,13 @@ public class PlayerController : MonoBehaviourPun
     {
         if (!photonView.IsMine)
         {
+            //캐릭터가 생성됐을 때, 중복 카메라 및 UI 제거
             _cam.gameObject.SetActive(false);
+            _playerCanvas.gameObject.SetActive(false);
             return;
         }
-        _cam.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
         
+        _cam.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity); 
         _playerStates[(int)_curState].Enter();
     }
 
@@ -324,6 +327,12 @@ public class PlayerController : MonoBehaviourPun
         _playerStats.IsHoldingItem(_item.GetItemWeight());
     }
   
+    [PunRPC]
+    public void SyncDeathRPC(bool isActive)
+    {
+        gameObject.SetActive(isActive);
+    }
+    
     /// <summary>
     /// 현재 플레이어의 상태 전환
     /// </summary>
