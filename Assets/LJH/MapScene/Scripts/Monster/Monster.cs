@@ -4,28 +4,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public enum monsterState
-{
-    idle,
-    chase,
-    attack,
-    returnMove
-}
 public class Monster : MonoBehaviourPun
 {
-    public monsterState state;
+    public M_StateMachine stateMachine;
 
+    //플레이어 추적용 게임오브젝트, 콜라이더 관리용 변수
     [SerializeField] List<GameObject> playerList = new List<GameObject>();
     List<Collider> playerColl = new List<Collider>();
-    NavMeshAgent agent;
+    
+    public NavMeshAgent agent;
 
     [SerializeField] GameObject spawnPoint;
     Vector3 spawnPointPos;
 
+    float attackDistance = 1f;
+
     private void Start()
     {
-        agent = GetComponent<NavMeshAgent>();
-        spawnPointPos = GameObject.FindWithTag(Tag.MonsterSpawner).transform.position;
+        Init();
+        StateInit();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -36,10 +33,16 @@ public class Monster : MonoBehaviourPun
         if(other.CompareTag(Tag.Player))
         {
             Debug.Log("인식 완료");
-            playerList.Add(other.gameObject);
-            playerColl.Add(other);
+            SearchingPlayer(other);
         }
     }
+
+    void SearchingPlayer(Collider player)
+    {
+        playerList.Add(player.gameObject);
+        playerColl.Add(player);
+    }
+
 
     private void OnTriggerStay(Collider other)
     {
@@ -79,5 +82,73 @@ public class Monster : MonoBehaviourPun
             //원래 위치로 돌아감
             agent.SetDestination(spawnPointPos);
         }
+    }
+
+    /// <summary>
+    /// 감지된 플레이어가 있을 경우 True
+    /// </summary>
+    /// <returns></returns>
+    public bool HasPlayers()
+    {
+        return playerList.Count > 0;
+    }
+
+    /// <summary>
+    /// 몬스터와 플레이어 거리가 일정 이하로 가까워지면 True 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public bool PlayerInRange()
+    {
+        if (playerList.Count == 0) 
+            return false;
+
+        //임시로 1f로 둠 추후에 맞춰야함
+        return Vector3.Distance(transform.position, playerList[0].transform.position) < attackDistance;
+    }
+
+    /// <summary>
+    /// 몬스터가 스폰포인트에 오면 True 반환하는 함수
+    /// </summary>
+    /// <returns></returns>
+    public bool IsAtSpawnPoint()
+    {
+        return Vector3.Distance(transform.position, spawnPointPos) < 1f;
+    }
+
+    /// <summary>
+    /// 플레이어 추격
+    /// </summary>
+    public void ChasePlayer()
+    {
+        agent.SetDestination(playerList[0].transform.position);
+    }
+
+    /// <summary>
+    /// 스폰포인트로 복귀
+    /// </summary>
+    public void ReturnToSpawn()
+    {
+        agent.SetDestination(spawnPointPos);
+    }
+
+    /// <summary>
+    /// 공격 하는 함수
+    /// </summary>
+    public void Attack()
+    {
+        Debug.Log("공격");
+    }
+
+
+    void Init()
+    {
+        agent = GetComponent<NavMeshAgent>();
+        spawnPointPos = GameObject.FindWithTag(Tag.MonsterSpawner).transform.position;
+    }
+
+    void StateInit()
+    {
+        stateMachine = new M_StateMachine();
+        stateMachine.ChangeState(new M_IdleState(), this);
     }
 }

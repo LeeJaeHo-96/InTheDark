@@ -18,7 +18,9 @@ public class MapDoorOnOff : MonoBehaviour
 
     static void CreateDoor(List<GameObject> lockList, List<GameObject> openList)
     {
-        for (int i = 0; i < lockList.Count; i++)
+        //문 한쪽만 있게 테스트용
+        //for (int i = 0; i < lockList.Count; i++)
+        for (int i = 0; i < 2; i++)
         {
             if (!lockList[i].activeSelf)
                 lockList[i].SetActive(Random.Range(0, 3) < 0.5f);
