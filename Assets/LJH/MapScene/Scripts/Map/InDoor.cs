@@ -17,8 +17,9 @@ public class InDoor : MonoBehaviour
 
     private void Update()
     {
-        if(hitMe != door.hitMe)
-            door.hitMe = hitMe;    
+        if (door != null)
+            if (hitMe != door.hitMe)
+                door.hitMe = hitMe;    
     }
 
 }

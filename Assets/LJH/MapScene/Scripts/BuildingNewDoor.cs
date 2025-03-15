@@ -11,11 +11,18 @@ public class BuildingNewDoor : MonoBehaviour
     private Coroutine doorCo;
     public bool isClosed = true;
 
-    private float openedAngle = 100f;
-    private float closedAngle = 180f;
+    //현재 y값 받아와야함
+    private float openedAngle;
+    private float closedAngle;
 
     public bool hitMe = false;
 
+    private void Start()
+    {
+        Vector3 defaultVec = transform.rotation.eulerAngles;
+        openedAngle = defaultVec.y + 100f;
+        closedAngle = defaultVec.y;
+    }
     private void Update()
     {
         if (hitMe && Input.GetKeyDown(KeyCode.E))
