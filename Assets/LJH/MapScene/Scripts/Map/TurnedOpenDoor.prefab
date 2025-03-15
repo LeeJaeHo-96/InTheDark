@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4827246097745531692}
   - component: {fileID: 993632154285383669}
   - component: {fileID: 7882749659432270442}
+  - component: {fileID: 1890151561254149481}
   m_Layer: 0
   m_Name: OpenDoor
   m_TagString: Untagged
@@ -114,6 +115,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   door: {fileID: -8843717681285660730}
   obstacle: {fileID: 0}
+  hitMe: 0
 --- !u!208 &7882749659432270442
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -130,6 +132,29 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
+--- !u!114 &1890151561254149481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1176391159469354177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 993632154285383669}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &1199865633589867535
 GameObject:
   m_ObjectHideFlags: 0
@@ -140,6 +165,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1455459100762494612}
   - component: {fileID: -8843717681285660730}
+  - component: {fileID: 7190621175671721475}
   m_Layer: 0
   m_Name: TurnedOpenDoor
   m_TagString: Untagged
@@ -175,9 +201,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e02540394fac8ef4abcdb9c061f5d9c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  indoor: {fileID: 0}
+  indoor: {fileID: 993632154285383669}
   isClosed: 1
   hitMe: 0
+--- !u!114 &7190621175671721475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1199865633589867535}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1001 &368961324306384493
 PrefabInstance:
   m_ObjectHideFlags: 0

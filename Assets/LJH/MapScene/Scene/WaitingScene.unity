@@ -1616,6 +1616,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -6344106445631212691, guid: d1f745b771727ed4cb0d4f75ace71f18,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 1266559943940787983, guid: d1f745b771727ed4cb0d4f75ace71f18,
         type: 3}
       propertyPath: m_RootOrder
@@ -1681,6 +1686,11 @@ PrefabInstance:
       propertyPath: m_Convex
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2804541095094486945, guid: d1f745b771727ed4cb0d4f75ace71f18,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 8562559995692688642, guid: d1f745b771727ed4cb0d4f75ace71f18,
         type: 3}
       propertyPath: hitMe
@@ -1718,44 +1728,6 @@ PrefabInstance:
       objectReference: {fileID: 1446688284}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d1f745b771727ed4cb0d4f75ace71f18, type: 3}
---- !u!1 &8562559996893694852 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8562559996345022658, guid: d1f745b771727ed4cb0d4f75ace71f18,
-    type: 3}
-  m_PrefabInstance: {fileID: 8562559996893694851}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &8562559996893694853 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8562559996245387076, guid: d1f745b771727ed4cb0d4f75ace71f18,
-    type: 3}
-  m_PrefabInstance: {fileID: 8562559996893694851}
-  m_PrefabAsset: {fileID: 0}
---- !u!65 &8562559996893694854
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8562559996893694852}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1.0000004, y: 1, z: 2.54}
-  m_Center: {x: 0, y: 0, z: -1.06}
---- !u!65 &8562559996893694855
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8562559996893694853}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1.57, y: 1, z: 1.19}
-  m_Center: {x: -1.04, y: 0, z: 0}
 --- !u!1 &8562559996893694856 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 568716647801100367, guid: d1f745b771727ed4cb0d4f75ace71f18,
