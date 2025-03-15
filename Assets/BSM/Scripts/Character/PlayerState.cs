@@ -7,18 +7,13 @@ public class PlayerState : StateMachine
     protected Coroutine _healthRecoverCo;
     protected Coroutine _staminaRecoverCo; 
     protected PlayerController _controller;
-    protected static bool isRecovering; 
+    protected static bool isRecovering;
     
     public PlayerState(PlayerController controller)
     {
         _controller = controller;
     }
-
-    public override void Enter()
-    {
-        //TODO: 각 초기 상태 초기화 작업
-    }
-
+    
     /// <summary>
     /// 스태미너 회복
     /// </summary>

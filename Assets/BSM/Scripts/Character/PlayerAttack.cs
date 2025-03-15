@@ -37,7 +37,7 @@ public class PlayerAttack : PlayerState
         {
             _controller.ChangeState(PState.RUN);
         }
-        else if (Input.GetKeyDown(KeyCode.Space))
+        else if (_controller.CanJump && Input.GetKeyDown(KeyCode.Space))
         {
             _controller.ChangeState(PState.JUMP);
         }

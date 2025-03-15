@@ -11,7 +11,8 @@ public class PlayerController : MonoBehaviourPun
     public float PosX;
     public float PosY;
     public float PosZ;
-    
+
+    public bool CanJump;
     public bool IsDeath;
     public GameObject PlayerBody;
     public Canvas PlayerCanvas;
@@ -51,8 +52,8 @@ public class PlayerController : MonoBehaviourPun
     
     private void Init()
     {
-        if(!photonView.IsMine) return;
         DontDestroyOnLoad(gameObject);
+        if(!photonView.IsMine) return; 
         
         _inventory = GetComponent<Inventory>();
         _playerStats = GetComponent<PlayerStats>();
@@ -267,15 +268,44 @@ public class PlayerController : MonoBehaviourPun
     private void CameraToItemRay()
     {
         Ray ray = new Ray(PlayerCam.transform.position, PlayerCam.transform.forward);
+        Ray jumpRay = new Ray(transform.position + Vector3.up * 0.1f, Vector3.down);
         
         Debug.DrawRay(ray.origin, ray.direction * 10, Color.red);
-
+        Debug.DrawRay(jumpRay.origin, jumpRay.direction * 0.3f, Color.blue);
+        
         ItemRaycast(ray);
         PopUpRaycast(ray);
         NewDoorRaycast(ray);
-        BuildingRaycast(ray); 
+        BuildingRaycast(ray);
+        JumpGroundCheckRayCast(jumpRay);
     }
+    
+    /// <summary>
+    /// 점프 가능 레이
+    /// </summary>
+    private void JumpGroundCheckRayCast(Ray jumpRay)
+    {
+        if (Physics.Raycast(jumpRay.origin, jumpRay.direction, out RaycastHit jumpHit, 0.3f))
+        {
+            if (jumpHit.collider != null)
+            {
+                float groundDistance = Mathf.Abs(jumpHit.point.y - transform.position.y);
 
+                if (groundDistance < 0.1f)
+                {
+                    CanJump = true;
+                }
+                else
+                {
+                    CanJump = false;
+                }                  
+            }  
+        }
+        else
+        {
+            CanJump = false;
+        }
+    }
     
     /// <summary>
     /// 아이템 감지 레이

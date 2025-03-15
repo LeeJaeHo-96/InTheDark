@@ -32,7 +32,7 @@ public class PlayerRun : PlayerState
         {
             _controller.ChangeState(PState.WALK);
         }
-        else if (Input.GetKeyDown(KeyCode.Space))
+        else if (_controller.CanJump && Input.GetKeyDown(KeyCode.Space))
         {
             _controller.ChangeState(PState.JUMP);
         }
