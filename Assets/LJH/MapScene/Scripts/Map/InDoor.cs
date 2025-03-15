@@ -6,7 +6,7 @@ public class InDoor : MonoBehaviour
     [SerializeField] BuildingNewDoor door;
 
     public NavMeshObstacle obstacle;
-    bool hitMe = false;
+    public bool hitMe = false;
     private void Start()
     {
         obstacle = GetComponent<NavMeshObstacle>();
