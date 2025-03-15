@@ -5,12 +5,13 @@ using UnityEngine;
 
 public class PlayerRun : PlayerState
 {
+    private Coroutine _consumeCo;
     
     public PlayerRun(PlayerController controller) : base(controller) {}
 
     public override void Enter()
     {
-        _controller.ConsumeStaminaCo = _controller.StartCoroutine(UseStaminaRoutine());
+        _consumeCo = _controller.StartCoroutine(UseStaminaRoutine());
     }
     
     public override void OnTrigger()
@@ -48,8 +49,8 @@ public class PlayerRun : PlayerState
 
     public override void Exit()
     {
-        _controller.StopCoroutine(_controller.ConsumeStaminaCo);
-        _controller.ConsumeStaminaCo = null;
+        _controller.StopCoroutine(_consumeCo);
+        _consumeCo = null;
     }
     
 

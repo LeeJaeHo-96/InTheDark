@@ -100,6 +100,8 @@ public class PunManager : MonoBehaviourPunCallbacks
     /// </summary>
     private void GoToWaitingScene()
     {
+        //TODO: 여기서 한번더 스폰하고 캐릭터 담아야 될려나
+        //GameManager.Instance.PlayerObjects
         PhotonNetwork.LoadLevel(SceneUtility.GetBuildIndexByScenePath("WaitingScene")); 
     }
 

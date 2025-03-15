@@ -13,6 +13,7 @@ public class TestGameScene : MonoBehaviourPunCallbacks
     
     private void Start()
     {
+        Cursor.lockState = CursorLockMode.Locked;
         PhotonNetwork.ConnectUsingSettings();
     }
     
