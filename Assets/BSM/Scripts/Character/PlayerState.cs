@@ -62,13 +62,13 @@ public class PlayerState : StateMachine
     /// </summary>
     /// <returns></returns>
     protected IEnumerator RecoverHealthRoutine()
-    { 
-         
+    {  
+        //TODO: 체력 회복 임시 조건
         while (_controller.PlayerStats.CurHP <= 20f)
-        {
-            yield return null;
-        }
-        
+        { 
+            _controller.PlayerStats.CurHP += 1;
+            yield return new WaitForSeconds(1f);
+        }  
     }
     
 }

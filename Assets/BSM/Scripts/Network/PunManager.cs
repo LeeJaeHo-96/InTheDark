@@ -15,8 +15,7 @@ public class PunManager : MonoBehaviourPunCallbacks
     private Lobby Lobby => Lobby.Instance;
     public static PunManager Instance;
     public UnityAction OnChangedPlayer;
-    public List<PlayerController> Players => GameManager.Instance.PlayerObjects;
-
+    
     private void Awake()
     {
         if (Instance == null)
@@ -100,7 +99,8 @@ public class PunManager : MonoBehaviourPunCallbacks
     /// 대기 화면으로 이동
     /// </summary>
     private void GoToWaitingScene()
-    {
+    { 
+        GameManager.Instance.PlayerObjects.Clear();
         GameManager.Instance.PlayerObjects = FindObjectsOfType<PlayerController>().ToList();
         PhotonNetwork.LoadLevel(SceneUtility.GetBuildIndexByScenePath("WaitingScene")); 
     }

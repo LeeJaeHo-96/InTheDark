@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerIdle : PlayerState
 {
     private Coroutine _recoverHealthCo;
+    private Coroutine _recoverWaitCo;
     
     public PlayerIdle(PlayerController controller) : base(controller) {}
 
@@ -13,9 +14,10 @@ public class PlayerIdle : PlayerState
     { 
         RecoverStamina();
 
+        //TODO: 체력 회복 임시 조건
         if (_controller.PlayerStats.CurHP <= 20f)
-        {
-            _recoverHealthCo = _controller.StartCoroutine(RecoverHealthRoutine());
+        { 
+            _recoverWaitCo = _controller.StartCoroutine(RecoverHealthWaitRoutine());
         }
         
     }
@@ -29,7 +31,6 @@ public class PlayerIdle : PlayerState
     {
         if (_staminaRecoverCo != null && !isRecovering && _controller.PlayerStats.Stamina >= 100f)
         {
-            Debug.Log("코루틴 중지");
             _controller.StopCoroutine(_staminaRecoverCo);
             _staminaRecoverCo = null;
         }
@@ -52,5 +53,30 @@ public class PlayerIdle : PlayerState
         } 
     }
 
+    public override void Exit()
+    {
+        if (_recoverWaitCo != null)
+        {
+            _controller.StopCoroutine(_recoverWaitCo);
+            _recoverWaitCo = null;
+        }
+
+        if (_recoverHealthCo != null)
+        {
+            _controller.StopCoroutine(_recoverHealthCo);
+            _recoverHealthCo = null;
+        } 
+    }
+    
+    /// <summary>
+    /// 체력 회복 전 대기 코루틴
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator RecoverHealthWaitRoutine()
+    {
+        //TODO: 체력 회복 임시 조건
+        yield return new WaitForSeconds(3f);
+        _recoverHealthCo = _controller.StartCoroutine(RecoverHealthRoutine()); 
+    }
     
 }
