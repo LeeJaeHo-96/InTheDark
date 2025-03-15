@@ -9,11 +9,7 @@ public class PlayerIdle : PlayerState
 
     public override void Enter()
     { 
-        //TODO: 스태미너 회복 로직 수정 필요
-        if (_controller.PlayerStats.Stamina < 100f && _controller.RecoverStaminaCo == null)
-        {
-            _controller.RecoverStaminaCo = _controller.StartCoroutine(RecoverStaminaRoutine());
-        }
+        RecoverStamina();
     }
 
     public override void OnTrigger()
@@ -41,18 +37,17 @@ public class PlayerIdle : PlayerState
         }
         
     }
-    
-    public override void Exit()
-    {
-        //Idle 애니메이션 종료
-        if (_controller.RecoverStaminaCo != null)
-        {
-            _controller.StopCoroutine(_controller.RecoverStaminaCo);
-            _controller.RecoverStaminaCo = null;
-        }
-    }
+     
     
     //TODO: 가만히 있는 상태이고 체력이 20이하이면 20까지 체력이 차야함
-    
+    public override void Exit()
+    {
+        if (!isRecovering && _staminaRecoverCo != null)
+        {
+            Debug.Log("코루틴 중지");
+            _controller.StopCoroutine(_staminaRecoverCo);
+            _staminaRecoverCo = null;
+        }
+    }
     
 }

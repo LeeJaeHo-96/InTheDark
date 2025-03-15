@@ -10,11 +10,7 @@ public class PlayerWalk : PlayerState
 
     public override void Enter()
     {
-        //TODO: 스태미너 회복 로직 수정 필요
-        if (_controller.PlayerStats.Stamina < 100f && _controller.RecoverStaminaCo == null)
-        {
-            _controller.RecoverStaminaCo = _controller.StartCoroutine(RecoverStaminaRoutine());
-        }
+        RecoverStamina();
     }
 
     public override void OnTrigger()
@@ -49,16 +45,15 @@ public class PlayerWalk : PlayerState
         
         _controller.PlayerRb.MovePosition(_controller.transform.position + dir.normalized * _controller.PlayerStats.WalkSpeed * Time.fixedDeltaTime);   
     }
-    
+
     public override void Exit()
     {
-        //회복 코루틴이 != null
-        if (_controller.RecoverStaminaCo != null)
+        if (!isRecovering && _staminaRecoverCo != null)
         {
-            _controller.StopCoroutine(_controller.RecoverStaminaCo);
-            _controller.RecoverStaminaCo = null;
+            Debug.Log("코루틴 중지");
+            _controller.StopCoroutine(_staminaRecoverCo);
+            _staminaRecoverCo = null;
         }
     }
-
 
 }

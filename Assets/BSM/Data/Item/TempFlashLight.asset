@@ -19,6 +19,7 @@ MonoBehaviour:
   ItemIcon: {fileID: 21300000, guid: e2884402014cea14e848bd7ffe110699, type: 3}
   IsAttack: 0
   IsConsumable: 1
-  MaxDurability: 20
+  MaxDurability: 300
   AttackSpeed: 0
   AttackRange: 0
+  Damage: 0
