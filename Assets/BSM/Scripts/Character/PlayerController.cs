@@ -35,7 +35,7 @@ public class PlayerController : MonoBehaviourPun
     public Item CurCarryItem;
     private PopUp _popup;
     private NewDoor _newDoor;
-    private BuildingNewDoor _buildingDoor;
+    private InDoor _buildingDoor;
     
     private PState _curState = PState.IDLE;
 
@@ -409,7 +409,7 @@ public class PlayerController : MonoBehaviourPun
     {
         if(Physics.Raycast(ray.origin, ray.direction, out RaycastHit popUp, 3f))
         {
-            if (popUp.collider.TryGetComponent<BuildingNewDoor>(out _buildingDoor))
+            if (popUp.collider.TryGetComponent<InDoor>(out _buildingDoor))
             {
                 _buildingDoor.hitMe = true;
             }
