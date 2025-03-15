@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviourPun
     public Collider OnTriggerOther;
     public Coroutine ConsumeStaminaCo;
     public Coroutine RecoverStaminaCo;
+    public Item CurCarryItem;
     public PState CurState => _curState;
     public Vector3 MoveDir = Vector3.zero;
      
@@ -32,10 +33,9 @@ public class PlayerController : MonoBehaviourPun
     
     private Inventory _inventory;
     private Item _item;
-    public Item CurCarryItem;
-    private PopUp _popup;
+    private PopUp _popup; 
     private NewDoor _newDoor;
-    private InDoor _buildingDoor;
+    private InDoor _inDoor;
     
     private PState _curState = PState.IDLE;
 
@@ -43,8 +43,9 @@ public class PlayerController : MonoBehaviourPun
     private float _mouseX;
     private float _mouseY;
     private int _itemLayer => LayerMask.GetMask("Item");
-
-    
+    private int _popupLayer => LayerMask.GetMask("PopUp");
+    private int _newDoorLayer => LayerMask.GetMask("NewDoor");
+    private int _inDoorLayer => LayerMask.GetMask("InDoor");
     
     private float _sensitivity => DataManager.Instance.UserSettingData.Sensitivity;
     
@@ -270,13 +271,13 @@ public class PlayerController : MonoBehaviourPun
         Ray ray = new Ray(PlayerCam.transform.position, PlayerCam.transform.forward);
         Ray jumpRay = new Ray(transform.position + Vector3.up * 0.1f, Vector3.down);
         
-        Debug.DrawRay(ray.origin, ray.direction * 10, Color.red);
+        Debug.DrawRay(ray.origin, ray.direction * 5, Color.red);
         Debug.DrawRay(jumpRay.origin, jumpRay.direction * 0.3f, Color.blue);
         
         ItemRaycast(ray);
         PopUpRaycast(ray);
         NewDoorRaycast(ray);
-        BuildingRaycast(ray);
+        InDoorRaycast(ray);
         JumpGroundCheckRayCast(jumpRay);
     }
     
@@ -345,20 +346,10 @@ public class PlayerController : MonoBehaviourPun
     /// <param name="ray"></param>
     private void PopUpRaycast(Ray ray)
     {
-        if(Physics.Raycast(ray.origin, ray.direction, out RaycastHit popUp, 5f))
+        if(Physics.Raycast(ray.origin, ray.direction, out RaycastHit hit, 3f, _popupLayer))
         {
-            if (popUp.collider.TryGetComponent<PopUp>(out _popup))
-            {
-                _popup.hitMe = true;
-            }
-            else
-            {
-                if (_popup != null)
-                {
-                    _popup.hitMe = false;
-                    _popup = null;
-                }
-            }
+            _popup = hit.collider.GetComponent<PopUp>(); 
+            _popup.hitMe = true; 
         }
         else
         {
@@ -376,20 +367,10 @@ public class PlayerController : MonoBehaviourPun
     /// <param name="ray"></param>
     private void NewDoorRaycast(Ray ray)
     {
-        if(Physics.Raycast(ray.origin, ray.direction, out RaycastHit popUp, 3f))
+        if(Physics.Raycast(ray.origin, ray.direction, out RaycastHit hit, 3f, _newDoorLayer))
         {
-            if (popUp.collider.TryGetComponent<NewDoor>(out _newDoor))
-            {
-                _newDoor.hitMe = true;
-            }
-            else
-            {
-                if (_newDoor != null)
-                {
-                    _newDoor.hitMe = false;
-                    _newDoor = null;
-                }
-            }
+            _newDoor = hit.collider.GetComponent<NewDoor>();
+            _newDoor.hitMe = true; 
         }
         else
         {
@@ -402,32 +383,22 @@ public class PlayerController : MonoBehaviourPun
     }
     
     /// <summary>
-    /// 빌딩 뉴 도어 레이
+    /// 인 도어 레이
     /// </summary>
     /// <param name="ray"></param>
-    private void BuildingRaycast(Ray ray)
+    private void InDoorRaycast(Ray ray)
     {
-        if(Physics.Raycast(ray.origin, ray.direction, out RaycastHit popUp, 3f))
+        if(Physics.Raycast(ray.origin, ray.direction, out RaycastHit hit, 3f, _inDoorLayer))
         {
-            if (popUp.collider.TryGetComponent<InDoor>(out _buildingDoor))
-            {
-                _buildingDoor.hitMe = true;
-            }
-            else
-            {
-                if (_buildingDoor != null)
-                {
-                    _buildingDoor.hitMe = false;
-                    _buildingDoor = null;
-                }
-            }
+            _inDoor = hit.collider.GetComponent<InDoor>();
+            _inDoor.hitMe = true;
         }
         else
         {
-            if (_buildingDoor != null)
+            if (_inDoor != null)
             {
-                _buildingDoor.hitMe = false;
-                _buildingDoor = null;
+                _inDoor.hitMe = false;
+                _inDoor = null;
             }
         }
     }

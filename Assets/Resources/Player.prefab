@@ -1855,6 +1855,9 @@ MonoBehaviour:
   OnTriggerOther: {fileID: 0}
   MoveDir: {x: 0, y: 0, z: 0}
   CurCarryItem: {fileID: 0}
+  _popup: {fileID: 0}
+  _newDoor: {fileID: 0}
+  _inDoor: {fileID: 0}
 --- !u!114 &2829151007137977279
 MonoBehaviour:
   m_ObjectHideFlags: 0
