@@ -1,39 +1,46 @@
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
 
-public class InDoor : MonoBehaviour, IPunObservable
+public class InDoor : MonoBehaviourPun
 {
     [SerializeField] BuildingNewDoor door;
 
     public NavMeshObstacle obstacle;
     public bool hitMe = false;
+
+    public UnityAction<bool> hitMeEvent;
+
+    //프로퍼티로 구현 예시
+    //public bool meHit
+    //{
+    //    get => hitMe;
+    //    set
+    //    {
+    //        if (door != null)
+    //            if (hitMe != door.hitMe)
+    //                door.hitMe = hitMe;
+    //    }
+    //}
+
     private void Start()
     {
         obstacle = GetComponent<NavMeshObstacle>();
 
         obstacle.enabled = true;
 
+        hitMeEvent += HitMeShare;
+
+
     }
 
-    private void Update()
+    public void HitMeShare(bool hitMe)
     {
         if (door != null)
-            if (hitMe != door.hitMe)
-                door.hitMe = hitMe;    
+            door.hitMe = hitMe;
     }
 
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-        if(stream.IsWriting)
-        {
-            stream.SendNext(obstacle.enabled);
-            stream.SendNext(hitMe);
-        }
-        else
-        {
-            this.obstacle.enabled = (bool)stream.ReceiveNext();
-            this.hitMe = (bool)stream.ReceiveNext();
-        }
-    }
+
+
 }

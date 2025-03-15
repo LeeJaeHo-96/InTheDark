@@ -24,11 +24,27 @@ public class NewDoor : MonoBehaviourPun
             if (doorCo == null)
             {
                 Debug.Log("눌림");
-                if(indoor != null)
-                    indoor.obstacle.enabled = !indoor.obstacle.enabled;
+                if (indoor != null)
+                {
+                    photonView.RPC("RPCObstacle", RpcTarget.AllViaServer);
+                }
                 photonView.RPC("RPCDoor", RpcTarget.AllViaServer);
             }
         }
+    }
+
+
+    // 유니티액션을 이용한 메서드
+    //[PunRPC]
+    //void RPChitMeShare()
+    //{
+    //    indoor.hitMeEvent?.Invoke(indoor.hitMe);
+    //}
+
+    [PunRPC]
+    void RPCObstacle()
+    {
+        indoor.obstacle.enabled = !indoor.obstacle.enabled;
     }
 
     [PunRPC]
