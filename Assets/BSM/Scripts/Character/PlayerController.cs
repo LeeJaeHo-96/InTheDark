@@ -33,6 +33,8 @@ public class PlayerController : MonoBehaviourPun
     private Item _item;
     public Item CurCarryItem;
     private PopUp _popup;
+    private NewDoor _newDoor;
+    private BuildingNewDoor _buildingDoor;
     
     private PState _curState = PState.IDLE;
 
@@ -268,6 +270,19 @@ public class PlayerController : MonoBehaviourPun
         
         Debug.DrawRay(ray.origin, ray.direction * 10, Color.red);
 
+        ItemRaycast(ray);
+        PopUpRaycast(ray);
+        NewDoorRaycast(ray);
+        BuildingRaycast(ray); 
+    }
+
+    
+    /// <summary>
+    /// 아이템 감지 레이
+    /// </summary>
+    /// <param name="ray"></param>
+    private void ItemRaycast(Ray ray)
+    {
         if (Physics.Raycast(ray.origin, ray.direction, out RaycastHit hit, 2f, _itemLayer))
         { 
             _item = hit.collider.GetComponent<Item>();
@@ -289,15 +304,17 @@ public class PlayerController : MonoBehaviourPun
         }
         else
         {
-            if (_popup != null)
-            {
-                _popup.hitMe = false;
-                _popup = null;
-            }
-            
             UIManager.Instance.ItemPickObjActive();
         }
-        
+    }
+    
+    
+    /// <summary>
+    /// 팝업 감지 레이
+    /// </summary>
+    /// <param name="ray"></param>
+    private void PopUpRaycast(Ray ray)
+    {
         if(Physics.Raycast(ray.origin, ray.direction, out RaycastHit popUp, 5f))
         {
             if (popUp.collider.TryGetComponent<PopUp>(out _popup))
@@ -321,8 +338,70 @@ public class PlayerController : MonoBehaviourPun
                 _popup = null;
             }
         }
-        
     }
+
+    /// <summary>
+    /// 뉴 도어 감지 레이
+    /// </summary>
+    /// <param name="ray"></param>
+    private void NewDoorRaycast(Ray ray)
+    {
+        if(Physics.Raycast(ray.origin, ray.direction, out RaycastHit popUp, 3f))
+        {
+            if (popUp.collider.TryGetComponent<NewDoor>(out _newDoor))
+            {
+                _newDoor.hitMe = true;
+            }
+            else
+            {
+                if (_newDoor != null)
+                {
+                    _newDoor.hitMe = false;
+                    _newDoor = null;
+                }
+            }
+        }
+        else
+        {
+            if (_newDoor != null)
+            {
+                _newDoor.hitMe = false;
+                _newDoor = null;
+            }
+        }
+    }
+    
+    /// <summary>
+    /// 빌딩 뉴 도어 레이
+    /// </summary>
+    /// <param name="ray"></param>
+    private void BuildingRaycast(Ray ray)
+    {
+        if(Physics.Raycast(ray.origin, ray.direction, out RaycastHit popUp, 3f))
+        {
+            if (popUp.collider.TryGetComponent<BuildingNewDoor>(out _buildingDoor))
+            {
+                _buildingDoor.hitMe = true;
+            }
+            else
+            {
+                if (_buildingDoor != null)
+                {
+                    _buildingDoor.hitMe = false;
+                    _buildingDoor = null;
+                }
+            }
+        }
+        else
+        {
+            if (_buildingDoor != null)
+            {
+                _buildingDoor.hitMe = false;
+                _buildingDoor = null;
+            }
+        }
+    }
+    
     
     /// <summary>
     /// 들고있는 아이템 드랍

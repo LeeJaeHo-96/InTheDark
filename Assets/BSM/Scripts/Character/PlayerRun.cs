@@ -11,7 +11,10 @@ public class PlayerRun : PlayerState
 
     public override void Enter()
     {
-        _consumeCo = _controller.StartCoroutine(UseStaminaRoutine());
+        if (_consumeCo == null)
+        {
+            _consumeCo = _controller.StartCoroutine(UseStaminaRoutine());
+        } 
     }
     
     public override void OnTrigger()

@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerState : StateMachine
-{ 
+{
+    protected Coroutine _healthRecoverCo;
     protected Coroutine _staminaRecoverCo; 
     protected PlayerController _controller;
-    protected bool isRecovering; 
+    protected static bool isRecovering; 
     
     public PlayerState(PlayerController controller)
     {
@@ -36,18 +37,13 @@ public class PlayerState : StateMachine
     /// <returns></returns>
     private IEnumerator RecoverStaminaRoutine()
     {
-        Debug.Log("회복 시작");
-        
         while (_controller.PlayerStats.Stamina < 100f)
         {
-            Debug.Log("스태미너 회복중");
             _controller.PlayerStats.Stamina += 5;
             _controller.PlayerStats.Stamina = Mathf.Clamp(_controller.PlayerStats.Stamina, 0, _controller.PlayerStats.MaxStamina);
             _controller.PlayerStats.OnChangedStamina?.Invoke(_controller.PlayerStats.Stamina);
             yield return new WaitForSeconds(0.8f); 
-        } 
-        
-        Debug.Log("회복 완료");
+        }  
         isRecovering = false;
     }
     
@@ -59,11 +55,25 @@ public class PlayerState : StateMachine
     {
         while (_controller.CurState == PState.RUN)
         {
-
             _controller.PlayerStats.Stamina -= 5;
             _controller.PlayerStats.Stamina = Mathf.Clamp(_controller.PlayerStats.Stamina, 0, _controller.PlayerStats.Stamina);
             _controller.PlayerStats.OnChangedStamina?.Invoke(_controller.PlayerStats.Stamina);
             yield return new WaitForSeconds(0.8f);
         } 
     }
+    
+    /// <summary>
+    /// 체력 회복 코루틴
+    /// </summary>
+    /// <returns></returns>
+    protected IEnumerator RecoverHealthRoutine()
+    { 
+         
+        while (_controller.PlayerStats.CurHP <= 20f)
+        {
+            yield return null;
+        }
+        
+    }
+    
 }

@@ -5,11 +5,19 @@ using UnityEngine;
 
 public class PlayerIdle : PlayerState
 {
+    private Coroutine _recoverHealthCo;
+    
     public PlayerIdle(PlayerController controller) : base(controller) {}
 
     public override void Enter()
     { 
         RecoverStamina();
+
+        if (_controller.PlayerStats.CurHP <= 20f)
+        {
+            _recoverHealthCo = _controller.StartCoroutine(RecoverHealthRoutine());
+        }
+        
     }
 
     public override void OnTrigger()
@@ -19,6 +27,13 @@ public class PlayerIdle : PlayerState
     
     public override void Update()
     {
+        if (_staminaRecoverCo != null && !isRecovering && _controller.PlayerStats.Stamina >= 100f)
+        {
+            Debug.Log("코루틴 중지");
+            _controller.StopCoroutine(_staminaRecoverCo);
+            _staminaRecoverCo = null;
+        }
+        
         if (_controller.MoveDir != Vector3.zero && !Input.GetKey(KeyCode.LeftShift))
         {
             _controller.ChangeState(PState.WALK);
@@ -34,20 +49,8 @@ public class PlayerIdle : PlayerState
         else if (_controller.MoveDir == Vector3.zero && Input.GetMouseButtonDown(0))
         {
             _controller.ChangeState(PState.ATTACK);
-        }
-        
+        } 
     }
-     
-    
-    //TODO: 가만히 있는 상태이고 체력이 20이하이면 20까지 체력이 차야함
-    public override void Exit()
-    {
-        if (!isRecovering && _staminaRecoverCo != null)
-        {
-            Debug.Log("코루틴 중지");
-            _controller.StopCoroutine(_staminaRecoverCo);
-            _staminaRecoverCo = null;
-        }
-    }
+
     
 }

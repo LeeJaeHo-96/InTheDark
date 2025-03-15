@@ -20,6 +20,13 @@ public class PlayerWalk : PlayerState
     
     public override void Update()
     {
+        if (_staminaRecoverCo != null && !isRecovering && _controller.PlayerStats.Stamina >= 100f)
+        {
+            Debug.Log("코루틴 중지");
+            _controller.StopCoroutine(_staminaRecoverCo);
+            _staminaRecoverCo = null;
+        }
+        
         if (_controller.MoveDir == Vector3.zero)
         {
             _controller.ChangeState(PState.IDLE);
@@ -45,15 +52,5 @@ public class PlayerWalk : PlayerState
         
         _controller.PlayerRb.MovePosition(_controller.transform.position + dir.normalized * _controller.PlayerStats.WalkSpeed * Time.fixedDeltaTime);   
     }
-
-    public override void Exit()
-    {
-        if (!isRecovering && _staminaRecoverCo != null)
-        {
-            Debug.Log("코루틴 중지");
-            _controller.StopCoroutine(_staminaRecoverCo);
-            _staminaRecoverCo = null;
-        }
-    }
-
+ 
 }
