@@ -391,13 +391,13 @@ public class PlayerController : MonoBehaviourPun
         if(Physics.Raycast(ray.origin, ray.direction, out RaycastHit hit, 3f, _inDoorLayer))
         {
             _inDoor = hit.collider.GetComponent<InDoor>();
-            _inDoor.hitMe = true;
+            _inDoor.hitMeEvent?.Invoke(true);
         }
         else
         {
             if (_inDoor != null)
             {
-                _inDoor.hitMe = false;
+                _inDoor.hitMeEvent?.Invoke(false);
                 _inDoor = null;
             }
         }
