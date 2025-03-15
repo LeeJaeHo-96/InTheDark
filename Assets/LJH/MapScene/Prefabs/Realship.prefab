@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2081930451700070810}
   - component: {fileID: 4251529985182289235}
   - component: {fileID: 8562559995692688642}
+  - component: {fileID: 2804541095094486945}
   m_Layer: 0
   m_Name: left_door
   m_TagString: Untagged
@@ -111,7 +112,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd6105f114eb6cd48bf32d210682bcd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  indoor: {fileID: 0}
   isClosed: 1
+  hitMe: 0
+--- !u!114 &2804541095094486945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 568716647801100367}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &1934411636381324725
 GameObject:
   m_ObjectHideFlags: 0
@@ -124,6 +149,7 @@ GameObject:
   - component: {fileID: 2755184943357968554}
   - component: {fileID: 133020369858311264}
   - component: {fileID: 2755184943357968553}
+  - component: {fileID: -6344106445631212691}
   m_Layer: 0
   m_Name: Realship
   m_TagString: Untagged
@@ -225,6 +251,28 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 2838047407261934760, guid: 0b97b62b37f204d4881c9554a79e4508, type: 3}
+--- !u!114 &-6344106445631212691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1934411636381324725}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &2320277915243598200
 GameObject:
   m_ObjectHideFlags: 0
@@ -1246,7 +1294,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8562559995881542794}
   m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -6.265001, y: -2.255, z: 0.03999901}
+  m_LocalPosition: {x: -7.24, y: -2.255, z: 0.04}
   m_LocalScale: {x: 0.49999988, y: 0.5, z: 0.49999988}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2358,6 +2406,7 @@ GameObject:
   - component: {fileID: 8562559996245387081}
   - component: {fileID: 8562559996245387083}
   - component: {fileID: 2356080285959954784}
+  - component: {fileID: 336727517847452237}
   m_Layer: 0
   m_Name: Computer
   m_TagString: Untagged
@@ -2443,8 +2492,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10782c345e325c046ac10fa543d10ca0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  playerCol: {fileID: 0}
   keyInfo: {fileID: 0}
   hitMe: 0
 --- !u!114 &2356080285959954784
@@ -2460,6 +2507,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   computerCanvas: {fileID: 8562559996385302116}
+--- !u!65 &336727517847452237
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8562559996245387076}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1.0000002}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8562559996345022658
 GameObject:
   m_ObjectHideFlags: 0
@@ -2473,6 +2533,7 @@ GameObject:
   - component: {fileID: 8562559996345022656}
   - component: {fileID: 8562559996345022661}
   - component: {fileID: 2356080285959954791}
+  - component: {fileID: 1234828316431771011}
   m_Layer: 0
   m_Name: Monitor
   m_TagString: Untagged
@@ -2557,8 +2618,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10782c345e325c046ac10fa543d10ca0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  playerCol: {fileID: 0}
   keyInfo: {fileID: 0}
   hitMe: 0
 --- !u!114 &2356080285959954791
@@ -2574,6 +2633,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Stage: 0
+--- !u!65 &1234828316431771011
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8562559996345022658}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.0000004, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: -0.51}
 --- !u!1 &8562559996385302116
 GameObject:
   m_ObjectHideFlags: 0

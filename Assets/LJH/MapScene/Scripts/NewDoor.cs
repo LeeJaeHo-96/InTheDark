@@ -1,9 +1,10 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class NewDoor : MonoBehaviour
+public class NewDoor : MonoBehaviourPun
 {
     [SerializeField] InDoor indoor;
 
@@ -25,9 +26,15 @@ public class NewDoor : MonoBehaviour
                 Debug.Log("´­¸²");
                 if(indoor != null)
                     indoor.obstacle.enabled = !indoor.obstacle.enabled;
-                doorCo = StartCoroutine(DoorCoroutine());
+                photonView.RPC("RPCDoor", RpcTarget.AllViaServer);
             }
         }
+    }
+
+    [PunRPC]
+    void RPCDoor()
+    {
+        doorCo = StartCoroutine(DoorCoroutine());
     }
 
     IEnumerator DoorCoroutine()
