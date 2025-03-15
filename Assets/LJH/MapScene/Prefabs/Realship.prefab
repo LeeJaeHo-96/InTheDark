@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4251529985182289235}
   - component: {fileID: 8562559995692688642}
   - component: {fileID: 2804541095094486945}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: left_door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2407,7 +2407,7 @@ GameObject:
   - component: {fileID: 8562559996245387083}
   - component: {fileID: 2356080285959954784}
   - component: {fileID: 336727517847452237}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: Computer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2534,7 +2534,7 @@ GameObject:
   - component: {fileID: 8562559996345022661}
   - component: {fileID: 2356080285959954791}
   - component: {fileID: 1234828316431771011}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: Monitor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
