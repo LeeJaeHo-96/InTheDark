@@ -23,7 +23,8 @@ public class NewDoor : MonoBehaviour
             if (doorCo == null)
             {
                 Debug.Log("´­¸²");
-                indoor.obstacle.enabled = !indoor.obstacle.enabled;
+                if(indoor != null)
+                    indoor.obstacle.enabled = !indoor.obstacle.enabled;
                 doorCo = StartCoroutine(DoorCoroutine());
             }
         }

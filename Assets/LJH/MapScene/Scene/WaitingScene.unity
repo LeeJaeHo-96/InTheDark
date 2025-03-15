@@ -1685,6 +1685,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: ship
       objectReference: {fileID: 0}
+    - target: {fileID: 8562559995692688642, guid: d1f745b771727ed4cb0d4f75ace71f18,
+        type: 3}
+      propertyPath: hitMe
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8562559995874686372, guid: d1f745b771727ed4cb0d4f75ace71f18,
         type: 3}
       propertyPath: sceneViewId
