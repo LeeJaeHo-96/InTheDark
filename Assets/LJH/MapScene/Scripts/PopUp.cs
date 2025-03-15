@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class PopUp : MonoBehaviour
 {
-    public GameObject player;
-    public Collider playerCol;
-
     [SerializeField] GameObject keyInfo;
 
     public bool hitMe;
