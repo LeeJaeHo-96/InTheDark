@@ -314,6 +314,8 @@ public class PlayerController : MonoBehaviourPun
     /// <param name="ray"></param>
     private void ItemRaycast(Ray ray)
     {
+        if (UIManager.Instance == null) return;
+            
         if (Physics.Raycast(ray.origin, ray.direction, out RaycastHit hit, 2f, _itemLayer))
         { 
             _item = hit.collider.GetComponent<Item>();
