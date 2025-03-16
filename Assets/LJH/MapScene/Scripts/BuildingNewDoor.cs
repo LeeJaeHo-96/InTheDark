@@ -31,16 +31,27 @@ public class BuildingNewDoor : MonoBehaviourPun
             if (doorCo == null)
             {
                 Debug.Log("눌림");
-                indoor.obstacle.enabled = !indoor.obstacle.enabled;
+                if (indoor != null)
+                {
+                    photonView.RPC("RPCObstacle", RpcTarget.AllViaServer);
+                }
                 photonView.RPC("RPCDoor", RpcTarget.AllViaServer);
+                Debug.Log("1차 실행됨");
             }
         }
+    }
+
+    [PunRPC]
+    void RPCObstacle()
+    {
+        indoor.obstacle.enabled = !indoor.obstacle.enabled;
     }
 
     [PunRPC]
     void RPCDoor()
     {
         doorCo = StartCoroutine(DoorCoroutine());
+        Debug.Log("RPCDoor 실행됨");
     }
 
     IEnumerator DoorCoroutine()
@@ -53,7 +64,7 @@ public class BuildingNewDoor : MonoBehaviourPun
         if (isClosed)
         {
             Debug.Log("문닫혀있음");
-            targetAngle = Quaternion.Euler(openedAngle, vec.y, vec.z);
+            targetAngle = Quaternion.Euler(vec.x, openedAngle, vec.z);
             while (elapsedTime < duration)
             {
                 elapsedTime += Time.deltaTime * doorSpeed;
@@ -70,7 +81,7 @@ public class BuildingNewDoor : MonoBehaviourPun
         else
         {
             Debug.Log("문열려있음");
-            targetAngle = Quaternion.Euler(closedAngle, vec.y, vec.z);
+            targetAngle = Quaternion.Euler(vec.x, closedAngle, vec.z);
             while (elapsedTime < duration)
             {
                 elapsedTime += Time.deltaTime * doorSpeed;

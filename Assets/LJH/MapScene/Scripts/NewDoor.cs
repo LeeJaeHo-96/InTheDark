@@ -24,10 +24,6 @@ public class NewDoor : MonoBehaviourPun
             if (doorCo == null)
             {
                 Debug.Log("´­¸²");
-                if (indoor != null)
-                {
-                    photonView.RPC("RPCObstacle", RpcTarget.AllViaServer);
-                }
                 photonView.RPC("RPCDoor", RpcTarget.AllViaServer);
             }
         }
