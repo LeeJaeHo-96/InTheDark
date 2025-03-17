@@ -276,9 +276,7 @@ public class PlayerController : MonoBehaviourPun
         ItemRaycast(ray);
         ObjectRaycast(ray, ref _popup, _popupLayer);
         ObjectRaycast(ray, ref _newDoor, _newDoorLayer);
-        // PopUpRaycast(ray);
-        // NewDoorRaycast(ray);
-        InDoorRaycast(ray);
+        ObjectRaycast(ray, ref _inDoor, _inDoorLayer);
         JumpGroundCheckRayCast(jumpRay);
     }
     
@@ -370,30 +368,7 @@ public class PlayerController : MonoBehaviourPun
             }
         } 
     }
-    
-    
-    /// <summary>
-    /// 인 도어 레이
-    /// </summary>
-    /// <param name="ray"></param>
-    private void InDoorRaycast(Ray ray)
-    {
-        if(Physics.Raycast(ray.origin, ray.direction, out RaycastHit hit, 3f, _inDoorLayer))
-        {
-            _inDoor = hit.collider.GetComponent<InDoor>();
-            _inDoor.hitMeEvent?.Invoke(true);
-        }
-        else
-        {
-            if (_inDoor != null)
-            {
-                _inDoor.hitMeEvent?.Invoke(false);
-                _inDoor = null;
-            }
-        }
-    }
-    
-    
+      
     /// <summary>
     /// 들고있는 아이템 드랍
     /// </summary>
