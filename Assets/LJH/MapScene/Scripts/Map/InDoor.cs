@@ -3,26 +3,24 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
 
-public class InDoor : MonoBehaviourPun
+public class InDoor : MonoBehaviourPun, IHitMe
 {
     [SerializeField] BuildingNewDoor door;
 
     public NavMeshObstacle obstacle;
-    public bool hitMe = false;
+    public bool HitMe 
+    {
+        get => HitMe; 
+        set
+        {
+            if(HitMe != door.HitMe) 
+                door.HitMe = HitMe;
+        }
+    }
 
-    public UnityAction<bool> hitMeEvent;
+    //이벤트로 작성할 경우 예시
+    //public UnityAction<bool> hitMeEvent;
 
-    //프로퍼티로 구현 예시
-    //public bool meHit
-    //{
-    //    get => hitMe;
-    //    set
-    //    {
-    //        if (door != null)
-    //            if (hitMe != door.hitMe)
-    //                door.hitMe = hitMe;
-    //    }
-    //}
 
     private void Start()
     {
@@ -30,7 +28,7 @@ public class InDoor : MonoBehaviourPun
 
         obstacle.enabled = true;
 
-        hitMeEvent += HitMeShare;
+        //hitMeEvent += HitMeShare;
 
 
     }
@@ -38,7 +36,7 @@ public class InDoor : MonoBehaviourPun
     public void HitMeShare(bool hitMe)
     {
         if (door != null)
-            door.hitMe = hitMe;
+            door.HitMe = hitMe;
     }
 
 

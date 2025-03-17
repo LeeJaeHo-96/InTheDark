@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class NewDoor : MonoBehaviourPun
+public class NewDoor : MonoBehaviourPun, IHitMe
 {
     [SerializeField] InDoor indoor;
 
@@ -15,11 +15,11 @@ public class NewDoor : MonoBehaviourPun
     private float openedAngle = 100f;
     private float closedAngle = 180f;
 
-    public bool hitMe = false;
+    public bool HitMe { get; set; }
 
     private void Update()
     {
-        if (hitMe && Input.GetKeyDown(KeyCode.E))
+        if (HitMe && Input.GetKeyDown(KeyCode.E))
         {
             if (doorCo == null)
             {

@@ -122,6 +122,7 @@ public class Monster : MonoBehaviourPun
     public void Attack()
     {
         Debug.Log("АјАн");
+        playerList[0].GetComponent<PlayerStats>().CurHP -= 1;
     }
 
 
