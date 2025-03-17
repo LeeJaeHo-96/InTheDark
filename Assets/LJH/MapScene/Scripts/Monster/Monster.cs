@@ -14,15 +14,19 @@ public class Monster : MonoBehaviourPun
     
     public NavMeshAgent agent;
 
-    [SerializeField] GameObject spawnPoint;
-    Vector3 spawnPointPos;
+    public Vector3 spawnPointPos;
 
-    float attackDistance = 1f;
+    float attackDistance = 2f;
 
     private void Start()
     {
         Init();
         StateInit();
+    }
+
+    private void Update()
+    {
+        stateMachine.Update();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -32,7 +36,6 @@ public class Monster : MonoBehaviourPun
 
         if(other.CompareTag(Tag.Player))
         {
-            Debug.Log("인식 완료");
             SearchingPlayer(other);
         }
     }
@@ -41,22 +44,6 @@ public class Monster : MonoBehaviourPun
     {
         playerList.Add(player.gameObject);
         playerColl.Add(player);
-    }
-
-
-    private void OnTriggerStay(Collider other)
-    {
-        if (!PhotonNetwork.IsMasterClient)
-            return;
-
-        //플레이어 추격
-        if (other.CompareTag(Tag.Player))
-        {
-            Debug.Log("추격중");
-            agent.SetDestination(other.gameObject.transform.position);
-            agent.SetDestination(playerList[0].transform.position);
-
-        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -79,8 +66,6 @@ public class Monster : MonoBehaviourPun
                     playerList.Remove(playerList[i+1]);
                 }
             }
-            //원래 위치로 돌아감
-            agent.SetDestination(spawnPointPos);
         }
     }
 
@@ -143,7 +128,6 @@ public class Monster : MonoBehaviourPun
     void Init()
     {
         agent = GetComponent<NavMeshAgent>();
-        spawnPointPos = GameObject.FindWithTag(Tag.MonsterSpawner).transform.position;
     }
 
     void StateInit()

@@ -23,7 +23,6 @@ public class NewDoor : MonoBehaviourPun
         {
             if (doorCo == null)
             {
-                Debug.Log("눌림");
                 photonView.RPC("RPCDoor", RpcTarget.AllViaServer);
             }
         }
@@ -58,7 +57,6 @@ public class NewDoor : MonoBehaviourPun
         Quaternion targetAngle;
         if(isClosed)
         {
-            Debug.Log("문닫혀있음");
             targetAngle = Quaternion.Euler(openedAngle, vec.y, vec.z);
             while (elapsedTime < duration)
             {
@@ -75,7 +73,6 @@ public class NewDoor : MonoBehaviourPun
         }
         else
         {
-            Debug.Log("문열려있음");
             targetAngle = Quaternion.Euler(closedAngle, vec.y, vec.z);
             while (elapsedTime < duration)
             {

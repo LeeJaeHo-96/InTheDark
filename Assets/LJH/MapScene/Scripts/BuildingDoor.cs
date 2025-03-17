@@ -68,7 +68,7 @@ public class BuildingDoor : MonoBehaviourPun, IPunObservable
             player = other.gameObject;
             isClosed = true;
             player.transform.position = buildingSpawnerPos;
-            sun.transform.rotation = Quaternion.Euler(192, -30, 0);
+            //sun.transform.rotation = Quaternion.Euler(192, -30, 0);
         }
     }
 

@@ -15,6 +15,8 @@ public class M_StateMachine
 
         currentState = newState;
         currentState.Enter(monster);
+
+        Debug.Log($"{newState} ·Î ÁøÀÔµÊ");
     }
 
     public void Update()
