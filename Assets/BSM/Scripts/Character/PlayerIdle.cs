@@ -13,7 +13,7 @@ public class PlayerIdle : PlayerState
     public override void Enter()
     { 
         RecoverStamina();
-
+        
         //TODO: 체력 회복 임시 조건
         if (_controller.PlayerStats.CurHP <= 20f)
         { 

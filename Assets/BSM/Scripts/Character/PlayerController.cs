@@ -23,11 +23,13 @@ public class PlayerController : MonoBehaviourPun
     public Coroutine ConsumeStaminaCo;
     public Coroutine RecoverStaminaCo;
     public Transform ArmPos;
+    public Transform HeadPos;
     public Item CurCarryItem;
     public Animator PlayerAnimator;
     public PState CurState => _curState;
     public Vector3 MoveDir = Vector3.zero;
-     
+   
+    
     private PlayerState[] _playerStates = new PlayerState[(int)PState.SIZE];
     private PlayerStats _playerStats;
     private Rigidbody _playerRb; 
@@ -116,6 +118,11 @@ public class PlayerController : MonoBehaviourPun
         SelectInventoryInItem();
     }
 
+    private void LateUpdate()
+    {
+        PlayerCam.transform.position = Vector3.Lerp(PlayerCam.transform.position, HeadPos.transform.position, 5f * Time.deltaTime);
+    }
+
     private void FixedUpdate()
     {
         if (!photonView.IsMine) return;
@@ -139,7 +146,7 @@ public class PlayerController : MonoBehaviourPun
         
         photonView.RPC(nameof(SyncPositionUpdate), RpcTarget.AllViaServer, x, y, z); 
     }
-    
+     
     [PunRPC]
     private void SyncPositionUpdate(float posX, float posY, float posZ)
     {
