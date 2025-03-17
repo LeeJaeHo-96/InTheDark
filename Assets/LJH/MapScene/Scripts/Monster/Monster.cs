@@ -16,7 +16,7 @@ public class Monster : MonoBehaviourPun
 
     public Vector3 spawnPointPos;
 
-    float attackDistance = 2f;
+    float attackDistance = 5f;
 
     private void Start()
     {
