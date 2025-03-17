@@ -10,6 +10,7 @@ public class PlayerWalk : PlayerState
 
     public override void Enter()
     {
+        _controller.PlayerAnimator.SetBool(_isMoveAniHash, true);
         RecoverStamina();
     }
 
