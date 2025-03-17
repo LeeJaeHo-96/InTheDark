@@ -8,7 +8,6 @@ public class M_IdleState : IMonsterState
     public void Enter(Monster monster)
     {
         this.monster = monster;
-        Debug.Log("대기 상태 진입");
     }
 
     public void Update()
@@ -21,6 +20,5 @@ public class M_IdleState : IMonsterState
 
     public void Exit()
     {
-        Debug.Log("대기 상태 나감");
     }
 }

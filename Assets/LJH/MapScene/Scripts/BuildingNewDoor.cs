@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class BuildingNewDoor : MonoBehaviourPun
+public class BuildingNewDoor : MonoBehaviourPun, IHitMe
 {
     [SerializeField] InDoor indoor;
 
@@ -16,7 +16,8 @@ public class BuildingNewDoor : MonoBehaviourPun
     private float openedAngle;
     private float closedAngle;
 
-    public bool hitMe = false;
+
+    public bool HitMe { get; set; }
 
     private void Start()
     {
@@ -26,15 +27,23 @@ public class BuildingNewDoor : MonoBehaviourPun
     }
     private void Update()
     {
-        if (hitMe && Input.GetKeyDown(KeyCode.E))
+        if (HitMe && Input.GetKeyDown(KeyCode.E))
         {
             if (doorCo == null)
             {
-                Debug.Log("눌림");
-                indoor.obstacle.enabled = !indoor.obstacle.enabled;
+                if (indoor != null)
+                {
+                    photonView.RPC("RPCObstacle", RpcTarget.AllViaServer);
+                }
                 photonView.RPC("RPCDoor", RpcTarget.AllViaServer);
             }
         }
+    }
+
+    [PunRPC]
+    void RPCObstacle()
+    {
+        indoor.obstacle.enabled = !indoor.obstacle.enabled;
     }
 
     [PunRPC]
@@ -52,8 +61,7 @@ public class BuildingNewDoor : MonoBehaviourPun
         Quaternion targetAngle;
         if (isClosed)
         {
-            Debug.Log("문닫혀있음");
-            targetAngle = Quaternion.Euler(openedAngle, vec.y, vec.z);
+            targetAngle = Quaternion.Euler(vec.x, openedAngle, vec.z);
             while (elapsedTime < duration)
             {
                 elapsedTime += Time.deltaTime * doorSpeed;
@@ -69,8 +77,7 @@ public class BuildingNewDoor : MonoBehaviourPun
         }
         else
         {
-            Debug.Log("문열려있음");
-            targetAngle = Quaternion.Euler(closedAngle, vec.y, vec.z);
+            targetAngle = Quaternion.Euler(vec.x, closedAngle, vec.z);
             while (elapsedTime < duration)
             {
                 elapsedTime += Time.deltaTime * doorSpeed;

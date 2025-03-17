@@ -13,6 +13,13 @@ public class M_ChaseState : IMonsterState
 
     public void Update()
     {
+        Debug.Log(monster.PlayerInRange());
+
+        if (monster.PlayerInRange())
+        {
+            monster.stateMachine.ChangeState(new M_AttackState(), monster);
+        }
+
         if (monster.HasPlayers())
         {
             monster.ChasePlayer();
@@ -21,6 +28,7 @@ public class M_ChaseState : IMonsterState
         {
             monster.stateMachine.ChangeState(new M_ReturnState(), monster);
         }
+
     }
 
     public void Exit()

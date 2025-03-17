@@ -50,7 +50,6 @@ public class DoorController : MonoBehaviourPun, IPunObservable
     {
         if (canDoorControll && Input.GetKeyDown(KeyCode.E) && popUp.hitMe)
         {
-            Debug.Log("E버튼 눌림");
             photonView.RPC("RPCDoorOpenAndClose", RpcTarget.AllViaServer, photonView.ViewID);
         }
     }

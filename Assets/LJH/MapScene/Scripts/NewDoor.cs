@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class NewDoor : MonoBehaviourPun
+public class NewDoor : MonoBehaviourPun, IHitMe
 {
     [SerializeField] InDoor indoor;
 
@@ -15,19 +15,14 @@ public class NewDoor : MonoBehaviourPun
     private float openedAngle = 100f;
     private float closedAngle = 180f;
 
-    public bool hitMe = false;
+    public bool HitMe { get; set; }
 
     private void Update()
     {
-        if (hitMe && Input.GetKeyDown(KeyCode.E))
+        if (HitMe && Input.GetKeyDown(KeyCode.E))
         {
             if (doorCo == null)
             {
-                Debug.Log("눌림");
-                if (indoor != null)
-                {
-                    photonView.RPC("RPCObstacle", RpcTarget.AllViaServer);
-                }
                 photonView.RPC("RPCDoor", RpcTarget.AllViaServer);
             }
         }
@@ -62,7 +57,6 @@ public class NewDoor : MonoBehaviourPun
         Quaternion targetAngle;
         if(isClosed)
         {
-            Debug.Log("문닫혀있음");
             targetAngle = Quaternion.Euler(openedAngle, vec.y, vec.z);
             while (elapsedTime < duration)
             {
@@ -79,7 +73,6 @@ public class NewDoor : MonoBehaviourPun
         }
         else
         {
-            Debug.Log("문열려있음");
             targetAngle = Quaternion.Euler(closedAngle, vec.y, vec.z);
             while (elapsedTime < duration)
             {
