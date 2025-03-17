@@ -20,7 +20,7 @@ public class Computer : MonoBehaviour
 
     void ComputerOnOff()
     {
-        if(popUp.hitMe && Input.GetKeyDown(KeyCode.E))
+        if(popUp.HitMe && Input.GetKeyDown(KeyCode.E))
         {
             computerCanvas.SetActive(!computerCanvas.activeSelf);
         }

@@ -25,7 +25,7 @@ public class Lever : MonoBehaviourPun
 
     void GoingMap()
     {
-        if(popUp.hitMe && Input.GetKeyDown(KeyCode.E))
+        if(popUp.HitMe && Input.GetKeyDown(KeyCode.E))
         {
             switch(Stage)
             {
