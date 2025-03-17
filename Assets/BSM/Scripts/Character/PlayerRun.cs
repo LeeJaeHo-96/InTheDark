@@ -10,7 +10,9 @@ public class PlayerRun : PlayerState
     public PlayerRun(PlayerController controller) : base(controller) {}
 
     public override void Enter()
-    {
+    { 
+        _controller.PlayerAnimator.SetBool(_runAniHash, true);
+        
         if (_consumeCo == null)
         {
             _consumeCo = _controller.StartCoroutine(UseStaminaRoutine());
@@ -28,7 +30,7 @@ public class PlayerRun : PlayerState
         {
             _controller.ChangeState(PState.IDLE);
         }
-        else if ((_controller.MoveDir != Vector3.zero && !Input.GetKey(KeyCode.LeftShift)) || _controller.PlayerStats.Stamina <= 0f)
+        else if (_controller.MoveDir.z <= 0 || !Input.GetKey(KeyCode.LeftShift) || _controller.PlayerStats.Stamina <= 0f)
         {
             _controller.ChangeState(PState.WALK);
         }
@@ -52,6 +54,7 @@ public class PlayerRun : PlayerState
 
     public override void Exit()
     {
+        _controller.PlayerAnimator.SetBool(_runAniHash, false);
         _controller.StopCoroutine(_consumeCo);
         _consumeCo = null;
     }

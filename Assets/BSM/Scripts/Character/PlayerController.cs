@@ -48,6 +48,9 @@ public class PlayerController : MonoBehaviourPun
     private int _popupLayer => LayerMask.GetMask("PopUp");
     private int _newDoorLayer => LayerMask.GetMask("NewDoor");
     private int _inDoorLayer => LayerMask.GetMask("InDoor");
+
+    private int _oneHandAniHash => Animator.StringToHash("IsOneHand");
+    private int _twoHandAniHash => Animator.StringToHash("IsTwoHand");
     
     private float _sensitivity => DataManager.Instance.UserSettingData.Sensitivity;
     
@@ -225,7 +228,8 @@ public class PlayerController : MonoBehaviourPun
         if (!CurCarryItem.IsOwned) return;
         if (!CurCarryItem.photonView.Owner.Equals(photonView.Owner)) return;
         
-        //TODO: 추후 팔 위치 조정 필요
+        //TODO: 추후 팔 위치 조정 필요 OneHand냐 TwoHand냐?
+        //CurCarryItem에서 위치 조정 함수 호출하면 될듯
         if (CurCarryItem.AttackItem())
         {
             //공격 아이템인지 아닌지에 따라 잡는 모션 다르게 처리하면 될듯
@@ -385,10 +389,12 @@ public class PlayerController : MonoBehaviourPun
         {
             if (CurCarryItem.GetHoldingType() == ItemHoldingType.TWOHANDED)
             {
+                PlayerAnimator.SetBool(_twoHandAniHash, false);
                 _playerStats.CanCarry = true;
             }
             else
             {
+                PlayerAnimator.SetBool(_oneHandAniHash, false);
                 _inventory.DropItem(_curInventoryIndex);
             }
              
@@ -420,6 +426,11 @@ public class PlayerController : MonoBehaviourPun
         if (CurCarryItem.GetHoldingType() == ItemHoldingType.ONEHANDED)
         {
             _inventory.GetItem(CurCarryItem);
+            PlayerAnimator.SetBool(_oneHandAniHash, true);
+        }
+        else
+        {
+            PlayerAnimator.SetBool(_twoHandAniHash, true);
         }
         
         CurCarryItem.PickUp(PhotonNetwork.LocalPlayer);

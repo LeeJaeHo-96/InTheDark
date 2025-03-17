@@ -13,15 +13,19 @@ public class PlayerState : StateMachine
     protected int _runAniHash;
     protected int _dirXAniHash;
     protected int _dirZAniHash;
-    
+    protected int _idleAniHash;
+    protected int _jumpAniHash;
     
     public PlayerState(PlayerController controller)
     {
         _controller = controller;
         
         _walkAniHash = Animator.StringToHash("IsWalk");
+        _runAniHash = Animator.StringToHash("IsRun");
         _dirXAniHash = Animator.StringToHash("DirX");
         _dirZAniHash = Animator.StringToHash("DirZ");
+        _idleAniHash = Animator.StringToHash("IsIdle");
+        _jumpAniHash = Animator.StringToHash("IsJump");
     }
  
     /// <summary>

@@ -8,6 +8,7 @@ public class PlayerJump : PlayerState
 
     public override void Enter()
     {
+        _controller.PlayerAnimator.SetBool(_jumpAniHash, true);
         _controller.PlayerRb.AddForce(Vector3.up * _controller.PlayerStats.JumpPower ,ForceMode.Impulse);
     }
 
@@ -34,6 +35,11 @@ public class PlayerJump : PlayerState
         {
             _controller.ChangeState(PState.ATTACK);
         }
+    }
+
+    public override void Exit()
+    {
+        _controller.PlayerAnimator.SetBool(_jumpAniHash, false);
     }
 
 }
