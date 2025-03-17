@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Photon.Pun;
-using UnityEngine;
+using UnityEngine; 
 using UnityEngine.Serialization;
 
 public class PlayerController : MonoBehaviourPun
@@ -22,15 +22,15 @@ public class PlayerController : MonoBehaviourPun
     public Collider OnTriggerOther;
     public Coroutine ConsumeStaminaCo;
     public Coroutine RecoverStaminaCo;
+    public Transform ArmPos;
     public Item CurCarryItem;
+    public Animator PlayerAnimator;
     public PState CurState => _curState;
     public Vector3 MoveDir = Vector3.zero;
      
     private PlayerState[] _playerStates = new PlayerState[(int)PState.SIZE];
     private PlayerStats _playerStats;
-    private Rigidbody _playerRb;
-    private Transform _armPos;
-    
+    private Rigidbody _playerRb; 
     private Inventory _inventory;
     private Item _item;
     private PopUp _popup; 
@@ -59,8 +59,7 @@ public class PlayerController : MonoBehaviourPun
         _inventory = GetComponent<Inventory>();
         _playerStats = GetComponent<PlayerStats>();
         _playerRb = GetComponent<Rigidbody>();
-        _armPos = transform.GetChild(0).GetChild(1).GetComponent<Transform>();
-        
+        PlayerAnimator = GetComponent<Animator>();
         _playerStates[(int)PState.IDLE] = new PlayerIdle(this);
         _playerStates[(int)PState.WALK] = new PlayerWalk(this);
         _playerStates[(int)PState.RUN] = new PlayerRun(this);
@@ -229,7 +228,7 @@ public class PlayerController : MonoBehaviourPun
             
         }
         
-        CurCarryItem.transform.position = _armPos.position;
+        CurCarryItem.transform.position = ArmPos.position;
         CurCarryItem.transform.rotation = Quaternion.Euler(-_mouseY, _mouseX, 0);
     }
     
@@ -275,8 +274,10 @@ public class PlayerController : MonoBehaviourPun
         Debug.DrawRay(jumpRay.origin, jumpRay.direction * 0.3f, Color.blue);
         
         ItemRaycast(ray);
-        PopUpRaycast(ray);
-        NewDoorRaycast(ray);
+        ObjectRaycast(ray, ref _popup, _popupLayer);
+        ObjectRaycast(ray, ref _newDoor, _newDoorLayer);
+        // PopUpRaycast(ray);
+        // NewDoorRaycast(ray);
         InDoorRaycast(ray);
         JumpGroundCheckRayCast(jumpRay);
     }
@@ -340,49 +341,36 @@ public class PlayerController : MonoBehaviourPun
             UIManager.Instance.ItemPickObjActive();
         }
     }
-    
-    
+      
     /// <summary>
-    /// 팝업 감지 레이
+    /// 오브젝트를 제네릭으로 감지
     /// </summary>
-    /// <param name="ray"></param>
-    private void PopUpRaycast(Ray ray)
+    /// <param name="ray">캐릭터 -> 오브젝트 방향</param>
+    /// <param name="target">PopUp, Indoor</param>
+    /// <param name="layer">PopUp, Indoor 레이어</param>
+    /// <typeparam name="T"></typeparam>
+    private void ObjectRaycast<T>(Ray ray, ref T target, int layer) where T : MonoBehaviour, IHitMe
     {
-        if(Physics.Raycast(ray.origin, ray.direction, out RaycastHit hit, 3f, _popupLayer))
+        if (Physics.Raycast(ray.origin, ray.direction, out RaycastHit hit, 3f, layer))
         {
-            _popup = hit.collider.GetComponent<PopUp>(); 
-            _popup.hitMe = true; 
-        }
-        else
-        {
-            if (_popup != null)
-            {
-                _popup.hitMe = false;
-                _popup = null;
-            }
-        }
-    }
+            T newTarget = hit.collider.GetComponent<T>();
 
-    /// <summary>
-    /// 뉴 도어 감지 레이
-    /// </summary>
-    /// <param name="ray"></param>
-    private void NewDoorRaycast(Ray ray)
-    {
-        if(Physics.Raycast(ray.origin, ray.direction, out RaycastHit hit, 3f, _newDoorLayer))
-        {
-            _newDoor = hit.collider.GetComponent<NewDoor>();
-            _newDoor.hitMe = true; 
+            if (newTarget != null)
+            {
+                target = newTarget;
+                target.HitMe = true;
+            } 
         }
         else
         {
-            if (_newDoor != null)
+            if (target != null)
             {
-                _newDoor.hitMe = false;
-                _newDoor = null;
+                target.HitMe = false;
+                target = null;
             }
-        }
+        } 
     }
+    
     
     /// <summary>
     /// 인 도어 레이

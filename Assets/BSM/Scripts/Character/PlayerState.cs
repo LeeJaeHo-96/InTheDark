@@ -8,12 +8,16 @@ public class PlayerState : StateMachine
     protected Coroutine _staminaRecoverCo; 
     protected PlayerController _controller;
     protected static bool isRecovering;
+
+    protected int _isMoveAniHash;
     
     public PlayerState(PlayerController controller)
     {
         _controller = controller;
+        
+        _isMoveAniHash = Animator.StringToHash("IsWalk");
     }
-    
+ 
     /// <summary>
     /// 스태미너 회복
     /// </summary>
