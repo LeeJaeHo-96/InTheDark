@@ -10,8 +10,8 @@ public class PlayerRun : PlayerState
     public PlayerRun(PlayerController controller) : base(controller) {}
 
     public override void Enter()
-    { 
-        _controller.PlayerAnimator.SetBool(_runAniHash, true);
+    {  
+        _controller.BehaviourAnimation(_runAniHash, true);
         
         if (_consumeCo == null)
         {
@@ -53,8 +53,8 @@ public class PlayerRun : PlayerState
     }
 
     public override void Exit()
-    {
-        _controller.PlayerAnimator.SetBool(_runAniHash, false);
+    { 
+        _controller.BehaviourAnimation(_runAniHash, false);
         _controller.StopCoroutine(_consumeCo);
         _consumeCo = null;
     }

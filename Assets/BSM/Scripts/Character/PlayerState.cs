@@ -15,7 +15,9 @@ public class PlayerState : StateMachine
     protected int _dirZAniHash;
     protected int _idleAniHash;
     protected int _jumpAniHash;
-    
+    protected int _hitAniHash;
+    protected int _deathAniHash;
+
     public PlayerState(PlayerController controller)
     {
         _controller = controller;
@@ -26,6 +28,8 @@ public class PlayerState : StateMachine
         _dirZAniHash = Animator.StringToHash("DirZ");
         _idleAniHash = Animator.StringToHash("IsIdle");
         _jumpAniHash = Animator.StringToHash("IsJump");
+        _hitAniHash = Animator.StringToHash("IsHit");
+        _deathAniHash = Animator.StringToHash("IsDeath");
     }
  
     /// <summary>

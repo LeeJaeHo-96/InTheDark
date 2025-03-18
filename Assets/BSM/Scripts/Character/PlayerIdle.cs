@@ -12,8 +12,8 @@ public class PlayerIdle : PlayerState
 
     public override void Enter()
     { 
-        RecoverStamina();
-        _controller.PlayerAnimator.SetBool(_idleAniHash, true);
+        RecoverStamina(); 
+        _controller.BehaviourAnimation(_idleAniHash, true);
         
         //TODO: 체력 회복 임시 조건
         if (_controller.PlayerStats.CurHP <= 20f)
@@ -55,8 +55,8 @@ public class PlayerIdle : PlayerState
     }
 
     public override void Exit()
-    {
-        _controller.PlayerAnimator.SetBool(_idleAniHash, false);
+    { 
+        _controller.BehaviourAnimation(_idleAniHash, false);
         
         if (_recoverWaitCo != null)
         {

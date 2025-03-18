@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Photon.Pun;
+using Unity.VisualScripting;
 using UnityEngine; 
 using UnityEngine.Serialization;
 
@@ -59,12 +60,13 @@ public class PlayerController : MonoBehaviourPun
     private void Init()
     {
         DontDestroyOnLoad(gameObject);
+        PlayerAnimator = GetComponent<Animator>();
+        
         if(!photonView.IsMine) return; 
         
         _inventory = GetComponent<Inventory>();
         _playerStats = GetComponent<PlayerStats>();
         _playerRb = GetComponent<Rigidbody>();
-        PlayerAnimator = GetComponent<Animator>();
         _playerStates[(int)PState.IDLE] = new PlayerIdle(this);
         _playerStates[(int)PState.WALK] = new PlayerWalk(this);
         _playerStates[(int)PState.RUN] = new PlayerRun(this);
@@ -389,12 +391,12 @@ public class PlayerController : MonoBehaviourPun
         {
             if (CurCarryItem.GetHoldingType() == ItemHoldingType.TWOHANDED)
             {
-                PlayerAnimator.SetBool(_twoHandAniHash, false);
+                BehaviourAnimation(_twoHandAniHash, false);
                 _playerStats.CanCarry = true;
             }
             else
             {
-                PlayerAnimator.SetBool(_oneHandAniHash, false);
+                BehaviourAnimation(_oneHandAniHash, false);
                 _inventory.DropItem(_curInventoryIndex);
             }
              
@@ -425,18 +427,41 @@ public class PlayerController : MonoBehaviourPun
 
         if (CurCarryItem.GetHoldingType() == ItemHoldingType.ONEHANDED)
         {
-            _inventory.GetItem(CurCarryItem);
-            PlayerAnimator.SetBool(_oneHandAniHash, true);
+            _inventory.GetItem(CurCarryItem); 
+            BehaviourAnimation(_oneHandAniHash, true);
         }
         else
-        {
-            PlayerAnimator.SetBool(_twoHandAniHash, true);
+        { 
+            BehaviourAnimation(_twoHandAniHash, true);
         }
         
         CurCarryItem.PickUp(PhotonNetwork.LocalPlayer);
         _playerStats.IsHoldingItem(_item.GetItemWeight());
     }
-  
+
+    public void BehaviourAnimation(int animHash, bool state)
+    {
+        photonView.RPC(nameof(SyncBehaviourAnimation), RpcTarget.AllViaServer, animHash, state);
+    }
+    
+    [PunRPC]
+    private void SyncBehaviourAnimation(int animHash, bool state)
+    {
+        PlayerAnimator.SetBool(animHash, state);
+    }
+
+    public void MoveAnimation(int animHash, float direction)
+    {
+        photonView.RPC(nameof(SyncMoveAnimation), RpcTarget.AllViaServer, animHash, direction);
+    }
+    
+    [PunRPC]
+    private void SyncMoveAnimation(int animHash, float direction)
+    {
+        PlayerAnimator.SetFloat(animHash, direction);
+    }
+    
+    
     [PunRPC]
     public void SyncDeathRPC(bool isDeath, bool isActive, bool isEnable, bool isKinematic)
     {

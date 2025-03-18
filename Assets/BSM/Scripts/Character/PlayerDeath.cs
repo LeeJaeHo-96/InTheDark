@@ -15,9 +15,12 @@ public class PlayerDeath : PlayerState
     }
 
     public override void Enter()
-    {
+    { 
+        _controller.BehaviourAnimation(_hitAniHash, true);
+        
         if (_controller.photonView.IsMine)
         {
+            //TODO: 바디 오브젝트 비활성화가 아닌 이동을 막아야 함.
             _controller.IsDeath = true;
             _controller.PlayerCanvas.gameObject.SetActive(false);
             _controller.photonView.RPC(nameof(_controller.SyncDeathRPC), RpcTarget.AllViaServer, true, false, true,

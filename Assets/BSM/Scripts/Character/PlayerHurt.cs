@@ -10,8 +10,32 @@ public class PlayerHurt : PlayerState
     }
 
     public override void Enter()
+    { 
+        ValidateHit();
+    }
+
+    public override void Update()
     {
-        if (_controller.OnTriggerOther.gameObject.layer == GameManager.Instance.ItemLayerIndexValue)
+        if (_controller.PlayerStats.CurHP <= 0)
+        {
+            _controller.ChangeState(PState.DEATH);
+        }
+        else
+        {
+            _controller.ChangeState(PState.IDLE);
+        }
+        
+    }
+
+    public override void Exit()
+    { 
+        _controller.BehaviourAnimation(_hitAniHash, false);
+    }
+    
+    private void ValidateHit()
+    {
+        //if (_controller.OnTriggerOther.gameObject.layer == GameManager.Instance.ItemLayerIndexValue)
+        if (_controller.OnTriggerOther.gameObject.layer == LayerMask.NameToLayer("Item"))
         {
             Item item = _controller.OnTriggerOther.gameObject.GetComponent<Item>();
             
@@ -30,25 +54,13 @@ public class PlayerHurt : PlayerState
             }
             
             if (item.IsAttacking && item.AttackItem())
-            {
+            { 
+                _controller.BehaviourAnimation(_hitAniHash, true);
                 TakeDamage(item.GetItemDamage());  
             } 
         }
     }
-
-    public override void Update()
-    {
-        if (_controller.PlayerStats.CurHP <= 0)
-        {
-            _controller.ChangeState(PState.DEATH);
-        }
-        else
-        {
-            _controller.ChangeState(PState.IDLE);
-        }
-        
-    }
-
+    
     /// <summary>
     /// 현재 체력 감소
     /// </summary>

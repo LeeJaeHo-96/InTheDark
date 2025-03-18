@@ -10,7 +10,7 @@ public class PlayerWalk : PlayerState
 
     public override void Enter()
     {
-        _controller.PlayerAnimator.SetBool(_walkAniHash, true);
+        _controller.BehaviourAnimation(_walkAniHash, true);
         RecoverStamina();
     }
 
@@ -21,8 +21,8 @@ public class PlayerWalk : PlayerState
     
     public override void Update()
     {
-        _controller.PlayerAnimator.SetFloat(_dirXAniHash, _controller.MoveDir.x);
-        _controller.PlayerAnimator.SetFloat(_dirZAniHash, _controller.MoveDir.z);
+        _controller.MoveAnimation(_dirXAniHash, _controller.MoveDir.x); 
+        _controller.MoveAnimation(_dirZAniHash, _controller.MoveDir.z); 
         
         if (_staminaRecoverCo != null && !isRecovering && _controller.PlayerStats.Stamina >= 100f)
         {
@@ -59,7 +59,7 @@ public class PlayerWalk : PlayerState
 
     public override void Exit()
     {
-        _controller.PlayerAnimator.SetBool(_walkAniHash, false);
+        _controller.BehaviourAnimation(_walkAniHash, false);
     }
     
 }
