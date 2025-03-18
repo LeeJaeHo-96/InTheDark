@@ -7,9 +7,17 @@ public class PlayerJump : PlayerState
     public PlayerJump(PlayerController controller) : base(controller) {}
 
     public override void Enter()
-    { 
-        _controller.BehaviourAnimation(_jumpAniHash, true);
-        _controller.PlayerRb.AddForce(Vector3.up * _controller.PlayerStats.JumpPower ,ForceMode.Impulse);
+    {
+        float remainStamina = _controller.PlayerStats.Stamina; 
+        
+        if (remainStamina - 5f > 0)
+        {
+            _controller.BehaviourAnimation(_jumpAniHash, true);
+            _controller.PlayerRb.AddForce(Vector3.up * _controller.PlayerStats.JumpPower ,ForceMode.Impulse);
+            _controller.PlayerStats.Stamina -= 5f;
+            _controller.PlayerStats.OnChangedStamina?.Invoke(_controller.PlayerStats.Stamina);
+        }
+        
     }
 
     public override void OnTrigger()

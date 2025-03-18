@@ -8,16 +8,9 @@ using UnityEngine.Events;
 public class PlayerStats : MonoBehaviourPun
 {
     public bool CanCarry;
-
-    public int TempHP;
-
-    private void Update()
-    {
-        TempHP = _curHP;
-    }
-
+  
     //TODO: 전체적인 수치는 조정 필요
-    private float _walkSpeed = 5f;
+    private float _walkSpeed = 2f;
 
     private int _curHP;
 
@@ -37,14 +30,14 @@ public class PlayerStats : MonoBehaviourPun
         get => _walkSpeed;
     }
 
-    private float _runSpeed = 10f;
+    private float _runSpeed = 5f;
 
     public float RunSpeed
     {
         get => _runSpeed;
     }
 
-    private float _jumpPower = 3f;
+    private float _jumpPower = 5f;
 
     public float JumpPower
     {

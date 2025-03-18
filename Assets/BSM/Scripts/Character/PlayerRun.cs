@@ -12,6 +12,12 @@ public class PlayerRun : PlayerState
     public override void Enter()
     {  
         _controller.BehaviourAnimation(_runAniHash, true);
+
+        if (_staminaRecoverCo != null)
+        {
+            _controller.StopCoroutine(_staminaRecoverCo);
+            _staminaRecoverCo = null;
+        }
         
         if (_consumeCo == null)
         {

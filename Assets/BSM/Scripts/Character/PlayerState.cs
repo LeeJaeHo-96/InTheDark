@@ -4,10 +4,8 @@ using UnityEngine;
 
 public class PlayerState : StateMachine
 {
-    protected Coroutine _healthRecoverCo;
-    protected Coroutine _staminaRecoverCo; 
+    protected static Coroutine _staminaRecoverCo; 
     protected PlayerController _controller;
-    protected static bool isRecovering;
 
     protected int _walkAniHash;
     protected int _runAniHash;
@@ -37,9 +35,8 @@ public class PlayerState : StateMachine
     /// </summary>
     protected void RecoverStamina()
     {
-        if (_controller.PlayerStats.Stamina < 100f && !isRecovering)
+        if (_controller.PlayerStats.Stamina < 100f && _staminaRecoverCo == null)
         {
-            isRecovering = true;
             _staminaRecoverCo = _controller.StartCoroutine(RecoverStaminaRoutine());
         }
     }
@@ -50,14 +47,13 @@ public class PlayerState : StateMachine
     /// <returns></returns>
     private IEnumerator RecoverStaminaRoutine()
     {
-        while (_controller.PlayerStats.Stamina < 100f)
+        while (_controller.PlayerStats.Stamina <= 100f)
         {
+            yield return new WaitForSeconds(0.8f); 
             _controller.PlayerStats.Stamina += 5;
             _controller.PlayerStats.Stamina = Mathf.Clamp(_controller.PlayerStats.Stamina, 0, _controller.PlayerStats.MaxStamina);
-            _controller.PlayerStats.OnChangedStamina?.Invoke(_controller.PlayerStats.Stamina);
-            yield return new WaitForSeconds(0.8f); 
+            _controller.PlayerStats.OnChangedStamina?.Invoke(_controller.PlayerStats.Stamina); 
         }  
-        isRecovering = false;
     }
     
     /// <summary>
@@ -82,9 +78,10 @@ public class PlayerState : StateMachine
     protected IEnumerator RecoverHealthRoutine()
     {  
         //TODO: 체력 회복 임시 조건
-        while (_controller.PlayerStats.CurHP <= 20f)
+        while (_controller.PlayerStats.CurHP <= 40f)
         { 
             _controller.PlayerStats.CurHP += 1;
+            _controller.PlayerStats.OnChangedHealth?.Invoke(_controller.PlayerStats.CurHP);
             yield return new WaitForSeconds(1f);
         }  
     }

@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerIdle : PlayerState
 {
     private Coroutine _recoverHealthCo;
-    private Coroutine _recoverWaitCo;
+    private Coroutine _recoverHealthWaitCo;
     
     public PlayerIdle(PlayerController controller) : base(controller) {}
 
@@ -16,9 +16,9 @@ public class PlayerIdle : PlayerState
         _controller.BehaviourAnimation(_idleAniHash, true);
         
         //TODO: 체력 회복 임시 조건
-        if (_controller.PlayerStats.CurHP <= 20f)
+        if (_controller.PlayerStats.CurHP <= 40f)
         { 
-            _recoverWaitCo = _controller.StartCoroutine(RecoverHealthWaitRoutine());
+            _recoverHealthWaitCo = _controller.StartCoroutine(RecoverHealthWaitRoutine());
         }
         
     }
@@ -30,7 +30,7 @@ public class PlayerIdle : PlayerState
     
     public override void Update()
     {
-        if (_staminaRecoverCo != null && !isRecovering && _controller.PlayerStats.Stamina >= 100f)
+        if (_controller.PlayerStats.Stamina >= 100f && _staminaRecoverCo != null)
         {
             _controller.StopCoroutine(_staminaRecoverCo);
             _staminaRecoverCo = null;
@@ -58,10 +58,10 @@ public class PlayerIdle : PlayerState
     { 
         _controller.BehaviourAnimation(_idleAniHash, false);
         
-        if (_recoverWaitCo != null)
+        if (_recoverHealthWaitCo != null)
         {
-            _controller.StopCoroutine(_recoverWaitCo);
-            _recoverWaitCo = null;
+            _controller.StopCoroutine(_recoverHealthWaitCo);
+            _recoverHealthWaitCo = null;
         }
 
         if (_recoverHealthCo != null)

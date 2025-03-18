@@ -24,9 +24,8 @@ public class PlayerWalk : PlayerState
         _controller.MoveAnimation(_dirXAniHash, _controller.MoveDir.x); 
         _controller.MoveAnimation(_dirZAniHash, _controller.MoveDir.z); 
         
-        if (_staminaRecoverCo != null && !isRecovering && _controller.PlayerStats.Stamina >= 100f)
+        if ( _controller.PlayerStats.Stamina >= 100f && _staminaRecoverCo != null)
         {
-            Debug.Log("코루틴 중지");
             _controller.StopCoroutine(_staminaRecoverCo);
             _staminaRecoverCo = null;
         }
