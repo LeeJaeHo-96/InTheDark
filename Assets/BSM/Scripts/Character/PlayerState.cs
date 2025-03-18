@@ -9,13 +9,27 @@ public class PlayerState : StateMachine
     protected PlayerController _controller;
     protected static bool isRecovering;
 
-    protected int _isMoveAniHash;
-    
+    protected int _walkAniHash;
+    protected int _runAniHash;
+    protected int _dirXAniHash;
+    protected int _dirZAniHash;
+    protected int _idleAniHash;
+    protected int _jumpAniHash;
+    protected int _hitAniHash;
+    protected int _deathAniHash;
+
     public PlayerState(PlayerController controller)
     {
         _controller = controller;
         
-        _isMoveAniHash = Animator.StringToHash("IsWalk");
+        _walkAniHash = Animator.StringToHash("IsWalk");
+        _runAniHash = Animator.StringToHash("IsRun");
+        _dirXAniHash = Animator.StringToHash("DirX");
+        _dirZAniHash = Animator.StringToHash("DirZ");
+        _idleAniHash = Animator.StringToHash("IsIdle");
+        _jumpAniHash = Animator.StringToHash("IsJump");
+        _hitAniHash = Animator.StringToHash("IsHit");
+        _deathAniHash = Animator.StringToHash("IsDeath");
     }
  
     /// <summary>

@@ -12,8 +12,9 @@ public class PlayerIdle : PlayerState
 
     public override void Enter()
     { 
-        RecoverStamina();
-
+        RecoverStamina(); 
+        _controller.BehaviourAnimation(_idleAniHash, true);
+        
         //TODO: 체력 회복 임시 조건
         if (_controller.PlayerStats.CurHP <= 20f)
         { 
@@ -35,11 +36,11 @@ public class PlayerIdle : PlayerState
             _staminaRecoverCo = null;
         }
         
-        if (_controller.MoveDir != Vector3.zero && !Input.GetKey(KeyCode.LeftShift))
+        if (_controller.MoveDir != Vector3.zero && !Input.GetKey(KeyCode.LeftShift) || _controller.MoveDir.z < 0 && Input.GetKey(KeyCode.LeftShift))
         {
             _controller.ChangeState(PState.WALK);
         }
-        else if (_controller.MoveDir != Vector3.zero && Input.GetKey(KeyCode.LeftShift))
+        else if (_controller.MoveDir.z > 0  && Input.GetKey(KeyCode.LeftShift))
         {
             _controller.ChangeState(PState.RUN);
         }
@@ -54,7 +55,9 @@ public class PlayerIdle : PlayerState
     }
 
     public override void Exit()
-    {
+    { 
+        _controller.BehaviourAnimation(_idleAniHash, false);
+        
         if (_recoverWaitCo != null)
         {
             _controller.StopCoroutine(_recoverWaitCo);

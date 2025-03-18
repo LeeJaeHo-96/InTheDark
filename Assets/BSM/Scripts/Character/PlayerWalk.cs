@@ -10,7 +10,7 @@ public class PlayerWalk : PlayerState
 
     public override void Enter()
     {
-        _controller.PlayerAnimator.SetBool(_isMoveAniHash, true);
+        _controller.BehaviourAnimation(_walkAniHash, true);
         RecoverStamina();
     }
 
@@ -21,6 +21,9 @@ public class PlayerWalk : PlayerState
     
     public override void Update()
     {
+        _controller.MoveAnimation(_dirXAniHash, _controller.MoveDir.x); 
+        _controller.MoveAnimation(_dirZAniHash, _controller.MoveDir.z); 
+        
         if (_staminaRecoverCo != null && !isRecovering && _controller.PlayerStats.Stamina >= 100f)
         {
             Debug.Log("코루틴 중지");
@@ -32,7 +35,7 @@ public class PlayerWalk : PlayerState
         {
             _controller.ChangeState(PState.IDLE);
         }
-        else if (_controller.MoveDir != Vector3.zero && Input.GetKey(KeyCode.LeftShift))
+        else if (_controller.MoveDir.z > 0 && Input.GetKey(KeyCode.LeftShift))
         {
             _controller.ChangeState(PState.RUN);
         }
@@ -53,5 +56,10 @@ public class PlayerWalk : PlayerState
         
         _controller.PlayerRb.MovePosition(_controller.transform.position + dir.normalized * _controller.PlayerStats.WalkSpeed * Time.fixedDeltaTime);   
     }
- 
+
+    public override void Exit()
+    {
+        _controller.BehaviourAnimation(_walkAniHash, false);
+    }
+    
 }

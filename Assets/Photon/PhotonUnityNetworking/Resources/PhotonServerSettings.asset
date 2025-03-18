@@ -96,6 +96,9 @@ MonoBehaviour:
   - RPCplayerPosSet
   - RPCDoor
   - RPCObstacle
+  - 
+  - SyncBehaviourAnimation
+  - SyncMoveAnimation
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

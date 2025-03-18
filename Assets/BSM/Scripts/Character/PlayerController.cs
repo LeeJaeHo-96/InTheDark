@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Photon.Pun;
+using Unity.VisualScripting;
 using UnityEngine; 
 using UnityEngine.Serialization;
 
@@ -23,11 +24,13 @@ public class PlayerController : MonoBehaviourPun
     public Coroutine ConsumeStaminaCo;
     public Coroutine RecoverStaminaCo;
     public Transform ArmPos;
+    public Transform HeadPos;
     public Item CurCarryItem;
     public Animator PlayerAnimator;
     public PState CurState => _curState;
     public Vector3 MoveDir = Vector3.zero;
-     
+   
+    
     private PlayerState[] _playerStates = new PlayerState[(int)PState.SIZE];
     private PlayerStats _playerStats;
     private Rigidbody _playerRb; 
@@ -46,6 +49,9 @@ public class PlayerController : MonoBehaviourPun
     private int _popupLayer => LayerMask.GetMask("PopUp");
     private int _newDoorLayer => LayerMask.GetMask("NewDoor");
     private int _inDoorLayer => LayerMask.GetMask("InDoor");
+
+    private int _oneHandAniHash => Animator.StringToHash("IsOneHand");
+    private int _twoHandAniHash => Animator.StringToHash("IsTwoHand");
     
     private float _sensitivity => DataManager.Instance.UserSettingData.Sensitivity;
     
@@ -54,12 +60,13 @@ public class PlayerController : MonoBehaviourPun
     private void Init()
     {
         DontDestroyOnLoad(gameObject);
+        PlayerAnimator = GetComponent<Animator>();
+        
         if(!photonView.IsMine) return; 
         
         _inventory = GetComponent<Inventory>();
         _playerStats = GetComponent<PlayerStats>();
         _playerRb = GetComponent<Rigidbody>();
-        PlayerAnimator = GetComponent<Animator>();
         _playerStates[(int)PState.IDLE] = new PlayerIdle(this);
         _playerStates[(int)PState.WALK] = new PlayerWalk(this);
         _playerStates[(int)PState.RUN] = new PlayerRun(this);
@@ -116,6 +123,11 @@ public class PlayerController : MonoBehaviourPun
         SelectInventoryInItem();
     }
 
+    private void LateUpdate()
+    {
+        PlayerCam.transform.position = Vector3.Lerp(PlayerCam.transform.position, HeadPos.transform.position, 5f * Time.deltaTime);
+    }
+
     private void FixedUpdate()
     {
         if (!photonView.IsMine) return;
@@ -139,7 +151,7 @@ public class PlayerController : MonoBehaviourPun
         
         photonView.RPC(nameof(SyncPositionUpdate), RpcTarget.AllViaServer, x, y, z); 
     }
-    
+     
     [PunRPC]
     private void SyncPositionUpdate(float posX, float posY, float posZ)
     {
@@ -218,7 +230,8 @@ public class PlayerController : MonoBehaviourPun
         if (!CurCarryItem.IsOwned) return;
         if (!CurCarryItem.photonView.Owner.Equals(photonView.Owner)) return;
         
-        //TODO: 추후 팔 위치 조정 필요
+        //TODO: 추후 팔 위치 조정 필요 OneHand냐 TwoHand냐?
+        //CurCarryItem에서 위치 조정 함수 호출하면 될듯
         if (CurCarryItem.AttackItem())
         {
             //공격 아이템인지 아닌지에 따라 잡는 모션 다르게 처리하면 될듯
@@ -378,10 +391,12 @@ public class PlayerController : MonoBehaviourPun
         {
             if (CurCarryItem.GetHoldingType() == ItemHoldingType.TWOHANDED)
             {
+                BehaviourAnimation(_twoHandAniHash, false);
                 _playerStats.CanCarry = true;
             }
             else
             {
+                BehaviourAnimation(_oneHandAniHash, false);
                 _inventory.DropItem(_curInventoryIndex);
             }
              
@@ -412,13 +427,41 @@ public class PlayerController : MonoBehaviourPun
 
         if (CurCarryItem.GetHoldingType() == ItemHoldingType.ONEHANDED)
         {
-            _inventory.GetItem(CurCarryItem);
+            _inventory.GetItem(CurCarryItem); 
+            BehaviourAnimation(_oneHandAniHash, true);
+        }
+        else
+        { 
+            BehaviourAnimation(_twoHandAniHash, true);
         }
         
         CurCarryItem.PickUp(PhotonNetwork.LocalPlayer);
         _playerStats.IsHoldingItem(_item.GetItemWeight());
     }
-  
+
+    public void BehaviourAnimation(int animHash, bool state)
+    {
+        photonView.RPC(nameof(SyncBehaviourAnimation), RpcTarget.AllViaServer, animHash, state);
+    }
+    
+    [PunRPC]
+    private void SyncBehaviourAnimation(int animHash, bool state)
+    {
+        PlayerAnimator.SetBool(animHash, state);
+    }
+
+    public void MoveAnimation(int animHash, float direction)
+    {
+        photonView.RPC(nameof(SyncMoveAnimation), RpcTarget.AllViaServer, animHash, direction);
+    }
+    
+    [PunRPC]
+    private void SyncMoveAnimation(int animHash, float direction)
+    {
+        PlayerAnimator.SetFloat(animHash, direction);
+    }
+    
+    
     [PunRPC]
     public void SyncDeathRPC(bool isDeath, bool isActive, bool isEnable, bool isKinematic)
     {
