@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
-using UnityEngine;
+using UnityEngine; 
+using System;
 
 public class PlayerHurt : PlayerState
 {
@@ -11,7 +12,7 @@ public class PlayerHurt : PlayerState
 
     public override void Enter()
     { 
-        ValidateHit();
+        ValidateHit(); 
     }
 
     public override void Update()
@@ -55,12 +56,13 @@ public class PlayerHurt : PlayerState
             
             if (item.IsAttacking && item.AttackItem())
             { 
-                _controller.BehaviourAnimation(_hitAniHash, true);
+                Debug.Log($"남은 체력 :{_controller.PlayerStats.CurHP}");
+                _controller.BehaviourAnimation(_hitAniHash, true); 
                 TakeDamage(item.GetItemDamage());  
             } 
         }
     }
-    
+ 
     /// <summary>
     /// 현재 체력 감소
     /// </summary>

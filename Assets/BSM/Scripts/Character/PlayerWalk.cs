@@ -21,8 +21,8 @@ public class PlayerWalk : PlayerState
     
     public override void Update()
     {
-        _controller.MoveAnimation(_dirXAniHash, _controller.MoveDir.x); 
-        _controller.MoveAnimation(_dirZAniHash, _controller.MoveDir.z); 
+        _controller.BehaviourAnimation(_dirXAniHash, _controller.MoveDir.x); 
+        _controller.BehaviourAnimation(_dirZAniHash, _controller.MoveDir.z); 
         
         if ( _controller.PlayerStats.Stamina >= 100f && _staminaRecoverCo != null)
         {

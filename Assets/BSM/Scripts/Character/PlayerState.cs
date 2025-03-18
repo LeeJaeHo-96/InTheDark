@@ -14,8 +14,8 @@ public class PlayerState : StateMachine
     protected int _idleAniHash;
     protected int _jumpAniHash;
     protected int _hitAniHash;
-    protected int _deathAniHash;
-
+    protected int _deathAniHash; 
+    
     public PlayerState(PlayerController controller)
     {
         _controller = controller;

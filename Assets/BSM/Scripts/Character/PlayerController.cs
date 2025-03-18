@@ -29,8 +29,7 @@ public class PlayerController : MonoBehaviourPun
     public Animator PlayerAnimator;
     public PState CurState => _curState;
     public Vector3 MoveDir = Vector3.zero;
-   
-    
+ 
     private PlayerState[] _playerStates = new PlayerState[(int)PState.SIZE];
     private PlayerStats _playerStats;
     private Rigidbody _playerRb; 
@@ -73,7 +72,6 @@ public class PlayerController : MonoBehaviourPun
         _playerStates[(int)PState.ATTACK] = new PlayerAttack(this);
         _playerStates[(int)PState.HURT] = new PlayerHurt(this);
         _playerStates[(int)PState.DEATH] = new PlayerDeath(this);
-
     }
 
     private void Start()
@@ -135,7 +133,7 @@ public class PlayerController : MonoBehaviourPun
         if (!photonView.IsMine) return;
         _playerStates[(int)_curState].FixedUpdate();
     }
-
+ 
     /// <summary>
     /// 키보드 입력
     /// </summary>
@@ -459,28 +457,28 @@ public class PlayerController : MonoBehaviourPun
     /// <param name="animHash"></param>
     /// <param name="state"></param>
     public void BehaviourAnimation(int animHash, bool state)
-    {
+    { 
         photonView.RPC(nameof(SyncBehaviourAnimation), RpcTarget.AllViaServer, animHash, state);
-    }
+    } 
     
     [PunRPC]
     private void SyncBehaviourAnimation(int animHash, bool state)
-    {
+    { 
         PlayerAnimator.SetBool(animHash, state);
-    }
-
+    } 
+    
     /// <summary>
     /// 이동 방향 동기화
     /// </summary>
     /// <param name="animHash"></param>
     /// <param name="direction"></param>
-    public void MoveAnimation(int animHash, float direction)
+    public void BehaviourAnimation(int animHash, float direction)
     {
-        photonView.RPC(nameof(SyncMoveAnimation), RpcTarget.AllViaServer, animHash, direction);
+        photonView.RPC(nameof(SyncBehaviourAnimation), RpcTarget.AllViaServer, animHash, direction);
     }
     
     [PunRPC]
-    private void SyncMoveAnimation(int animHash, float direction)
+    private void SyncBehaviourAnimation(int animHash, float direction)
     {
         PlayerAnimator.SetFloat(animHash, direction);
     }
