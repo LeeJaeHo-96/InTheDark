@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5491143529195056060}
   m_Layer: 0
   m_Name: Corrider (6)
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 8
@@ -379,7 +379,7 @@ GameObject:
   - component: {fileID: 6028351014780441246}
   m_Layer: 0
   m_Name: Corrider
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 8
@@ -864,7 +864,7 @@ GameObject:
   - component: {fileID: 3759628447093739288}
   m_Layer: 0
   m_Name: Corrider (8)
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 8
@@ -1402,7 +1402,7 @@ GameObject:
   - component: {fileID: 3960738279399899304}
   m_Layer: 0
   m_Name: Corrider (6)
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 8
@@ -1693,7 +1693,7 @@ GameObject:
   - component: {fileID: 1976414190697690049}
   m_Layer: 0
   m_Name: Corrider (7)
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 8
