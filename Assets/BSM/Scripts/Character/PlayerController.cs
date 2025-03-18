@@ -39,6 +39,7 @@ public class PlayerController : MonoBehaviourPun
     private PopUp _popup; 
     private NewDoor _newDoor;
     private InDoor _inDoor;
+    private GameObject _computerObject;
     
     private PState _curState = PState.IDLE;
 
@@ -46,10 +47,8 @@ public class PlayerController : MonoBehaviourPun
     private float _mouseX;
     private float _mouseY;
     private int _itemLayer => LayerMask.GetMask("Item");
-    private int _popupLayer => LayerMask.GetMask("PopUp");
-    private int _newDoorLayer => LayerMask.GetMask("NewDoor");
-    private int _inDoorLayer => LayerMask.GetMask("InDoor");
-
+    private int _computerLayer => LayerMask.NameToLayer("Computer");
+    
     private int _oneHandAniHash => Animator.StringToHash("IsOneHand");
     private int _twoHandAniHash => Animator.StringToHash("IsTwoHand");
     
@@ -112,7 +111,8 @@ public class PlayerController : MonoBehaviourPun
     private void Update()
     {
         if (!photonView.IsMine) return;
-
+        if (_computerObject != null && _computerObject.activeSelf) return;
+        
         _playerStates[(int)_curState].Update();
         InputKey();
         PositionUpdate();
@@ -125,6 +125,8 @@ public class PlayerController : MonoBehaviourPun
 
     private void LateUpdate()
     {
+        if (_computerObject != null && _computerObject.activeSelf) return;
+        
         PlayerCam.transform.position = Vector3.Lerp(PlayerCam.transform.position, HeadPos.transform.position, 5f * Time.deltaTime);
     }
 
@@ -287,9 +289,9 @@ public class PlayerController : MonoBehaviourPun
         Debug.DrawRay(jumpRay.origin, jumpRay.direction * 0.3f, Color.blue);
         
         ItemRaycast(ray);
-        ObjectRaycast(ray, ref _popup, _popupLayer);
-        ObjectRaycast(ray, ref _newDoor, _newDoorLayer);
-        ObjectRaycast(ray, ref _inDoor, _inDoorLayer);
+        ObjectRaycast(ray, ref _popup);
+        ObjectRaycast(ray, ref _newDoor);
+        ObjectRaycast(ray, ref _inDoor);
         JumpGroundCheckRayCast(jumpRay);
     }
     
@@ -353,6 +355,7 @@ public class PlayerController : MonoBehaviourPun
         }
     }
       
+    
     /// <summary>
     /// 오브젝트를 제네릭으로 감지
     /// </summary>
@@ -360,12 +363,21 @@ public class PlayerController : MonoBehaviourPun
     /// <param name="target">PopUp, Indoor</param>
     /// <param name="layer">PopUp, Indoor 레이어</param>
     /// <typeparam name="T"></typeparam>
-    private void ObjectRaycast<T>(Ray ray, ref T target, int layer) where T : MonoBehaviour, IHitMe
+    private void ObjectRaycast<T>(Ray ray, ref T target) where T : MonoBehaviour, IHitMe
     {
-        if (Physics.Raycast(ray.origin, ray.direction, out RaycastHit hit, 3f, layer))
+        if (Physics.Raycast(ray.origin, ray.direction, out RaycastHit hit, 3f))
         {
             T newTarget = hit.collider.GetComponent<T>();
-
+ 
+            if (hit.collider.gameObject.layer == _computerLayer)
+            {
+                _computerObject = hit.collider.transform.GetChild(0).gameObject;
+            }
+            else
+            {
+                _computerObject = null;
+            }
+            
             if (newTarget != null)
             {
                 target = newTarget;
@@ -379,6 +391,8 @@ public class PlayerController : MonoBehaviourPun
                 target.HitMe = false;
                 target = null;
             }
+            
+            _computerObject = null;
         } 
     }
       
@@ -439,6 +453,11 @@ public class PlayerController : MonoBehaviourPun
         _playerStats.IsHoldingItem(_item.GetItemWeight());
     }
 
+    /// <summary>
+    /// 애니메이션 행동 동기화
+    /// </summary>
+    /// <param name="animHash"></param>
+    /// <param name="state"></param>
     public void BehaviourAnimation(int animHash, bool state)
     {
         photonView.RPC(nameof(SyncBehaviourAnimation), RpcTarget.AllViaServer, animHash, state);
@@ -450,6 +469,11 @@ public class PlayerController : MonoBehaviourPun
         PlayerAnimator.SetBool(animHash, state);
     }
 
+    /// <summary>
+    /// 이동 방향 동기화
+    /// </summary>
+    /// <param name="animHash"></param>
+    /// <param name="direction"></param>
     public void MoveAnimation(int animHash, float direction)
     {
         photonView.RPC(nameof(SyncMoveAnimation), RpcTarget.AllViaServer, animHash, direction);
