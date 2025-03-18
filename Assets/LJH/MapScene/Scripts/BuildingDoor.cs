@@ -5,11 +5,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class BuildingDoor : MonoBehaviourPun, IPunObservable
+public class BuildingDoor : MonoBehaviourPun, IHitMe
 {
     [SerializeField] Image progressBar;
-
-    bool isClosed = false;
 
     Coroutine doorIncreaseCo;
 
@@ -18,31 +16,40 @@ public class BuildingDoor : MonoBehaviourPun, IPunObservable
     Vector3 buildingSpawnerPos;
 
     [SerializeField] GameObject sun;
+    PopUp popUp;
 
+    public bool HitMe { get; set; }
 
     void Start()
     {
+        popUp = GetComponent<PopUp>();
         buildingSpawnerPos = buildingSpawner.transform.position;
     }
 
     private void Update()
     {
+        Debug.Log(popUp.HitMe);
+
+
         if (!photonView.IsMine)
             return;
 
-        //OpenDoor();
+        OpenDoor();
     }
 
     void OpenDoor()
     {
-        if (isClosed && Input.GetKeyDown(KeyCode.E) && doorIncreaseCo == null)
+        Debug.Log("오픈도어 실행됨");
+        if (popUp.HitMe && Input.GetKeyDown(KeyCode.E) && doorIncreaseCo == null)
         {
+            Debug.Log("문열리고있음");
             doorIncreaseCo = StartCoroutine(DoorIncreaseCoRoutine());
             player = GameObject.FindWithTag(Tag.Player);
         }
 
-        if (isClosed && Input.GetKeyUp(KeyCode.E) && doorIncreaseCo != null)
+        if ((!popUp.HitMe || Input.GetKeyUp(KeyCode.E)) && doorIncreaseCo != null)
         {
+            Debug.Log("문열기취소");
             StopCoroutine(doorIncreaseCo);
             doorIncreaseCo = null;
             progressBar.fillAmount = 0f;
@@ -58,37 +65,6 @@ public class BuildingDoor : MonoBehaviourPun, IPunObservable
 
             if (progressBar.fillAmount >= 1)
                 player.transform.position = buildingSpawnerPos;
-        }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag(Tag.Player))
-        {
-            player = other.gameObject;
-            isClosed = true;
-            player.transform.position = buildingSpawnerPos;
-            //sun.transform.rotation = Quaternion.Euler(192, -30, 0);
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag(Tag.Player))
-        {
-            isClosed = false;
-        }
-    }
-
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-        if (stream.IsWriting)
-        {
-            stream.SendNext(isClosed);
-        }
-        else
-        {
-            isClosed = (bool)stream.ReceiveNext();
         }
     }
 }

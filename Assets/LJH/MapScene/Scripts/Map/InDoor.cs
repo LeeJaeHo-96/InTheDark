@@ -8,13 +8,18 @@ public class InDoor : MonoBehaviourPun, IHitMe
     [SerializeField] BuildingNewDoor door;
 
     public NavMeshObstacle obstacle;
-    public bool HitMe 
+
+    public bool _HitMe;
+    public bool HitMe
     {
-        get => HitMe; 
+        get => _HitMe;
+
         set
         {
-            if(HitMe != door.HitMe) 
-                door.HitMe = HitMe;
+            _HitMe = value;
+
+            if (HitMe != door.HitMe)
+                door.HitMe = _HitMe;
         }
     }
 
