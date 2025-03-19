@@ -45,6 +45,11 @@ public class PlayerWalk : PlayerState
         else if (Input.GetMouseButtonDown(0) && _controller.CurCarryItem != null)
         {
             _controller.CurCarryItem.ItemUse();
+            if (_controller.CurCarryItem.AttackItem() &&
+                _controller.CurCarryItem.GetHoldingType() == ItemHoldingType.ONEHANDED)
+            {
+                _controller.BehaviourAnimation(_attackAniHash);
+            }
         }
 
     }

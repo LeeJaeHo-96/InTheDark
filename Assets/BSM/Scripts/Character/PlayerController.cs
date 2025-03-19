@@ -48,8 +48,10 @@ public class PlayerController : MonoBehaviourPun
     private int _itemLayer => LayerMask.GetMask("Item");
     private int _computerLayer => LayerMask.NameToLayer("Computer");
     
-    private int _oneHandAniHash => Animator.StringToHash("IsOneHand");
-    private int _twoHandAniHash => Animator.StringToHash("IsTwoHand");
+    private int _getOneHandUseAniHash => Animator.StringToHash("GetUseItem");
+    private int _dropOneHandUseAniHash => Animator.StringToHash("DropUseItem");
+    private int _getTwoHandAniHash => Animator.StringToHash("GetTwoHandItem");
+    private int _dropTwoHandAniHash => Animator.StringToHash("DropTwoHandItem");
     
     private float _sensitivity => DataManager.Instance.UserSettingData.Sensitivity;
     
@@ -403,12 +405,16 @@ public class PlayerController : MonoBehaviourPun
         {
             if (CurCarryItem.GetHoldingType() == ItemHoldingType.TWOHANDED)
             {
-                BehaviourAnimation(_twoHandAniHash, false);
+                BehaviourAnimation(_dropTwoHandAniHash);
                 _playerStats.CanCarry = true;
             }
             else
             {
-                BehaviourAnimation(_oneHandAniHash, false);
+                if (!CurCarryItem.AttackItem())
+                {
+                    BehaviourAnimation(_dropOneHandUseAniHash);
+                }
+                
                 _inventory.DropItem(_curInventoryIndex);
             }
              
@@ -439,12 +445,16 @@ public class PlayerController : MonoBehaviourPun
 
         if (CurCarryItem.GetHoldingType() == ItemHoldingType.ONEHANDED)
         {
-            _inventory.GetItem(CurCarryItem); 
-            BehaviourAnimation(_oneHandAniHash, true);
+            _inventory.GetItem(CurCarryItem);
+
+            if (!CurCarryItem.AttackItem())
+            {
+                BehaviourAnimation(_getOneHandUseAniHash);
+            } 
         }
         else
         { 
-            BehaviourAnimation(_twoHandAniHash, true);
+            BehaviourAnimation(_getTwoHandAniHash);
         }
         
         CurCarryItem.PickUp(PhotonNetwork.LocalPlayer);
@@ -454,8 +464,8 @@ public class PlayerController : MonoBehaviourPun
     /// <summary>
     /// 애니메이션 행동 동기화
     /// </summary>
-    /// <param name="animHash"></param>
-    /// <param name="state"></param>
+    /// <param name="animHash">애니메이션 해시값</param>
+    /// <param name="state">현재 상태</param>
     public void BehaviourAnimation(int animHash, bool state)
     { 
         photonView.RPC(nameof(SyncBehaviourAnimation), RpcTarget.AllViaServer, animHash, state);
@@ -470,8 +480,8 @@ public class PlayerController : MonoBehaviourPun
     /// <summary>
     /// 이동 방향 동기화
     /// </summary>
-    /// <param name="animHash"></param>
-    /// <param name="direction"></param>
+    /// <param name="animHash">애니메이션 해시값</param>
+    /// <param name="direction">이동 방향</param>
     public void BehaviourAnimation(int animHash, float direction)
     {
         photonView.RPC(nameof(SyncBehaviourAnimation), RpcTarget.AllViaServer, animHash, direction);
@@ -483,6 +493,16 @@ public class PlayerController : MonoBehaviourPun
         PlayerAnimator.SetFloat(animHash, direction);
     }
     
+    public void BehaviourAnimation(int animHash)
+    {
+        photonView.RPC(nameof(SyncBehaviourAnimation), RpcTarget.AllViaServer, animHash);
+    }
+    
+    [PunRPC]
+    private void SyncBehaviourAnimation(int animHash)
+    {
+        PlayerAnimator.SetTrigger(animHash);
+    }
     
     [PunRPC]
     public void SyncDeathRPC(bool isDeath, bool isActive, bool isEnable, bool isKinematic)

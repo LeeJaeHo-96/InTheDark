@@ -12,7 +12,7 @@ public class PlayerJump : PlayerState
         
         if (remainStamina - 5f > 0)
         {
-            _controller.BehaviourAnimation(_jumpAniHash, true);
+            _controller.BehaviourAnimation(_jumpAniHash);
             _controller.PlayerRb.AddForce(Vector3.up * _controller.PlayerStats.JumpPower ,ForceMode.Impulse);
             _controller.PlayerStats.Stamina -= 5f;
             _controller.PlayerStats.OnChangedStamina?.Invoke(_controller.PlayerStats.Stamina);
@@ -46,8 +46,7 @@ public class PlayerJump : PlayerState
     }
 
     public override void Exit()
-    {
-        _controller.BehaviourAnimation(_jumpAniHash, false);
+    { 
     }
 
 }
