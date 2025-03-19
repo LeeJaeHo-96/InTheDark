@@ -97,7 +97,6 @@ public class ComputerControll : BaseUI
 
                         case exit:
                             gameObject.SetActive(false);
-                            inputField.ActivateInputField();
                             break;
 
                         default:
@@ -189,7 +188,7 @@ public class ComputerControll : BaseUI
                             //구매 완료
                             CallAirBalloon();
                             items = null;
-                            inputField.ActivateInputField();
+                            gameObject.SetActive(false);
                             break;
 
                         default:

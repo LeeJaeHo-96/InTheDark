@@ -4,13 +4,12 @@ using UnityEngine;
 
 public class Computer : MonoBehaviour
 {
-    GameObject computerCanvas;
+    [SerializeField] GameObject computerCanvas;
     PopUp popUp;
 
     private void Start()
     {
         popUp = GetComponent<PopUp>();
-        computerCanvas = transform.GetChild(0).GetComponent<GameObject>();
     }
 
     private void Update()
