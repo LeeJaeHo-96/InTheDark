@@ -1610,6 +1610,7 @@ MonoBehaviour:
   _itemID: 1
   IsOwned: 0
   IsAttacking: 0
+  _battery: 0
 --- !u!65 &1623468813
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1830,6 +1831,7 @@ MonoBehaviour:
   _itemID: 3
   IsOwned: 0
   IsAttacking: 0
+  _battery: 0
 --- !u!65 &1717094847
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2295,6 +2297,11 @@ PrefabInstance:
         type: 3}
       propertyPath: sceneViewId
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4157712696110778496, guid: e7b6106d85866fe4ab45e94ab1bee0cb,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e7b6106d85866fe4ab45e94ab1bee0cb, type: 3}

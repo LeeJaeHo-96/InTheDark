@@ -20,7 +20,7 @@ public class Item : MonoBehaviourPun
     
     protected float _attackRange;
     protected float _damage;
-    protected float _battery;
+    public float _battery;
     protected bool isPower = false;
     
     private float _itemWeight;
@@ -33,11 +33,11 @@ public class Item : MonoBehaviourPun
         _itemCollider = GetComponent<Collider>();
     }
 
-    protected void OnEnable()
+    protected void Start()
     {
         StartCoroutine(ItemSetDelayRoutine());
     }
- 
+  
     private void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.CompareTag(Tag.Ground))
@@ -66,8 +66,7 @@ public class Item : MonoBehaviourPun
             yield return null; 
         }
         
-        SetItemData();
-        ItemRestore();
+        SetItemData(); 
     }
     
     /// <summary>
