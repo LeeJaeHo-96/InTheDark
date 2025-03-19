@@ -41,11 +41,15 @@ public class ComputerControll : BaseUI
         TextSetActive((int)Text.menu);
 
         inputField.gameObject.SetActive(true);
+        inputField.ActivateInputField();
+
+
     }
 
     private void Update()
     {
         TextInput(inputField.text);
+
     }
 
     /// <summary>
@@ -64,19 +68,23 @@ public class ComputerControll : BaseUI
                     {
                         case land:
                             TextSetActive((int)Text.land);
+                            inputField.ActivateInputField();
                             break;
 
                         case store:
                             TextSetActive((int)Text.store);
+                            inputField.ActivateInputField();
                             break;
 
                         case exit:
                             gameObject.SetActive(false);
+                            inputField.ActivateInputField();
                             break;
 
                         default:
                             //Todo 플레이스홀더 내용 바꿔야할듯?
                             Debug.Log("다시 입력해주세요_Menu");
+                            inputField.ActivateInputField();
                             break;
                     }
                     break;
@@ -87,25 +95,30 @@ public class ComputerControll : BaseUI
                         case land_Start:
                             //Todo : 목적지 시작의섬 선택
                             Debug.Log("시작의 섬 으로 설정");
+                            inputField.ActivateInputField();
                             break;
 
                         case land_Middle:
                             //Todo : 목적지 중간섬 선택
                             Debug.Log("중간섬으로 설정");
+                            inputField.ActivateInputField();
                             break;
 
                         case land_End:
                             //Todo : 목적지 끝의 섬 선택
                             Debug.Log("끝의 섬으로 설정");
+                            inputField.ActivateInputField();
                             break;
 
                         case exit:
                             TextSetActive((int)Text.menu);
+                            inputField.ActivateInputField();
                             break;
 
                         default:
                             //Todo 플레이스홀더 내용 바꿔야할듯?
                             Debug.Log("다시 입력해주세요");
+                            inputField.ActivateInputField();
                             break;
                     }
                     break;
@@ -116,20 +129,24 @@ public class ComputerControll : BaseUI
                         case flashlight:
                             //Todo : 구매 리스트에 손전등 추가
                             Debug.Log("손전등 추가");
+                            inputField.ActivateInputField();
                             break;
 
                         case stick:
                             //Todo : 구매 리스트에 막대기 추가
                             Debug.Log("막대기 추가");
+                            inputField.ActivateInputField();
                             break;
 
                         case exit:
                             TextSetActive((int)Text.menu);
+                            inputField.ActivateInputField();
                             break;
 
                         default:
                             //Todo 플레이스홀더 내용 바꿔야할듯?
                             Debug.Log("다시 입력해주세요");
+                            inputField.ActivateInputField();
                             break;
                     }
                     break;
