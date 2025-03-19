@@ -28,7 +28,7 @@ public class Item_FlashLight : Item
             _flashCo = StartCoroutine(FlashLightRoutine());
         }
         else
-        {
+        { 
             //배터리 공유
             photonView.RPC(nameof(SyncBatteryRPC), RpcTarget.AllViaServer, _battery);
             

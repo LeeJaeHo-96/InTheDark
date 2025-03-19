@@ -20,7 +20,7 @@ public class Item : MonoBehaviourPun
     
     protected float _attackRange;
     protected float _damage;
-    public float _battery;
+    protected float _battery;
     protected bool isPower = false;
     
     private float _itemWeight;
