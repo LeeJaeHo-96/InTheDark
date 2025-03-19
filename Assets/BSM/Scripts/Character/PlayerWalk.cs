@@ -21,12 +21,11 @@ public class PlayerWalk : PlayerState
     
     public override void Update()
     {
-        _controller.MoveAnimation(_dirXAniHash, _controller.MoveDir.x); 
-        _controller.MoveAnimation(_dirZAniHash, _controller.MoveDir.z); 
+        _controller.BehaviourAnimation(_dirXAniHash, _controller.MoveDir.x); 
+        _controller.BehaviourAnimation(_dirZAniHash, _controller.MoveDir.z); 
         
-        if (_staminaRecoverCo != null && !isRecovering && _controller.PlayerStats.Stamina >= 100f)
+        if ( _controller.PlayerStats.Stamina >= 100f && _staminaRecoverCo != null)
         {
-            Debug.Log("코루틴 중지");
             _controller.StopCoroutine(_staminaRecoverCo);
             _staminaRecoverCo = null;
         }
@@ -46,6 +45,11 @@ public class PlayerWalk : PlayerState
         else if (Input.GetMouseButtonDown(0) && _controller.CurCarryItem != null)
         {
             _controller.CurCarryItem.ItemUse();
+            if (_controller.CurCarryItem.AttackItem() &&
+                _controller.CurCarryItem.GetHoldingType() == ItemHoldingType.ONEHANDED)
+            {
+                _controller.BehaviourAnimation(_attackAniHash);
+            }
         }
 
     }

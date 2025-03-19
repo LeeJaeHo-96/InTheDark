@@ -28,7 +28,10 @@ public class Item_FlashLight : Item
             _flashCo = StartCoroutine(FlashLightRoutine());
         }
         else
-        {
+        { 
+            //배터리 공유
+            photonView.RPC(nameof(SyncBatteryRPC), RpcTarget.AllViaServer, _battery);
+            
             StopCoroutine(_flashCo);
             _flashCo = null;
         }
@@ -39,9 +42,7 @@ public class Item_FlashLight : Item
     {
         _flashLight.enabled = isOn;
     }
-    
-    //TODO: 슬롯 체인지 하면 배터리가 초기화 되는데 이거 수정해야함
-    
+     
     private IEnumerator FlashLightRoutine()
     {
         while (isPower && _battery >= 0)
@@ -56,12 +57,28 @@ public class Item_FlashLight : Item
             yield return null;
         } 
     }
+
+    /// <summary>
+    /// 남은 배터리 동기화
+    /// </summary>
+    /// <param name="battery"></param>
+    [PunRPC]
+    private void SyncBatteryRPC(float battery)
+    {
+        _battery = battery;
+    }
     
+    /// <summary>
+    /// 손전등 아이템 충전
+    /// </summary>
     protected override void ItemRestore()
     {
         _battery = _itemData.MaxDurability;
     }
 
+    /// <summary>
+    /// 아이템 버렸을 때 동작
+    /// </summary>
     protected override void ItemDrop()
     {
         isPower = false; 

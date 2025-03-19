@@ -14,6 +14,12 @@ public class PlayerAttack : PlayerState
         }
         else
         {
+            if (_controller.CurCarryItem.AttackItem() &&
+                _controller.CurCarryItem.GetHoldingType() == ItemHoldingType.ONEHANDED)
+            {
+                _controller.BehaviourAnimation(_attackAniHash);
+            }
+             
             _controller.CurCarryItem.ItemUse();
         }
     }
@@ -42,6 +48,10 @@ public class PlayerAttack : PlayerState
             _controller.ChangeState(PState.JUMP);
         }
     }
-    
+
+    public override void Exit()
+    {
+        _controller.BehaviourAnimation(_attackAniHash, false);
+    }
     
 }

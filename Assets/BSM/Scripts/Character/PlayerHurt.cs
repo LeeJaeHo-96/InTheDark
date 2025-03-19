@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
-using UnityEngine;
+using UnityEngine; 
+using System;
 
 public class PlayerHurt : PlayerState
 {
@@ -11,7 +12,7 @@ public class PlayerHurt : PlayerState
 
     public override void Enter()
     { 
-        ValidateHit();
+        ValidateHit(); 
     }
 
     public override void Update()
@@ -26,16 +27,10 @@ public class PlayerHurt : PlayerState
         }
         
     }
-
-    public override void Exit()
-    { 
-        _controller.BehaviourAnimation(_hitAniHash, false);
-    }
-    
+  
     private void ValidateHit()
     {
-        //if (_controller.OnTriggerOther.gameObject.layer == GameManager.Instance.ItemLayerIndexValue)
-        if (_controller.OnTriggerOther.gameObject.layer == LayerMask.NameToLayer("Item"))
+        if (_controller.OnTriggerOther.gameObject.layer == GameManager.Instance.ItemLayerIndexValue)
         {
             Item item = _controller.OnTriggerOther.gameObject.GetComponent<Item>();
             
@@ -55,12 +50,12 @@ public class PlayerHurt : PlayerState
             
             if (item.IsAttacking && item.AttackItem())
             { 
-                _controller.BehaviourAnimation(_hitAniHash, true);
+                _controller.BehaviourAnimation(_hitAniHash); 
                 TakeDamage(item.GetItemDamage());  
             } 
         }
     }
-    
+ 
     /// <summary>
     /// 현재 체력 감소
     /// </summary>

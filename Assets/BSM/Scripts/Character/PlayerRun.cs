@@ -12,6 +12,12 @@ public class PlayerRun : PlayerState
     public override void Enter()
     {  
         _controller.BehaviourAnimation(_runAniHash, true);
+
+        if (_staminaRecoverCo != null)
+        {
+            _controller.StopCoroutine(_staminaRecoverCo);
+            _staminaRecoverCo = null;
+        }
         
         if (_consumeCo == null)
         {
@@ -41,6 +47,11 @@ public class PlayerRun : PlayerState
         else if (Input.GetMouseButtonDown(0) && _controller.CurCarryItem != null)
         {
             _controller.CurCarryItem.ItemUse();
+            if (_controller.CurCarryItem.AttackItem() &&
+                _controller.CurCarryItem.GetHoldingType() == ItemHoldingType.ONEHANDED)
+            {
+                _controller.BehaviourAnimation(_attackAniHash);
+            }
         }
     }
 

@@ -29,8 +29,7 @@ public class PlayerController : MonoBehaviourPun
     public Animator PlayerAnimator;
     public PState CurState => _curState;
     public Vector3 MoveDir = Vector3.zero;
-   
-    
+ 
     private PlayerState[] _playerStates = new PlayerState[(int)PState.SIZE];
     private PlayerStats _playerStats;
     private Rigidbody _playerRb; 
@@ -39,6 +38,8 @@ public class PlayerController : MonoBehaviourPun
     private PopUp _popup; 
     private NewDoor _newDoor;
     private InDoor _inDoor;
+    private GameObject _computerObject;
+    private List<Item_FlashLight> _carryFlashLights = new List<Item_FlashLight>();
     
     private PState _curState = PState.IDLE;
 
@@ -46,12 +47,12 @@ public class PlayerController : MonoBehaviourPun
     private float _mouseX;
     private float _mouseY;
     private int _itemLayer => LayerMask.GetMask("Item");
-    private int _popupLayer => LayerMask.GetMask("PopUp");
-    private int _newDoorLayer => LayerMask.GetMask("NewDoor");
-    private int _inDoorLayer => LayerMask.GetMask("InDoor");
-
-    private int _oneHandAniHash => Animator.StringToHash("IsOneHand");
-    private int _twoHandAniHash => Animator.StringToHash("IsTwoHand");
+    private int _computerLayer => LayerMask.NameToLayer("Computer");
+    
+    private int _getOneHandUseAniHash => Animator.StringToHash("GetUseItem");
+    private int _dropOneHandUseAniHash => Animator.StringToHash("DropUseItem");
+    private int _getTwoHandAniHash => Animator.StringToHash("GetTwoHandItem");
+    private int _dropTwoHandAniHash => Animator.StringToHash("DropTwoHandItem");
     
     private float _sensitivity => DataManager.Instance.UserSettingData.Sensitivity;
     
@@ -74,7 +75,6 @@ public class PlayerController : MonoBehaviourPun
         _playerStates[(int)PState.ATTACK] = new PlayerAttack(this);
         _playerStates[(int)PState.HURT] = new PlayerHurt(this);
         _playerStates[(int)PState.DEATH] = new PlayerDeath(this);
-
     }
 
     private void Start()
@@ -112,7 +112,8 @@ public class PlayerController : MonoBehaviourPun
     private void Update()
     {
         if (!photonView.IsMine) return;
-
+        if (_computerObject != null && _computerObject.activeSelf) return; 
+            
         _playerStates[(int)_curState].Update();
         InputKey();
         PositionUpdate();
@@ -125,6 +126,9 @@ public class PlayerController : MonoBehaviourPun
 
     private void LateUpdate()
     {
+        if (_computerObject != null && _computerObject.activeSelf) return;
+        if (IsDeath) return;
+        
         PlayerCam.transform.position = Vector3.Lerp(PlayerCam.transform.position, HeadPos.transform.position, 5f * Time.deltaTime);
     }
 
@@ -133,7 +137,7 @@ public class PlayerController : MonoBehaviourPun
         if (!photonView.IsMine) return;
         _playerStates[(int)_curState].FixedUpdate();
     }
-
+ 
     /// <summary>
     /// 키보드 입력
     /// </summary>
@@ -195,18 +199,28 @@ public class PlayerController : MonoBehaviourPun
         if (CurCarryItem != null)
         {
             if (CurCarryItem.GetHoldingType() == ItemHoldingType.ONEHANDED)
-            {
-                CurCarryItem.gameObject.SetActive(false);
+            { 
+                if (!CurCarryItem.AttackItem())
+                {
+                    BehaviourAnimation(_dropOneHandUseAniHash);
+                }
+                
+                CurCarryItem.gameObject.SetActive(false); 
                 
                 //변경할 슬롯의 아이템이 있는지 확인
                 if (_inventory.SelectedItem(index) != null)
                 {
-                    CurCarryItem = _inventory.SelectedItem(index);
-                    CurCarryItem.gameObject.SetActive(true); 
+                    CurCarryItem = _inventory.SelectedItem(index); 
+                    CurCarryItem.gameObject.SetActive(true);
+
+                    if (!CurCarryItem.AttackItem())
+                    {
+                        BehaviourAnimation(_getOneHandUseAniHash);
+                    }  
                 }
                 else
                 {
-                    CurCarryItem = null;
+                    CurCarryItem = null; 
                 }
             } 
         }
@@ -216,6 +230,11 @@ public class PlayerController : MonoBehaviourPun
             {
                 CurCarryItem = _inventory.SelectedItem(index);
                 CurCarryItem.gameObject.SetActive(true); 
+                
+                if (!CurCarryItem.AttackItem())
+                {
+                    BehaviourAnimation(_getOneHandUseAniHash);
+                } 
             }
         }  
     }
@@ -287,9 +306,9 @@ public class PlayerController : MonoBehaviourPun
         Debug.DrawRay(jumpRay.origin, jumpRay.direction * 0.3f, Color.blue);
         
         ItemRaycast(ray);
-        ObjectRaycast(ray, ref _popup, _popupLayer);
-        ObjectRaycast(ray, ref _newDoor, _newDoorLayer);
-        ObjectRaycast(ray, ref _inDoor, _inDoorLayer);
+        ObjectRaycast(ray, ref _popup);
+        ObjectRaycast(ray, ref _newDoor);
+        ObjectRaycast(ray, ref _inDoor);
         JumpGroundCheckRayCast(jumpRay);
     }
     
@@ -353,6 +372,7 @@ public class PlayerController : MonoBehaviourPun
         }
     }
       
+    
     /// <summary>
     /// 오브젝트를 제네릭으로 감지
     /// </summary>
@@ -360,12 +380,21 @@ public class PlayerController : MonoBehaviourPun
     /// <param name="target">PopUp, Indoor</param>
     /// <param name="layer">PopUp, Indoor 레이어</param>
     /// <typeparam name="T"></typeparam>
-    private void ObjectRaycast<T>(Ray ray, ref T target, int layer) where T : MonoBehaviour, IHitMe
+    private void ObjectRaycast<T>(Ray ray, ref T target) where T : MonoBehaviour, IHitMe
     {
-        if (Physics.Raycast(ray.origin, ray.direction, out RaycastHit hit, 3f, layer))
+        if (Physics.Raycast(ray.origin, ray.direction, out RaycastHit hit, 3f))
         {
             T newTarget = hit.collider.GetComponent<T>();
-
+ 
+            if (hit.collider.gameObject.layer == _computerLayer)
+            {
+                _computerObject = hit.collider.transform.GetChild(0).gameObject;
+            }
+            else
+            {
+                _computerObject = null;
+            }
+            
             if (newTarget != null)
             {
                 target = newTarget;
@@ -379,6 +408,8 @@ public class PlayerController : MonoBehaviourPun
                 target.HitMe = false;
                 target = null;
             }
+            
+            _computerObject = null;
         } 
     }
       
@@ -391,12 +422,12 @@ public class PlayerController : MonoBehaviourPun
         {
             if (CurCarryItem.GetHoldingType() == ItemHoldingType.TWOHANDED)
             {
-                BehaviourAnimation(_twoHandAniHash, false);
+                BehaviourAnimation(_dropTwoHandAniHash);
                 _playerStats.CanCarry = true;
             }
             else
             {
-                BehaviourAnimation(_oneHandAniHash, false);
+                BehaviourAnimation(_dropOneHandUseAniHash);
                 _inventory.DropItem(_curInventoryIndex);
             }
              
@@ -418,55 +449,85 @@ public class PlayerController : MonoBehaviourPun
         }
         else
         {
+            //현재 들고 있는 아이템과 다른 아이템을 주웠을 경우
             if (CurCarryItem != item)
             { 
-                CurCarryItem.gameObject.SetActive(false);
+                CurCarryItem.gameObject.SetActive(false); 
                 CurCarryItem = item;
             }
         }
 
         if (CurCarryItem.GetHoldingType() == ItemHoldingType.ONEHANDED)
         {
-            _inventory.GetItem(CurCarryItem); 
-            BehaviourAnimation(_oneHandAniHash, true);
+            _inventory.GetItem(CurCarryItem);
+
+            if (!CurCarryItem.AttackItem())
+            {
+                BehaviourAnimation(_getOneHandUseAniHash);
+            } 
         }
         else
         { 
-            BehaviourAnimation(_twoHandAniHash, true);
+            BehaviourAnimation(_getTwoHandAniHash);
         }
-        
+         
         CurCarryItem.PickUp(PhotonNetwork.LocalPlayer);
         _playerStats.IsHoldingItem(_item.GetItemWeight());
     }
 
+    /// <summary>
+    /// 애니메이션 행동 동기화
+    /// </summary>
+    /// <param name="animHash">애니메이션 해시값</param>
+    /// <param name="state">현재 상태</param>
     public void BehaviourAnimation(int animHash, bool state)
-    {
+    { 
         photonView.RPC(nameof(SyncBehaviourAnimation), RpcTarget.AllViaServer, animHash, state);
-    }
+    } 
     
     [PunRPC]
     private void SyncBehaviourAnimation(int animHash, bool state)
-    {
+    { 
         PlayerAnimator.SetBool(animHash, state);
-    }
-
-    public void MoveAnimation(int animHash, float direction)
+    } 
+    
+    /// <summary>
+    /// 이동 방향 동기화
+    /// </summary>
+    /// <param name="animHash">애니메이션 해시값</param>
+    /// <param name="direction">이동 방향</param>
+    public void BehaviourAnimation(int animHash, float direction)
     {
-        photonView.RPC(nameof(SyncMoveAnimation), RpcTarget.AllViaServer, animHash, direction);
+        photonView.RPC(nameof(SyncBehaviourAnimation), RpcTarget.AllViaServer, animHash, direction);
     }
     
     [PunRPC]
-    private void SyncMoveAnimation(int animHash, float direction)
+    private void SyncBehaviourAnimation(int animHash, float direction)
     {
         PlayerAnimator.SetFloat(animHash, direction);
     }
     
+    public void BehaviourAnimation(int animHash)
+    {
+        photonView.RPC(nameof(SyncBehaviourAnimation), RpcTarget.AllViaServer, animHash);
+    }
     
     [PunRPC]
-    public void SyncDeathRPC(bool isDeath, bool isActive, bool isEnable, bool isKinematic)
+    private void SyncBehaviourAnimation(int animHash)
+    {
+        PlayerAnimator.SetTrigger(animHash);
+    }
+    
+    /// <summary>
+    /// 죽은 상태 동기화
+    /// </summary>
+    /// <param name="isDeath"></param>
+    /// <param name="isEnable"></param>
+    /// <param name="isKinematic"></param>
+    [PunRPC]
+    public void SyncDeathRPC(bool isDeath, bool isEnable, bool isKinematic)
     {
         IsDeath = isDeath;
-        PlayerBody.SetActive(isActive);
         gameObject.GetComponent<CapsuleCollider>().enabled = isEnable;
         gameObject.GetComponent<Rigidbody>().isKinematic = isKinematic;
     }
