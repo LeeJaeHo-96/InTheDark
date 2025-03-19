@@ -20,7 +20,7 @@ public class HotAirBalloon : MonoBehaviourPun
     float speed = 5f;
     float boomDelayTime = 60f;
 
-    Coroutine boomCo;
+    public Coroutine boomCo;
     // 스폰 위치 -110
     // 스탑 위치 220
 
@@ -52,12 +52,13 @@ public class HotAirBalloon : MonoBehaviourPun
             basket.transform.parent = null;
             basket.AddComponent<Rigidbody>();
 
-            boomCo = StartCoroutine(BoomAirBallon());
+            boomCo = StartCoroutine(BoomAirBalloon(boomDelayTime));
         }
     }
 
-    IEnumerator BoomAirBallon()
+    public IEnumerator BoomAirBalloon(float boomDelayTime)
     {
+        Debug.Log($"{boomDelayTime}초 후 파괴");
         yield return new WaitForSeconds(boomDelayTime);
         basket.transform.parent = gameObject.transform;
         Destroy(gameObject);

@@ -92,6 +92,8 @@ public class ComputerControll : BaseUI
 
                         case store:
                             TextSetActive((int)Text.store);
+                            //상점 열때마다 아이템 목록 초기화
+                            items.Clear();
                             inputField.ActivateInputField();
                             break;
 
@@ -100,6 +102,7 @@ public class ComputerControll : BaseUI
                             break;
 
                         default:
+                            inputField.text = "";
                             //Todo 플레이스홀더 내용 바꿔야할듯?
                             Debug.Log("다시 입력해주세요_Menu");
                             inputField.ActivateInputField();
@@ -134,6 +137,7 @@ public class ComputerControll : BaseUI
                             break;
 
                         default:
+                            inputField.text = "";
                             //Todo 플레이스홀더 내용 바꿔야할듯?
                             Debug.Log("다시 입력해주세요");
                             inputField.ActivateInputField();
@@ -156,17 +160,18 @@ public class ComputerControll : BaseUI
                             //Todo : 구매 리스트에 막대기 추가
                             Debug.Log("막대기 추가");
                             AddItemList(itemList[1]);
-                            TextSetActive((int)Text.store);
+                            TextSetActive((int)Text.check);
                             inputField.ActivateInputField();
                             break;
 
                         case exit:
-                            items = null;
+                            items.Clear();
                             TextSetActive((int)Text.menu);
                             inputField.ActivateInputField();
                             break;
 
                         default:
+                            inputField.text = "";
                             //Todo 플레이스홀더 내용 바꿔야할듯?
                             Debug.Log("다시 입력해주세요");
                             inputField.ActivateInputField();
@@ -187,11 +192,11 @@ public class ComputerControll : BaseUI
                         case buy:
                             //구매 완료
                             CallAirBalloon();
-                            items = null;
                             gameObject.SetActive(false);
                             break;
 
                         default:
+                            inputField.text = "";
                             //Todo 플레이스홀더 내용 바꿔야할듯?
                             Debug.Log("다시 입력해주세요");
                             inputField.ActivateInputField();
