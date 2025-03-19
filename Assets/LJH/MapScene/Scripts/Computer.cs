@@ -10,7 +10,6 @@ public class Computer : MonoBehaviour
     private void Start()
     {
         popUp = GetComponent<PopUp>();
-        //computerCanvas = transform.GetChild(0).GetComponent<GameObject>();
     }
 
     private void Update()
