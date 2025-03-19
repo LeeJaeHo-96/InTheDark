@@ -44,9 +44,5 @@ public class PlayerJump : PlayerState
             _controller.ChangeState(PState.ATTACK);
         }
     }
-
-    public override void Exit()
-    { 
-    }
-
+ 
 }

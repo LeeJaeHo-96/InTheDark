@@ -111,8 +111,8 @@ public class PlayerController : MonoBehaviourPun
     private void Update()
     {
         if (!photonView.IsMine) return;
-        if (_computerObject != null && _computerObject.activeSelf) return;
-        
+        if (_computerObject != null && _computerObject.activeSelf) return; 
+            
         _playerStates[(int)_curState].Update();
         InputKey();
         PositionUpdate();
@@ -126,6 +126,7 @@ public class PlayerController : MonoBehaviourPun
     private void LateUpdate()
     {
         if (_computerObject != null && _computerObject.activeSelf) return;
+        if (IsDeath) return;
         
         PlayerCam.transform.position = Vector3.Lerp(PlayerCam.transform.position, HeadPos.transform.position, 5f * Time.deltaTime);
     }
@@ -504,11 +505,16 @@ public class PlayerController : MonoBehaviourPun
         PlayerAnimator.SetTrigger(animHash);
     }
     
+    /// <summary>
+    /// 죽은 상태 동기화
+    /// </summary>
+    /// <param name="isDeath"></param>
+    /// <param name="isEnable"></param>
+    /// <param name="isKinematic"></param>
     [PunRPC]
-    public void SyncDeathRPC(bool isDeath, bool isActive, bool isEnable, bool isKinematic)
+    public void SyncDeathRPC(bool isDeath, bool isEnable, bool isKinematic)
     {
         IsDeath = isDeath;
-        PlayerBody.SetActive(isActive);
         gameObject.GetComponent<CapsuleCollider>().enabled = isEnable;
         gameObject.GetComponent<Rigidbody>().isKinematic = isKinematic;
     }

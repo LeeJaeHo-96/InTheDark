@@ -27,8 +27,8 @@ public class PlayerState : StateMachine
         _dirZAniHash = Animator.StringToHash("DirZ");
         _idleAniHash = Animator.StringToHash("IsIdle");
         _jumpAniHash = Animator.StringToHash("Jump");
-        _hitAniHash = Animator.StringToHash("IsHit");
-        _deathAniHash = Animator.StringToHash("IsDeath");
+        _hitAniHash = Animator.StringToHash("Hit");
+        _deathAniHash = Animator.StringToHash("Death");
         _attackAniHash = Animator.StringToHash("Attack");
     }
  

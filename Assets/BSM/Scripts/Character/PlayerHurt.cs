@@ -27,16 +27,10 @@ public class PlayerHurt : PlayerState
         }
         
     }
-
-    public override void Exit()
-    { 
-        _controller.BehaviourAnimation(_hitAniHash, false);
-    }
-    
+  
     private void ValidateHit()
     {
-        //if (_controller.OnTriggerOther.gameObject.layer == GameManager.Instance.ItemLayerIndexValue)
-        if (_controller.OnTriggerOther.gameObject.layer == LayerMask.NameToLayer("Item"))
+        if (_controller.OnTriggerOther.gameObject.layer == GameManager.Instance.ItemLayerIndexValue)
         {
             Item item = _controller.OnTriggerOther.gameObject.GetComponent<Item>();
             
@@ -56,8 +50,7 @@ public class PlayerHurt : PlayerState
             
             if (item.IsAttacking && item.AttackItem())
             { 
-                Debug.Log($"남은 체력 :{_controller.PlayerStats.CurHP}");
-                _controller.BehaviourAnimation(_hitAniHash, true); 
+                _controller.BehaviourAnimation(_hitAniHash); 
                 TakeDamage(item.GetItemDamage());  
             } 
         }
