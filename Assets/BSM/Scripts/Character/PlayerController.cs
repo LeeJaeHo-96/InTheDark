@@ -39,6 +39,7 @@ public class PlayerController : MonoBehaviourPun
     private NewDoor _newDoor;
     private InDoor _inDoor;
     private GameObject _computerObject;
+    private List<Item_FlashLight> _carryFlashLights = new List<Item_FlashLight>();
     
     private PState _curState = PState.IDLE;
 
@@ -469,7 +470,7 @@ public class PlayerController : MonoBehaviourPun
         { 
             BehaviourAnimation(_getTwoHandAniHash);
         }
-        
+         
         CurCarryItem.PickUp(PhotonNetwork.LocalPlayer);
         _playerStats.IsHoldingItem(_item.GetItemWeight());
     }
