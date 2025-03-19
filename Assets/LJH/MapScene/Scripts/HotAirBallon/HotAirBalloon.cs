@@ -1,42 +1,66 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class HotAirBalloon : MonoBehaviour
+public class HotAirBalloon : MonoBehaviourPun
 {
     Rigidbody rigid;
-    Vector3 destination;
+
+    [HideInInspector] public GameObject spawnPoint;
+    Vector3 spawnPos;
+    [HideInInspector] public GameObject destinationPoint;
+    Vector3 destinationPos;
+
     List<Item> itemList = new List<Item>();
 
     GameObject basket;
 
-    float speed = 5;
-    float boomDelayTime;
+    float speed = 5f;
+    float boomDelayTime = 60f;
+
+    Coroutine boomCo;
+    // 스폰 위치 -110
+    // 스탑 위치 220
 
     private void Start()
     {
-        destination = transform.position + new Vector3(0, 0, 50);
+        spawnPos = spawnPoint.transform.position;
+        destinationPos = destinationPoint.transform.position;
+        
     }
     private void FixedUpdate()
     {
         
-        transform.position = Vector3.MoveTowards(transform.position, destination, Time.deltaTime * speed);
+        transform.position = Vector3.MoveTowards(transform.position, destinationPos, Time.deltaTime * speed);
+        float distance = Vector3.Distance(spawnPos, destinationPos) / 2;
 
-        if(Vector3.Distance(transform.position, destination) <= 7f)
+        if(Vector3.Distance(transform.position, destinationPos) <= distance)
         {
             DropBasket();
         }    
     }
 
+
     void DropBasket()
     {
-        if (transform.GetChild(0).name == "Basket")
+        if (basket == null)
         {
+            //열기구에서 분리하고 리지드바디 추가하여 자연스럽게 떨어지게 함
             basket = transform.GetChild(0).gameObject;
             basket.transform.parent = null;
             basket.AddComponent<Rigidbody>();
-        }
 
+            boomCo = StartCoroutine(BoomAirBallon());
+        }
+    }
+
+    IEnumerator BoomAirBallon()
+    {
+        yield return new WaitForSeconds(boomDelayTime);
+        basket.transform.parent = gameObject.transform;
+        Destroy(gameObject);
+        //Todo : 폭발 애니메이션 추가해야함
     }
 }
