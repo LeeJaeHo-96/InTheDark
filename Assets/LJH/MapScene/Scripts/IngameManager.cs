@@ -1,23 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class IngameManager : MonoBehaviour
 {
     public static IngameManager Instance;
 
-   public float time { get; set; }
-   public float minute { get; set; }
+    public float time {get; set;}
+    public float minute { get; set; }
 
     float randomMinute;
 
     float elapsedTime = 1f;
 
-    float money;
+    public float money { get; set; }
 
     private void Awake()
     {
         SingletonInit();
+        Init();
     }
 
 
@@ -67,6 +69,11 @@ public class IngameManager : MonoBehaviour
         //Todo: πË√‚πﬂΩ√≈¥
     }    
 
+
+    void Init()
+    {
+        money = 250f;
+    }
 
 
     void SingletonInit()

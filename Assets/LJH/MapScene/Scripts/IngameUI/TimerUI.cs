@@ -9,6 +9,7 @@ public class TimerUI : MonoBehaviour
 
     private void OnEnable()
     {
+        //시작할 때, 타이머 리셋 후 타이머 시작됨
         IngameManager.Instance.TimerReset();
         StartCoroutine(IngameManager.Instance.TimerCount());
     }

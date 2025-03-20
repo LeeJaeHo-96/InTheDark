@@ -39,6 +39,7 @@ public class ComputerControll : BaseUI
 
     //아이템 구매용 리스트
     List<Item> items = new List<Item>();
+    float itemsPrice;
 
     [Header("아이템 프리팹 넣어두는 리스트")]
     [SerializeField] List<Item> itemList = new List<Item>();
@@ -208,8 +209,28 @@ public class ComputerControll : BaseUI
     /// <param name="item"></param>
     void AddItemList(Item item)
     {
-        items.Add(item);
+        //머지 이후에 주석해제하여 테스트
+        if(itemPriceCheck(item))
+        {
+            items.Add(item);
+        }
+        else
+        {
+            //Todo :돈부족 텍스트 노출
+            Debug.Log("보유금이 부족합니다.");
+        }
         inputField.text = "";
+    }
+
+    bool itemPriceCheck(Item item)
+    {
+        //if(itemsPrice + item.itemPrice > IngameManager.Instance.money)
+        //{ 
+        //    return false;
+        //}
+        //
+        //itemsPrice += item.itemPrice;
+        return true;
     }
 
     /// <summary>
@@ -217,6 +238,8 @@ public class ComputerControll : BaseUI
     /// </summary>
     public void CallAirBalloon()
     {
+        IngameManager.Instance.money -= itemsPrice;
+
         GameObject airBallonPrefab = PhotonNetwork.Instantiate("HotAirBalloon", spawnPoint.transform.position, Quaternion.identity);
         airBallonPrefab.GetComponent<HotAirBalloon>().spawnPoint = spawnPoint;
         airBallonPrefab.GetComponent<HotAirBalloon>().destinationPoint = destinationPoint;
