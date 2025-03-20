@@ -13,14 +13,20 @@ public class PlayerAttack : PlayerState
             _controller.ChangeState(PState.IDLE);
         }
         else
-        {
-            if (_controller.CurCarryItem.AttackItem() &&
-                _controller.CurCarryItem.GetHoldingType() == ItemHoldingType.ONEHANDED)
+        { 
+            if (_controller.CurCarryItem.AttackItem())
             {
-                _controller.BehaviourAnimation(_attackAniHash);
+                if (_controller.CurCarryItem.GetHoldingType() == ItemHoldingType.ONEHANDED)
+                {
+                    _controller.BehaviourAnimation(_attackAniHash);
+                }
+                
+                _controller.CurCarryItem.ItemUse(_controller.PlayerAnimator);
             }
-             
-            _controller.CurCarryItem.ItemUse();
+            else
+            {
+                _controller.CurCarryItem.ItemUse();
+            } 
         }
     }
 
@@ -31,15 +37,15 @@ public class PlayerAttack : PlayerState
     
     public override void Update()
     {
-        if (Input.GetMouseButtonUp(0))
+        if (_controller.MoveDir == Vector3.zero)
         {
             _controller.ChangeState(PState.IDLE);
         }
-        else if (Input.GetMouseButton(0) && _controller.MoveDir != Vector3.zero && !Input.GetKey(KeyCode.LeftShift))
+        else if (_controller.MoveDir != Vector3.zero && !Input.GetKey(KeyCode.LeftShift) || _controller.MoveDir.z < 0 && Input.GetKey(KeyCode.LeftShift))
         {
             _controller.ChangeState(PState.WALK);
         }
-        else if (Input.GetMouseButton(0) && _controller.MoveDir != Vector3.zero && Input.GetKey(KeyCode.LeftShift))
+        else if (_controller.MoveDir.z > 0  && Input.GetKey(KeyCode.LeftShift))
         {
             _controller.ChangeState(PState.RUN);
         }
@@ -48,10 +54,6 @@ public class PlayerAttack : PlayerState
             _controller.ChangeState(PState.JUMP);
         }
     }
-
-    public override void Exit()
-    {
-        _controller.BehaviourAnimation(_attackAniHash, false);
-    }
+ 
     
 }

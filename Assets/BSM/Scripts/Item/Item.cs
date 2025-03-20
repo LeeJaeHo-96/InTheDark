@@ -22,6 +22,7 @@ public class Item : MonoBehaviourPun
     protected float _damage;
     protected float _battery;
     protected bool isPower = false;
+    protected int _attackSpeedAniHash => Animator.StringToHash("AttackSpeed");
     
     private float _itemWeight;
     
@@ -147,12 +148,29 @@ public class Item : MonoBehaviourPun
     public bool AttackItem() => _itemData.IsAttack;
 
     public int GetItemDamage() => _itemData.Damage;
+
+    /// <summary>
+    /// 각 아이템 별 아이템 위치 설정
+    /// </summary>
+    /// <param name="holdPos">손 위치</param>
+    /// <param name="mouseX">마우스 X 회전값</param>
+    /// <param name="mouseY">마우스 Y 회전값</param>
+    public virtual void SetItemHoldPosition(Transform holdPos, float mouseX, float mouseY)
+    {
+        transform.position = holdPos.position; 
+        transform.rotation = Quaternion.Euler(-mouseY, mouseX, 0);
+    }
     
     /// <summary>
-    /// 각 아이템별 능력 사용
+    /// 각 소모 아이템별 능력 사용
     /// </summary>
     public virtual void ItemUse() {}
 
+    /// <summary>
+    /// 공격 아아팀 사용
+    /// </summary>
+    /// <param name="animator"></param>
+    public virtual void ItemUse(Animator animator) {}
      
     /// <summary>
     /// 아이템 별 초기화 작업

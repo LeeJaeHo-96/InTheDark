@@ -39,7 +39,7 @@ public class PlayerJump : PlayerState
         {
             _controller.ChangeState(PState.RUN);
         }
-        else if (Input.GetMouseButtonDown(0))
+        else if (Input.GetMouseButtonDown(0) && _controller.CurCarryItem != null)
         {
             _controller.ChangeState(PState.ATTACK);
         }

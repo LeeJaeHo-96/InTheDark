@@ -15,8 +15,7 @@ public class PlayerState : StateMachine
     protected int _jumpAniHash;
     protected int _hitAniHash;
     protected int _deathAniHash;
-    protected int _attackAniHash;
-    
+    protected int _attackAniHash;  
     public PlayerState(PlayerController controller)
     {
         _controller = controller;
@@ -29,7 +28,7 @@ public class PlayerState : StateMachine
         _jumpAniHash = Animator.StringToHash("Jump");
         _hitAniHash = Animator.StringToHash("Hit");
         _deathAniHash = Animator.StringToHash("Death");
-        _attackAniHash = Animator.StringToHash("Attack");
+        _attackAniHash = Animator.StringToHash("Attack");  
     }
  
     /// <summary>

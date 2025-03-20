@@ -10,54 +10,44 @@ public class Item_FishingRod : Item
 
     private Vector3 _originPos;
     private bool _isReady;
+
+    public float a;
+    public float b;
+    public float c;
     
     protected override void Awake()
     {
         base.Awake();
         _fishingRodCollider = GetComponent<BoxCollider>(); 
     }
-     
-    public override void ItemUse()
-    {
-        _attackCo = StartCoroutine(AttackRoutine());
-    }
 
+    public override void SetItemHoldPosition(Transform holdPos, float mouseX, float mouseY)
+    {  
+        transform.position = holdPos.position; 
+        transform.rotation = Quaternion.Euler(-mouseY, mouseX, 0);
+    }
+    
+    public override void ItemUse(Animator animator)
+    {
+        animator.SetFloat(_attackSpeedAniHash, _itemData.AttackSpeed);
+        _attackCo = StartCoroutine(AttackRoutine()); 
+    }
+ 
     private IEnumerator AttackRoutine()
     {
         float elapsedTime = 0;
-        float duration = _itemData.AttackSpeed;
+        float duration = _itemData.AttackSpeed; 
 
-        //무기의 사정거리만큼 콜라이더 범위 변경
-        _fishingRodCollider.center = new Vector3(0, 0, _attackRange);
-
-        while (!_isReady)
+        if (Input.GetMouseButtonUp(0))
         {
-            if (Input.GetMouseButton(0))
-            {
-                //TODO: 임시 모션
-                transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y - 90f, 0);
-            } 
-            else if (Input.GetMouseButtonUp(0))
-            {
-                _isReady = true; 
-                photonView.RPC(nameof(SyncAttackingRPC), RpcTarget.AllBuffered, true);
-            }
-
-            yield return null;
-        }
+            _isReady = true; 
+            photonView.RPC(nameof(SyncAttackingRPC), RpcTarget.AllBuffered, true);
+        } 
         
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.5f);
         photonView.RPC(nameof(SyncAttackingRPC), RpcTarget.AllBuffered, false);
-        
-        while (elapsedTime < duration)
-        {
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        _isReady = false;
-        //콜라이더 범위 복구
-        _fishingRodCollider.center = new Vector3(0, 0, 0.1f); 
+         
+        _isReady = false; 
     }
      
     protected override void ItemDrop()

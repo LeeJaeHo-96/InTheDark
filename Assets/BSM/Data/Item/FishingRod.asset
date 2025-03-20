@@ -20,6 +20,6 @@ MonoBehaviour:
   IsAttack: 1
   IsConsumable: 0
   MaxDurability: 0
-  AttackSpeed: 0.8
+  AttackSpeed: 5
   AttackRange: 0.25
   Damage: 2
