@@ -159,7 +159,8 @@ public class Item : MonoBehaviourPun
     {
         //TODO: 아이템 별로 위치 조정이 필요할 경우 따로 스크립트 만들어서 조정하기. 
         transform.position = holdPos.position; 
-        transform.rotation = Quaternion.Euler(-mouseY, mouseX, 0);
+        transform.rotation = Quaternion.Euler(0, mouseX, 0);
+
     }
     
     /// <summary>
