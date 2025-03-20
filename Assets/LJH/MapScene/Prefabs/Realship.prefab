@@ -2607,7 +2607,7 @@ GameObject:
   - component: {fileID: 8562559996245387083}
   - component: {fileID: 2356080285959954784}
   - component: {fileID: 336727517847452237}
-  m_Layer: 16
+  m_Layer: 13
   m_Name: Computer
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -17,7 +17,7 @@ public class HotAirBalloon : MonoBehaviourPun
 
     GameObject basket;
 
-    float speed = 5f;
+    float speed = 15f;
     float boomDelayTime = 60f;
 
     public Coroutine boomCo;
@@ -58,7 +58,6 @@ public class HotAirBalloon : MonoBehaviourPun
 
     public IEnumerator BoomAirBalloon(float boomDelayTime)
     {
-        Debug.Log($"{boomDelayTime}ÃÊ ÈÄ ÆÄ±«");
         yield return new WaitForSeconds(boomDelayTime);
         basket.transform.parent = gameObject.transform;
         Destroy(gameObject);

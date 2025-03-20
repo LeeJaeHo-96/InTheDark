@@ -24,13 +24,11 @@ public class BuildingDoor : MonoBehaviourPun, IHitMe
     {
         popUp = GetComponent<PopUp>();
         buildingSpawnerPos = buildingSpawner.transform.position;
+
     }
 
     private void Update()
     {
-        Debug.Log(popUp.HitMe);
-
-
         if (!photonView.IsMine)
             return;
 
@@ -39,17 +37,14 @@ public class BuildingDoor : MonoBehaviourPun, IHitMe
 
     void OpenDoor()
     {
-        Debug.Log("오픈도어 실행됨");
         if (popUp.HitMe && Input.GetKeyDown(KeyCode.E) && doorIncreaseCo == null)
         {
-            Debug.Log("문열리고있음");
             doorIncreaseCo = StartCoroutine(DoorIncreaseCoRoutine());
             player = GameObject.FindWithTag(Tag.Player);
         }
 
         if ((!popUp.HitMe || Input.GetKeyUp(KeyCode.E)) && doorIncreaseCo != null)
         {
-            Debug.Log("문열기취소");
             StopCoroutine(doorIncreaseCo);
             doorIncreaseCo = null;
             progressBar.fillAmount = 0f;

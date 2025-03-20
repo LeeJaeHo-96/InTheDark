@@ -22,7 +22,6 @@ public class M_StateMachine
         currentState.Enter(monster);
         AnimationPlay(newState, monster);
 
-        Debug.Log($"{newState} ∑Œ ¡¯¿‘µ ");
     }
 
     void AnimationPlay(IMonsterState newState, Monster monster)

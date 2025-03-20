@@ -31,7 +31,6 @@ public class Lever : MonoBehaviourPun
             {
                 case Stage.startLand:
                     SceneManager.LoadScene("MapScene1");
-                    Debug.Log("Ω√¿€¿« º∂¿∏∑Œ ∞©¥œ¥Ÿ");
                     break;
 
                 case Stage.middleLand:

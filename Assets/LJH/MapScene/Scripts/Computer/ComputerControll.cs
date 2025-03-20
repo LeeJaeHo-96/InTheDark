@@ -115,19 +115,16 @@ public class ComputerControll : BaseUI
                     {
                         case land_Start:
                             //Todo : 목적지 시작의섬 선택
-                            Debug.Log("시작의 섬 으로 설정");
                             inputField.ActivateInputField();
                             break;
 
                         case land_Middle:
                             //Todo : 목적지 중간섬 선택
-                            Debug.Log("중간섬으로 설정");
                             inputField.ActivateInputField();
                             break;
 
                         case land_End:
                             //Todo : 목적지 끝의 섬 선택
-                            Debug.Log("끝의 섬으로 설정");
                             inputField.ActivateInputField();
                             break;
 
@@ -150,7 +147,6 @@ public class ComputerControll : BaseUI
                     {
                         case flashlight:
                             //Todo : 구매 리스트에 손전등 추가
-                            Debug.Log("손전등 추가");
                             AddItemList(itemList[0]);
                             TextSetActive((int)Text.check);
                             inputField.ActivateInputField();
@@ -158,7 +154,6 @@ public class ComputerControll : BaseUI
 
                         case stick:
                             //Todo : 구매 리스트에 막대기 추가
-                            Debug.Log("막대기 추가");
                             AddItemList(itemList[1]);
                             TextSetActive((int)Text.check);
                             inputField.ActivateInputField();
