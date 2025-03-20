@@ -2244,7 +2244,7 @@ PrefabInstance:
     - target: {fileID: 3346944227075447361, guid: e7b6106d85866fe4ab45e94ab1bee0cb,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.512
       objectReference: {fileID: 0}
     - target: {fileID: 3346944227075447361, guid: e7b6106d85866fe4ab45e94ab1bee0cb,
         type: 3}
@@ -2295,11 +2295,6 @@ PrefabInstance:
         type: 3}
       propertyPath: sceneViewId
       value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4157712696110778496, guid: e7b6106d85866fe4ab45e94ab1bee0cb,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e7b6106d85866fe4ab45e94ab1bee0cb, type: 3}

@@ -120,9 +120,6 @@ MonoBehaviour:
   _itemID: 2
   IsOwned: 0
   IsAttacking: 0
-  a: 0
-  b: 0
-  c: 0
 --- !u!1 &2981447290846159052
 GameObject:
   m_ObjectHideFlags: 0

@@ -79,6 +79,8 @@ public class PlayerStats : MonoBehaviourPun
         
         _walkSpeed -= speedFactor;
         _runSpeed -= speedFactor;
+        
+        Debug.Log($"현재 스피드:{_walkSpeed}");
     }
 
     /// <summary>

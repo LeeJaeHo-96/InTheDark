@@ -113,7 +113,7 @@ public class PlayerController : MonoBehaviourPun
     {
         if (!photonView.IsMine) return;
         if (_computerObject != null && _computerObject.activeSelf) return; 
-        Debug.Log(_curState);
+        
         _playerStates[(int)_curState].Update();
         InputKey();
         PositionUpdate();
@@ -248,12 +248,8 @@ public class PlayerController : MonoBehaviourPun
         if(CurCarryItem == null) return;
         if (!CurCarryItem.IsOwned) return;
         if (!CurCarryItem.photonView.Owner.Equals(photonView.Owner)) return;
-        
-        //TODO: 추후 팔 위치 조정 필요 OneHand냐 TwoHand냐?
-        CurCarryItem.SetItemHoldPosition(ItemHoldPos, _mouseX, _mouseY);
-        
-        // CurCarryItem.transform.position = ItemHoldPos.position;
-        // CurCarryItem.transform.rotation = Quaternion.Euler(-_mouseY, _mouseX, 0);
+
+        CurCarryItem.SetItemHoldPosition(ItemHoldPos, _mouseX, _mouseY); 
     }
     
     /// <summary>

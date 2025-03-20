@@ -14,6 +14,12 @@ public class Item_FlashLight : Item
         base.Awake();
         _flashLight = GetComponentInChildren<Light>(); 
     }
+
+    public override void SetItemHoldPosition(Transform holdPos, float mouseX, float mouseY)
+    {
+        transform.position = holdPos.position; 
+        transform.rotation = Quaternion.Euler(-mouseY, mouseX, 0);
+    }
     
     /// <summary>
     /// 아이템 사용

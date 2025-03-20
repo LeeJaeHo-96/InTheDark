@@ -150,13 +150,14 @@ public class Item : MonoBehaviourPun
     public int GetItemDamage() => _itemData.Damage;
 
     /// <summary>
-    /// 각 아이템 별 아이템 위치 설정
+    /// 각 아이템 별 아이템 기본 위치 설정
     /// </summary>
     /// <param name="holdPos">손 위치</param>
     /// <param name="mouseX">마우스 X 회전값</param>
     /// <param name="mouseY">마우스 Y 회전값</param>
     public virtual void SetItemHoldPosition(Transform holdPos, float mouseX, float mouseY)
     {
+        //TODO: 아이템 별로 위치 조정이 필요할 경우 따로 스크립트 만들어서 조정하기. 
         transform.position = holdPos.position; 
         transform.rotation = Quaternion.Euler(-mouseY, mouseX, 0);
     }
