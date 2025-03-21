@@ -183,7 +183,12 @@ public class Item : MonoBehaviourPun
     /// 아이템 버린 후 동작
     /// </summary>
     protected virtual void ItemDrop() {}
-
+    
+    public int GetSellPrice() => _itemData.ItemSellPrice;
+    
+    public int GetBuyPrice() => _itemData.ItemSellPrice;
+    
+    
     [PunRPC]
     protected void SyncAttackingRPC(bool isAttacking)
     {

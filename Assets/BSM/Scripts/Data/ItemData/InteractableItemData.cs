@@ -78,7 +78,9 @@ public class InteractableItemData : ScriptableObject
     [Header("아이템 공격력")] 
     public int Damage;
 
-    [Header("아이템 가격")] 
-    public int ItemPrice;
+    [Header("아이템 판매 가격")] 
+    public int ItemSellPrice;
 
+    [Header("아이템 구매 가격")] 
+    public int ItemBuyPrice;
 }
