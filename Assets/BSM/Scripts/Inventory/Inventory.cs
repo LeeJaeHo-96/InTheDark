@@ -46,6 +46,5 @@ public class Inventory : InventoryController
         }
 
         return null;
-    }
-    
+    } 
 }

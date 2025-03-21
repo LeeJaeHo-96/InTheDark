@@ -193,35 +193,42 @@ public class PlayerController : MonoBehaviourPun
     /// <param name="index"></param>
     private void CarryItemChange(int index)
     {
-        if (_curInventoryIndex == index) return;
-        
+ 
         _curInventoryIndex = index;
         
         //들고 있는 아이템이 있는지 확인
         if (CurCarryItem != null)
         {
             if (CurCarryItem.GetHoldingType() == ItemHoldingType.ONEHANDED)
-            { 
-                if (!CurCarryItem.AttackItem())
-                {
-                    BehaviourAnimation(_dropOneHandUseAniHash);
-                }
-                
+            {  
                 CurCarryItem.gameObject.SetActive(false); 
                 
                 //변경할 슬롯의 아이템이 있는지 확인
                 if (_inventory.SelectedItem(index) != null)
                 {
-                    CurCarryItem = _inventory.SelectedItem(index); 
-                    CurCarryItem.gameObject.SetActive(true);
-
-                    if (!CurCarryItem.AttackItem())
+                    if (!_inventory.SelectedItem(index).AttackItem())
                     {
                         BehaviourAnimation(_getOneHandUseAniHash);
-                    }  
+                    }
+                    else
+                    {
+                        if (!CurCarryItem.AttackItem() && _inventory.SelectedItem(index).AttackItem())
+                        {
+                            BehaviourAnimation(_dropOneHandUseAniHash);
+                        }
+                    }
+                    
+                    CurCarryItem = _inventory.SelectedItem(index); 
+                    CurCarryItem.gameObject.SetActive(true);
+ 
                 }
                 else
                 {
+                    if (!CurCarryItem.AttackItem())
+                    {
+                        BehaviourAnimation(_dropOneHandUseAniHash);
+                    }
+                    
                     CurCarryItem = null; 
                 }
             } 
@@ -417,7 +424,11 @@ public class PlayerController : MonoBehaviourPun
             }
             else
             {
-                BehaviourAnimation(_dropOneHandUseAniHash);
+                if (!CurCarryItem.AttackItem())
+                {
+                    BehaviourAnimation(_dropOneHandUseAniHash);
+                }
+                 
                 _inventory.DropItem(_curInventoryIndex);
             }
             
@@ -436,12 +447,29 @@ public class PlayerController : MonoBehaviourPun
         if (CurCarryItem == null)
         {
             CurCarryItem = item;
+            
+            if (!CurCarryItem.AttackItem())
+            {
+                BehaviourAnimation(_getOneHandUseAniHash);
+            }
         }
         else
         {
             //현재 들고 있는 아이템과 다른 아이템을 주웠을 경우
             if (CurCarryItem != item)
-            { 
+            {
+                if (!item.AttackItem())
+                {
+                    BehaviourAnimation(_getOneHandUseAniHash);
+                }
+                else
+                {
+                    if (!CurCarryItem.AttackItem() && item.AttackItem())
+                    {
+                        BehaviourAnimation(_dropOneHandUseAniHash);
+                    }
+                }
+                 
                 CurCarryItem.gameObject.SetActive(false); 
                 CurCarryItem = item;
             }
@@ -449,12 +477,7 @@ public class PlayerController : MonoBehaviourPun
 
         if (CurCarryItem.GetHoldingType() == ItemHoldingType.ONEHANDED)
         {
-            _inventory.GetItem(CurCarryItem);
-
-            if (!CurCarryItem.AttackItem())
-            {
-                BehaviourAnimation(_getOneHandUseAniHash);
-            } 
+            _inventory.GetItem(CurCarryItem);  
         }
         else
         { 

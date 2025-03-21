@@ -9,6 +9,7 @@ using UnityEditor.Build.Content;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using Photon.Voice.PUN;
 
 public class PunManager : MonoBehaviourPunCallbacks
 {
@@ -46,6 +47,7 @@ public class PunManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
+        PunVoiceClient.Instance.AutoConnectAndJoin = true;
         //방 입장 시 캐릭터 스폰 
         OnChangedPlayer?.Invoke();
         Cursor.lockState = CursorLockMode.Locked;

@@ -43,6 +43,7 @@ public class Item : MonoBehaviourPun
     {
         if (other.gameObject.CompareTag(Tag.Ground))
         {
+            transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
             _itemCollider.isTrigger = true;
             _itemRb.isKinematic = true; 
         }
