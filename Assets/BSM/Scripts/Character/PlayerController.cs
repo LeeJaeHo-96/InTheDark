@@ -193,6 +193,8 @@ public class PlayerController : MonoBehaviourPun
     /// <param name="index"></param>
     private void CarryItemChange(int index)
     {
+        if (_curInventoryIndex == index) return;
+        
         _curInventoryIndex = index;
         
         //들고 있는 아이템이 있는지 확인
