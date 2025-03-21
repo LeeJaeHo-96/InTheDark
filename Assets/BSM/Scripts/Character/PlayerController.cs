@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviourPun
     public Collider OnTriggerOther;
     public Coroutine ConsumeStaminaCo;
     public Coroutine RecoverStaminaCo;
-    public Transform ArmPos;
+    public Transform ItemHoldPos;
     public Transform HeadPos;
     public Item CurCarryItem;
     public Animator PlayerAnimator;
@@ -113,7 +113,7 @@ public class PlayerController : MonoBehaviourPun
     {
         if (!photonView.IsMine) return;
         if (_computerObject != null && _computerObject.activeSelf) return; 
-            
+        
         _playerStates[(int)_curState].Update();
         InputKey();
         PositionUpdate();
@@ -248,20 +248,8 @@ public class PlayerController : MonoBehaviourPun
         if(CurCarryItem == null) return;
         if (!CurCarryItem.IsOwned) return;
         if (!CurCarryItem.photonView.Owner.Equals(photonView.Owner)) return;
-        
-        //TODO: 추후 팔 위치 조정 필요 OneHand냐 TwoHand냐?
-        //CurCarryItem에서 위치 조정 함수 호출하면 될듯
-        if (CurCarryItem.AttackItem())
-        {
-            //공격 아이템인지 아닌지에 따라 잡는 모션 다르게 처리하면 될듯
-        }
-        else
-        {
-            
-        }
-        
-        CurCarryItem.transform.position = ArmPos.position;
-        CurCarryItem.transform.rotation = Quaternion.Euler(-_mouseY, _mouseX, 0);
+
+        CurCarryItem.SetItemHoldPosition(ItemHoldPos, _mouseX, _mouseY); 
     }
     
     /// <summary>
@@ -430,7 +418,7 @@ public class PlayerController : MonoBehaviourPun
                 BehaviourAnimation(_dropOneHandUseAniHash);
                 _inventory.DropItem(_curInventoryIndex);
             }
-             
+            
             CurCarryItem.Drop(); 
             _playerStats.IsNotHoldingItem(_item.GetItemWeight());
             CurCarryItem = null;

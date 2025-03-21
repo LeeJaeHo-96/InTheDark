@@ -79,6 +79,10 @@ public class PlayerStats : MonoBehaviourPun
         
         _walkSpeed -= speedFactor;
         _runSpeed -= speedFactor;
+
+        _walkSpeed = Mathf.Clamp(_walkSpeed, 1f, _walkSpeed);
+        _runSpeed = Mathf.Clamp(_runSpeed, 1f, _runSpeed);
+
     }
 
     /// <summary>

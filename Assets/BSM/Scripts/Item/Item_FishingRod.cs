@@ -7,66 +7,66 @@ public class Item_FishingRod : Item
 {
     private BoxCollider _fishingRodCollider;
     private Coroutine _attackCo;
-
+    private Transform _holdPos;
+    
     private Vector3 _originPos;
-    private bool _isReady;
+    private float _animationLength;
+    private float _animationSpeed;
+    private bool _isAttacked;
     
     protected override void Awake()
     {
         base.Awake();
         _fishingRodCollider = GetComponent<BoxCollider>(); 
     }
-     
-    public override void ItemUse()
-    {
-        _attackCo = StartCoroutine(AttackRoutine());
-    }
 
+    public override void SetItemHoldPosition(Transform holdPos, float mouseX, float mouseY)
+    {
+        _holdPos = holdPos;
+        transform.position = holdPos.position;
+        if (!_isAttacked)
+        {
+            transform.rotation = Quaternion.Euler(-mouseY, mouseX, 0);
+            transform.SetParent(null);
+        }
+        else
+        {
+            transform.SetParent(_holdPos);
+            transform.localRotation = Quaternion.Euler(0, 90,0);
+        }
+    }
+    
+    public override void ItemUse(Animator animator)
+    {
+        animator.SetFloat(_attackSpeedAniHash, _itemData.AttackSpeed);
+        _animationLength = animator.GetCurrentAnimatorStateInfo(0).length;
+        _isAttacked = true;
+        _attackCo = StartCoroutine(AttackRoutine()); 
+    }
+ 
     private IEnumerator AttackRoutine()
     {
         float elapsedTime = 0;
-        float duration = _itemData.AttackSpeed;
+        
+        photonView.RPC(nameof(SyncAttackingRPC), RpcTarget.AllBuffered, true);
 
-        //무기의 사정거리만큼 콜라이더 범위 변경
-        _fishingRodCollider.center = new Vector3(0, 0, _attackRange);
-
-        while (!_isReady)
-        {
-            if (Input.GetMouseButton(0))
-            {
-                //TODO: 임시 모션
-                transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y - 90f, 0);
-            } 
-            else if (Input.GetMouseButtonUp(0))
-            {
-                _isReady = true; 
-                photonView.RPC(nameof(SyncAttackingRPC), RpcTarget.AllBuffered, true);
-            }
-
+        //애니메이션 재생이 끝나면 공격 끝난 상태로 변경
+        while (elapsedTime < _animationLength)
+        { 
+            elapsedTime += Time.deltaTime * _itemData.AttackSpeed; 
             yield return null;
         }
         
-        yield return new WaitForSeconds(0.1f);
+        _isAttacked = false;
         photonView.RPC(nameof(SyncAttackingRPC), RpcTarget.AllBuffered, false);
-        
-        while (elapsedTime < duration)
-        {
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
 
-        _isReady = false;
-        //콜라이더 범위 복구
-        _fishingRodCollider.center = new Vector3(0, 0, 0.1f); 
     }
      
     protected override void ItemDrop()
     {
         if (_attackCo != null)
-        {
-            _fishingRodCollider.center = new Vector3(0, 0, 0.1f); 
+        { 
             photonView.RPC(nameof(SyncAttackingRPC), RpcTarget.AllBuffered, false);
-            _isReady = false;
             StopCoroutine(_attackCo);
             _attackCo = null;
         } 

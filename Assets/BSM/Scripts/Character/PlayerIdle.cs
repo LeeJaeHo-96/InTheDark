@@ -49,7 +49,7 @@ public class PlayerIdle : PlayerState
         {
             _controller.ChangeState(PState.JUMP);
         }
-        else if (_controller.MoveDir == Vector3.zero && Input.GetMouseButtonDown(0))
+        else if (Input.GetMouseButtonDown(0) && _controller.CurCarryItem != null)
         {
             _controller.ChangeState(PState.ATTACK);
         } 
