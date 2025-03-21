@@ -23,8 +23,6 @@ public class Basket : MonoBehaviourPun, IHitMe
 
         if(popUp.HitMe && Input.GetKeyDown(KeyCode.E))
         {
-            Debug.Log("눌리긴했음");
-            Debug.Log(itemList[0].name);
             ShowItem(itemList);
         }
     }
@@ -57,7 +55,6 @@ public class Basket : MonoBehaviourPun, IHitMe
             }
             else
             {
-                Debug.Log($"{i} 번째 아이템 생성");
                 Vector3 itemPos = transform.position + new Vector3(Random.Range(-5, 5), 0, Random.Range(-5, 5));
                 string itemName = itemList[i].name;
 

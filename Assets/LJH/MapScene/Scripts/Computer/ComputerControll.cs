@@ -39,6 +39,7 @@ public class ComputerControll : BaseUI
 
     //아이템 구매용 리스트
     List<Item> items = new List<Item>();
+    float itemsPrice;
 
     [Header("아이템 프리팹 넣어두는 리스트")]
     [SerializeField] List<Item> itemList = new List<Item>();
@@ -115,19 +116,16 @@ public class ComputerControll : BaseUI
                     {
                         case land_Start:
                             //Todo : 목적지 시작의섬 선택
-                            Debug.Log("시작의 섬 으로 설정");
                             inputField.ActivateInputField();
                             break;
 
                         case land_Middle:
                             //Todo : 목적지 중간섬 선택
-                            Debug.Log("중간섬으로 설정");
                             inputField.ActivateInputField();
                             break;
 
                         case land_End:
                             //Todo : 목적지 끝의 섬 선택
-                            Debug.Log("끝의 섬으로 설정");
                             inputField.ActivateInputField();
                             break;
 
@@ -150,7 +148,6 @@ public class ComputerControll : BaseUI
                     {
                         case flashlight:
                             //Todo : 구매 리스트에 손전등 추가
-                            Debug.Log("손전등 추가");
                             AddItemList(itemList[0]);
                             TextSetActive((int)Text.check);
                             inputField.ActivateInputField();
@@ -158,7 +155,6 @@ public class ComputerControll : BaseUI
 
                         case stick:
                             //Todo : 구매 리스트에 막대기 추가
-                            Debug.Log("막대기 추가");
                             AddItemList(itemList[1]);
                             TextSetActive((int)Text.check);
                             inputField.ActivateInputField();
@@ -213,8 +209,28 @@ public class ComputerControll : BaseUI
     /// <param name="item"></param>
     void AddItemList(Item item)
     {
-        items.Add(item);
+        //머지 이후에 주석해제하여 테스트
+        if(itemPriceCheck(item))
+        {
+            items.Add(item);
+        }
+        else
+        {
+            //Todo :돈부족 텍스트 노출
+            Debug.Log("보유금이 부족합니다.");
+        }
         inputField.text = "";
+    }
+
+    bool itemPriceCheck(Item item)
+    {
+        //if(itemsPrice + item.itemPrice > IngameManager.Instance.money)
+        //{ 
+        //    return false;
+        //}
+        //
+        //itemsPrice += item.itemPrice;
+        return true;
     }
 
     /// <summary>
@@ -222,6 +238,8 @@ public class ComputerControll : BaseUI
     /// </summary>
     public void CallAirBalloon()
     {
+        IngameManager.Instance.money -= itemsPrice;
+
         GameObject airBallonPrefab = PhotonNetwork.Instantiate("HotAirBalloon", spawnPoint.transform.position, Quaternion.identity);
         airBallonPrefab.GetComponent<HotAirBalloon>().spawnPoint = spawnPoint;
         airBallonPrefab.GetComponent<HotAirBalloon>().destinationPoint = destinationPoint;

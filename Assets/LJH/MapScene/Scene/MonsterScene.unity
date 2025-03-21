@@ -1691,6 +1691,7 @@ MonoBehaviour:
   - {fileID: 3310518982278022394, guid: c80f2addf76a23a4eb065a64449ad165, type: 3}
   - {fileID: -5838869726790599612, guid: 218affc1a06b4ac499a51a580ef31fd7, type: 3}
   spawnPoint: {fileID: 0}
+  destinationPoint: {fileID: 0}
 --- !u!114 &1822360548
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2185,6 +2186,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 645621079688909076, guid: 639dd54ec7561c24f8c2a65faefdee52,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2279673577778460036, guid: 639dd54ec7561c24f8c2a65faefdee52,
         type: 3}
       propertyPath: m_RootOrder
@@ -2250,5 +2256,10 @@ PrefabInstance:
       propertyPath: keyInfo
       value: 
       objectReference: {fileID: 2146900750}
+    - target: {fileID: 7614266951285945263, guid: 639dd54ec7561c24f8c2a65faefdee52,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 639dd54ec7561c24f8c2a65faefdee52, type: 3}
