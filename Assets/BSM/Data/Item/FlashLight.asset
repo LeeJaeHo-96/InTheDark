@@ -23,3 +23,5 @@ MonoBehaviour:
   AttackSpeed: 0
   AttackRange: 0
   Damage: 0
+  ItemSellPrice: 5
+  ItemBuyPrice: 50

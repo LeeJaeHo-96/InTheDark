@@ -2966,7 +2966,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e13e458f687b4a441b45e9ae26b27e04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemList: []
+  itemList:
+  - {fileID: 3346944227075447420, guid: 5d9845ce93fee7c48adbc4318ea291c1, type: 3}
+  - {fileID: 2711540062947287058, guid: 778a4ff95e8737349abfc3a9d4e41555, type: 3}
   spawnPoint: {fileID: 0}
   destinationPoint: {fileID: 0}
 --- !u!114 &78650967700037174

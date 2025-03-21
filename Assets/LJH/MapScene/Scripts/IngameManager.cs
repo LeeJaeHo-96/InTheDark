@@ -22,6 +22,11 @@ public class IngameManager : MonoBehaviour
         Init();
     }
 
+    private void Update()
+    {
+        Debug.Log(money);
+    }
+
 
     //시간의 경우 10초마다 5 ~10분이 흐르고
     //am8시로 시작해서
