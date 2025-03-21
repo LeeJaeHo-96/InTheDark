@@ -55,6 +55,7 @@ public class PunManager : MonoBehaviourPunCallbacks
 
     public override void OnLeftRoom()
     {
+        Cursor.lockState = CursorLockMode.None;
         GoToStartScene();
     }
 
