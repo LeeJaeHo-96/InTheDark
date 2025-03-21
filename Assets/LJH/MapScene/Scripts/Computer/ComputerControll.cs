@@ -236,11 +236,11 @@ public class ComputerControll : BaseUI
         switch (item.name)
         {
             case "FlashLight":
-                itemData = ItemManager.Instance._itemDataList[0];
+                itemData = ItemManager.Instance.GetItemData(4); // ¼ÕÀüµî Id
                 break;
 
             case "FishingRod":
-                itemData = ItemManager.Instance._itemDataList[1];
+                itemData = ItemManager.Instance.GetItemData(2); // ³¬½Ë´ë Id
                 break;
 
             default:

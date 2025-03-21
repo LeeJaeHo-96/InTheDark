@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemID: 7
   ItemWeight: 10
-  ItemHoldingType: 1
+  ItemHoldingType: 0
   ItemName: "\uBE48\uD2F0\uC9C0\uC804\uD654\uAE30"
   ItemIcon: {fileID: 0}
   IsAttack: 0

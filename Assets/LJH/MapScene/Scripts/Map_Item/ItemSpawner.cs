@@ -13,8 +13,9 @@ public class ItemSpawner : MonoBehaviourPun
     private void Start()
     {
         //아이템 담아줘야함
-        itemList.Add("Item1");
-        itemList.Add("Item2");
+        itemList.Add("Barrel");
+        itemList.Add("VintageTelephone");
+        itemList.Add("Gramophone");
 
         rayPos = transform.position + new Vector3(0, 1, 0);
 

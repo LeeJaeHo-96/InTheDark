@@ -9,7 +9,7 @@ public class ItemManager : MonoBehaviour
     public static ItemManager Instance;
     
     [Header("아이템 데이터 할당")]
-    [SerializeField] public List<InteractableItemData> _itemDataList;
+    [SerializeField] private List<InteractableItemData> _itemDataList;
     
     private Dictionary<int, InteractableItemData> _itemDict = new Dictionary<int, InteractableItemData>();
      

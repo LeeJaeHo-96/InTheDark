@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 697810887719877068}
   - component: {fileID: 697810887719877040}
   m_Layer: 17
-  m_Name: 07_VintageTelephone
+  m_Name: VintageTelephone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
