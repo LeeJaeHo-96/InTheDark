@@ -55,7 +55,6 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        PhotonNetwork.ConnectUsingSettings();
         //TODO: 임시로 가져오는 user id
         CurUser = FirebaseManager.Auth.CurrentUser; 
         StartFrame();

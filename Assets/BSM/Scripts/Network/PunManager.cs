@@ -33,6 +33,7 @@ public class PunManager : MonoBehaviourPunCallbacks
     private void Start()
     {
         PhotonNetwork.AutomaticallySyncScene = true;
+        PhotonNetwork.ConnectUsingSettings();
     }
 
 
@@ -47,7 +48,6 @@ public class PunManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        PunVoiceClient.Instance.AutoConnectAndJoin = true;
         //방 입장 시 캐릭터 스폰 
         OnChangedPlayer?.Invoke();
         Cursor.lockState = CursorLockMode.Locked;
