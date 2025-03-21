@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Photon.Pun;
 using Photon.Realtime;
+using Photon.Voice.PUN;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -32,12 +33,13 @@ public class TestGameScene : MonoBehaviourPunCallbacks
     {
         RoomOptions roomOptions = new RoomOptions();
         roomOptions.MaxPlayers = 4;
-        
+
         PhotonNetwork.JoinOrCreateRoom("테스트방", roomOptions, TypedLobby.Default);
     }
 
     public override void OnJoinedRoom()
     {
+        PunVoiceClient.Instance.AutoConnectAndJoin = true;
         StartCoroutine(SpawnRoutine());
     }
   
