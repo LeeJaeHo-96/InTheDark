@@ -186,7 +186,7 @@ public class Item : MonoBehaviourPun
     
     public int GetSellPrice() => _itemData.ItemSellPrice;
     
-    public int GetBuyPrice() => _itemData.ItemSellPrice;
+    public int GetBuyPrice() => _itemData.ItemBuyPrice;
     
     
     [PunRPC]

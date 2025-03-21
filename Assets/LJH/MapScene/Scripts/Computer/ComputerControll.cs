@@ -25,8 +25,6 @@ public class ComputerControll : BaseUI
     const string and = "계속";
     const string buy = "완료";
 
-
-
     TMP_Text menuText;
     TMP_Text landText;
     TMP_Text storeText;
@@ -149,14 +147,12 @@ public class ComputerControll : BaseUI
                         case flashlight:
                             //Todo : 구매 리스트에 손전등 추가
                             AddItemList(itemList[0]);
-                            TextSetActive((int)Text.check);
                             inputField.ActivateInputField();
                             break;
 
                         case stick:
                             //Todo : 구매 리스트에 막대기 추가
                             AddItemList(itemList[1]);
-                            TextSetActive((int)Text.check);
                             inputField.ActivateInputField();
                             break;
 
@@ -180,7 +176,15 @@ public class ComputerControll : BaseUI
                     {
                         case and:
                             //Todo : 구매 리스트에 손전등 추가
-                            TextSetActive((int)Text.store);
+                            if (itemsPrice >= IngameManager.Instance.money)
+                            {
+                                Debug.Log("보유금이 부족하여 '계속'을 진행할 수 없습니다.");
+                                TextSetActive((int)Text.check);
+                            }
+                            else
+                            {
+                                TextSetActive((int)Text.store);
+                            }
                             //이후에 추가 구매? 구매 완료? 화면 넣어야함
                             inputField.ActivateInputField();
                             break;
@@ -209,27 +213,52 @@ public class ComputerControll : BaseUI
     /// <param name="item"></param>
     void AddItemList(Item item)
     {
-        //머지 이후에 주석해제하여 테스트
-        if(itemPriceCheck(item))
-        {
-            items.Add(item);
+       ////머지 이후에 주석해제하여 테스트
+       if(itemPriceCheck(item))
+       {
+           items.Add(item);
+           TextSetActive((int)Text.check);
         }
-        else
-        {
+       else
+       {
+            TextSetActive((int)Text.store);
             //Todo :돈부족 텍스트 노출
             Debug.Log("보유금이 부족합니다.");
-        }
+       }
         inputField.text = "";
     }
 
     bool itemPriceCheck(Item item)
     {
-        //if(itemsPrice + item.itemPrice > IngameManager.Instance.money)
-        //{ 
-        //    return false;
-        //}
-        //
-        //itemsPrice += item.itemPrice;
+        InteractableItemData itemData;
+        Debug.Log(item.name);
+
+        switch (item.name)
+        {
+            case "FlashLight":
+                itemData = ItemManager.Instance._itemDataList[0];
+                break;
+
+            case "FishingRod":
+                itemData = ItemManager.Instance._itemDataList[1];
+                break;
+
+            default:
+                itemData = null;
+                return false;
+        }
+
+        Debug.Log($"아이템 데이터 {itemData.name}");
+        float itemPrice = itemData.ItemBuyPrice;
+        Debug.Log($"{item.name}의 가격 {itemPrice}");
+
+        if(itemsPrice + itemPrice > IngameManager.Instance.money)
+        { 
+            return false;
+        }
+        
+        itemsPrice += itemPrice;
+        Debug.Log($"담은 아이템의 가격 {itemsPrice}1");
         return true;
     }
 
@@ -238,7 +267,9 @@ public class ComputerControll : BaseUI
     /// </summary>
     public void CallAirBalloon()
     {
+        Debug.Log($"담은 아이템의 가격 {itemsPrice}2");
         IngameManager.Instance.money -= itemsPrice;
+        Debug.Log($"변동된 돈 {IngameManager.Instance.money}");
 
         GameObject airBallonPrefab = PhotonNetwork.Instantiate("HotAirBalloon", spawnPoint.transform.position, Quaternion.identity);
         airBallonPrefab.GetComponent<HotAirBalloon>().spawnPoint = spawnPoint;
