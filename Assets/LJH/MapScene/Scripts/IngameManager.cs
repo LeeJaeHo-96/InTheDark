@@ -10,21 +10,18 @@ public class IngameManager : MonoBehaviour
     public float time {get; set;}
     public float minute { get; set; }
 
+    public int days { get; set; }
+
     float randomMinute;
 
     float elapsedTime = 1f;
 
-    public float money { get; set; }
+    public int money { get; set; }
 
     private void Awake()
     {
-        SingletonInit();
         Init();
-    }
-
-    private void Update()
-    {
-        Debug.Log(money);
+        SingletonInit();
     }
 
 
@@ -74,10 +71,9 @@ public class IngameManager : MonoBehaviour
         //Todo: πË√‚πﬂΩ√≈¥
     }    
 
-
     void Init()
     {
-        money = 250f;
+        Database.instance.LoadData(FirebaseManager.Auth.CurrentUser.UserId, "Slot_1");
     }
 
 

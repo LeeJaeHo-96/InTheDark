@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class NewDoor : MonoBehaviourPun, IHitMe
 {
-    [SerializeField] InDoor indoor;
 
     float doorSpeed = 5f;
     private Coroutine doorCo;
@@ -36,11 +35,6 @@ public class NewDoor : MonoBehaviourPun, IHitMe
     //    indoor.hitMeEvent?.Invoke(indoor.hitMe);
     //}
 
-    [PunRPC]
-    void RPCObstacle()
-    {
-        indoor.obstacle.enabled = !indoor.obstacle.enabled;
-    }
 
     [PunRPC]
     void RPCDoor()

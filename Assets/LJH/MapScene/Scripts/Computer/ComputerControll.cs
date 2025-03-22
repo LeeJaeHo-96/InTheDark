@@ -37,7 +37,7 @@ public class ComputerControll : BaseUI
 
     //아이템 구매용 리스트
     List<Item> items = new List<Item>();
-    float itemsPrice;
+    int itemsPrice;
 
     [Header("아이템 프리팹 넣어두는 리스트")]
     [SerializeField] List<Item> itemList = new List<Item>();
@@ -249,7 +249,7 @@ public class ComputerControll : BaseUI
         }
 
         Debug.Log($"아이템 데이터 {itemData.name}");
-        float itemPrice = itemData.ItemBuyPrice;
+        int itemPrice = itemData.ItemBuyPrice;
         Debug.Log($"{item.name}의 가격 {itemPrice}");
 
         if(itemsPrice + itemPrice > IngameManager.Instance.money)

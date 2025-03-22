@@ -10,7 +10,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class Login : BaseUI
+public class GameExit : BaseUI
 {
     [Header("테스트용")]
     [SerializeField] bool isTest;
@@ -38,7 +38,6 @@ public class Login : BaseUI
         id = idField.text;
         password = passwordField.text;
 
-        NullCheck();
         FirebaseManager.Auth.SignInWithEmailAndPasswordAsync(id, password).ContinueWithOnMainThread(task =>
         {
             if (task.IsCanceled)
@@ -103,8 +102,6 @@ public class Login : BaseUI
                 {
                     if (snapshot.HasChild("slots"))
                     {
-                        Debug.Log(snapshot.Child("name").Value);
-                        Debug.Log(snapshot.Child("email").Value);
 
                         foreach (DataSnapshot slotSnapshot in snapshot.Child("slots").Children)
                         {
@@ -159,6 +156,13 @@ public class Login : BaseUI
             return;
         }
     }
+
+
+
+
+
+
+
 
 
     void Init()
