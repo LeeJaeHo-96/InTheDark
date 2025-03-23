@@ -24,7 +24,6 @@ public class PlayerController : MonoBehaviourPun
     public Coroutine ConsumeStaminaCo;
     public Coroutine RecoverStaminaCo;
     public Transform ItemHoldPos;
-    public Transform HeadPos;
     public Item CurCarryItem;
     public Animator PlayerAnimator;
     public PState CurState => _curState;
@@ -39,7 +38,6 @@ public class PlayerController : MonoBehaviourPun
     private NewDoor _newDoor;
     private InDoor _inDoor;
     private GameObject _computerObject;
-    private List<Item_FlashLight> _carryFlashLights = new List<Item_FlashLight>();
     
     private PState _curState = PState.IDLE;
 
@@ -85,8 +83,8 @@ public class PlayerController : MonoBehaviourPun
             PlayerCam.gameObject.SetActive(false);
             PlayerCanvas.gameObject.SetActive(false);
             return;
-        } 
-        
+        }
+ 
         PlayerCam.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity); 
         _playerStates[(int)_curState].Enter();
     }
@@ -122,14 +120,6 @@ public class PlayerController : MonoBehaviourPun
         DropItem();
         ItemPositionToArm();
         SelectInventoryInItem();
-    }
-
-    private void LateUpdate()
-    {
-        if (_computerObject != null && _computerObject.activeSelf) return;
-        if (IsDeath) return;
-        
-        PlayerCam.transform.position = Vector3.Lerp(PlayerCam.transform.position, HeadPos.transform.position, 5f * Time.deltaTime);
     }
 
     private void FixedUpdate()
@@ -251,6 +241,7 @@ public class PlayerController : MonoBehaviourPun
     private void InputRotate()
     {
         if (IsDeath) return;
+        if (_computerObject != null && _computerObject.activeSelf) return;
         
         _mouseX += Input.GetAxisRaw("Mouse X") * _sensitivity * Time.deltaTime;
         _mouseY += Input.GetAxisRaw("Mouse Y");
@@ -283,8 +274,8 @@ public class PlayerController : MonoBehaviourPun
         Ray ray = new Ray(PlayerCam.transform.position, PlayerCam.transform.forward);
         Ray jumpRay = new Ray(transform.position + Vector3.up * 0.1f, Vector3.down);
         
-        Debug.DrawRay(ray.origin, ray.direction * 5, Color.red);
-        Debug.DrawRay(jumpRay.origin, jumpRay.direction * 0.3f, Color.blue);
+        // Debug.DrawRay(ray.origin, ray.direction * 5, Color.red);
+        // Debug.DrawRay(jumpRay.origin, jumpRay.direction * 0.3f, Color.blue);
         
         ItemRaycast(ray);
         ObjectRaycast(ray, ref _popup);
