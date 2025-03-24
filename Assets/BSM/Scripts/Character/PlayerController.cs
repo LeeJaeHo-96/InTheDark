@@ -112,9 +112,9 @@ public class PlayerController : MonoBehaviourPun
     {
         if (!photonView.IsMine) return;
         if (_computerObject != null && _computerObject.activeSelf) return;
-        if (_curState == PState.DEATH) return;
-        
         _playerStates[(int)_curState].Update();
+
+        if (_curState == PState.DEATH) return;
         InputKey();
         PositionUpdate();
         InputRotate();
