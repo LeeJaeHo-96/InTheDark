@@ -5,38 +5,36 @@ using UnityEngine;
 
 public class Item_FishingRod : Item
 {
-    private BoxCollider _fishingRodCollider;
     private Coroutine _attackCo;
     private Animator _animator;
     private Vector3 _originPos;
     private float _animationLength;
     private bool _isAttacked;
-    
-    protected override void Awake()
-    {
-        base.Awake();
-        _fishingRodCollider = GetComponent<BoxCollider>(); 
-    }
-
+ 
     public override void SetItemHoldPosition(Transform holdPos, float mouseX, float mouseY)
     {
         if (!_isAttacked)
         {
             transform.rotation = Quaternion.Euler(-mouseY, mouseX, 0);
-            
-            if (holdPos.TryGetComponent(out PhotonView view))
-            {
-                photonView.RPC(nameof(SyncSetParentRPC), RpcTarget.AllViaServer, view.ViewID, false);
-            }
+            ItemSetParent(holdPos, false); 
         }
         else
-        { 
-            if (holdPos.TryGetComponent(out PhotonView view))
-            {
-                photonView.RPC(nameof(SyncSetParentRPC), RpcTarget.AllViaServer, view.ViewID, true);
-            }
-             
-            photonView.RPC(nameof(SyncWeaponRotateRPC), RpcTarget.AllViaServer,holdPos.position.x, holdPos.position.y,holdPos.position.z, 90f);
+        {  
+            ItemSetParent(holdPos, true);  
+            photonView.RPC(nameof(SyncWeaponRotateRPC), RpcTarget.AllViaServer, 90f);
+        }
+    }
+    
+    /// <summary>
+    /// 아이템 부모 동기화
+    /// </summary>
+    /// <param name="holdPos">아이템이 이동할 위치</param>
+    /// <param name="isActive">활성화 여부</param>
+    private void ItemSetParent(Transform holdPos, bool isActive)
+    {
+        if (holdPos.TryGetComponent(out PhotonView view))
+        {
+            photonView.RPC(nameof(SyncSetParentRPC), RpcTarget.AllViaServer, view.ViewID, isActive);
         }
     }
  
@@ -49,12 +47,11 @@ public class Item_FishingRod : Item
         {
             transform.position = view.transform.position;
             transform.parent = isCondition ? view.transform : null; 
-        }
-        
+        } 
     }
     
     [PunRPC]
-    private void SyncWeaponRotateRPC(float posX, float posY, float posZ, float rotateY)
+    private void SyncWeaponRotateRPC(float rotateY)
     { 
         transform.localRotation = Quaternion.Euler(0, rotateY, 0);
     }

@@ -194,16 +194,14 @@ public class PlayerController : MonoBehaviourPun
         {
             if (CurCarryItem.GetHoldingType() == ItemHoldingType.ONEHANDED)
             {  
-                CurCarryItem.gameObject.SetActive(false); 
-                
+                ItemActive(CurCarryItem, false); 
                 
                 //변경할 슬롯의 아이템이 있는지 확인
                 if (_inventory.SelectedItem(index) != null)
                 {
                     SwapItemTypeCheck(CurCarryItem, _inventory.SelectedItem(index)); 
                     CurCarryItem = _inventory.SelectedItem(index); 
-                    CurCarryItem.gameObject.SetActive(true);
-                    
+                    ItemActive(CurCarryItem, true);  
                 }
                 else
                 {
@@ -221,12 +219,28 @@ public class PlayerController : MonoBehaviourPun
             if (_inventory.SelectedItem(index) != null)
             {
                 CurCarryItem = _inventory.SelectedItem(index);
-                CurCarryItem.gameObject.SetActive(true);  
+                ItemActive(CurCarryItem, true);  
                 CurItemTypeCheck(CurCarryItem);  
             }
         }  
     }
-  
+
+    /// <summary>
+    /// 아이템 활성화, 비활성화 동기화
+    /// </summary>
+    /// <param name="viewID">아이템 view ID</param>
+    /// <param name="isActive">활성화 여부</param>
+    [PunRPC]
+    private void SyncItemActiveRPC(int viewID, bool isActive)
+    {
+        PhotonView view = PhotonView.Find(viewID);
+        if (view != null)
+        {
+            view.gameObject.SetActive(isActive);
+        }
+        
+    }
+    
     /// <summary>
     /// 현재 아이템의 소유권자를 확인 후 위치 동기화
     /// </summary>
@@ -433,8 +447,8 @@ public class PlayerController : MonoBehaviourPun
             //현재 들고 있는 아이템과 다른 아이템을 주웠을 경우
             if (CurCarryItem != item)
             {
-                SwapItemTypeCheck(CurCarryItem, item); 
-                CurCarryItem.gameObject.SetActive(false); 
+                SwapItemTypeCheck(CurCarryItem, item);
+                ItemActive(CurCarryItem, false); 
                 CurCarryItem = item;
             }
         }
@@ -450,6 +464,14 @@ public class PlayerController : MonoBehaviourPun
          
         CurCarryItem.PickUp(PhotonNetwork.LocalPlayer);
         _playerStats.IsHoldingItem(_item.GetItemWeight());
+    }
+    
+    private void ItemActive(Item item, bool isActive)
+    {
+        if (item.TryGetComponent(out PhotonView view))
+        {
+            photonView.RPC(nameof(SyncItemActiveRPC), RpcTarget.AllViaServer, view.ViewID, isActive);
+        }
     }
     
     /// <summary>
