@@ -20,7 +20,7 @@ public class Item : MonoBehaviourPun
     
     protected float _attackRange;
     protected float _damage;
-    protected float _battery;
+    public float _battery;
     protected bool isPower = false;
     protected int _attackSpeedAniHash => Animator.StringToHash("AttackSpeed");
     
