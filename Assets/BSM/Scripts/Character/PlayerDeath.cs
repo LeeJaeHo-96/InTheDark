@@ -54,37 +54,11 @@ public class PlayerDeath : PlayerState
     }
     
     /// <summary>
-    /// 3인칭 시점
+    /// 카메라가 추적할 캐릭터 위치
     /// </summary>
     private void FollowCharacter()
     {
         _controller.ObserverPos = DataManager.Instance.PlayerObjects[_camIndex].PlayerBody.transform.position;
-        
-        // _controller.ObserverPos = new Vector3(
-        //     DataManager.Instance.PlayerObjects[_camIndex].PosX,
-        //     DataManager.Instance.PlayerObjects[_camIndex].PosY, 
-        //     DataManager.Instance.PlayerObjects[_camIndex].PosZ
-        // );
-        
-        // _mouseX += Input.GetAxisRaw("Mouse X");
-        // _mouseY -= Input.GetAxisRaw("Mouse Y");
-        
-        // Vector3 charPos = new Vector3(
-        //     GameManager.Instance.PlayerObjects[_camIndex].PosX,
-        //     GameManager.Instance.PlayerObjects[_camIndex].PosY, 
-        //     GameManager.Instance.PlayerObjects[_camIndex].PosZ
-        //     );
-        
-        //카메라 상,하 제한
-        // _mouseY = Mathf.Clamp(_mouseY, -50f, 20f);
-        // Quaternion rot = Quaternion.Euler(_mouseY, _mouseX, 0);
-        
-        //캐릭터와 카메라의 여유 거리
-        // Vector3 direction = new Vector3(0, 3f, -3f);
-        // _controller.PlayerCam.transform.position = charPos + rot * direction;
-        
-        //카메라 고정
-        //_controller.PlayerCam.transform.LookAt(charPos);
     }
 
 }

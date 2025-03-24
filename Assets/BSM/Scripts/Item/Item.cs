@@ -173,7 +173,7 @@ public class Item : MonoBehaviourPun
     /// 공격 아아팀 사용
     /// </summary>
     /// <param name="animator"></param>
-    public virtual void ItemUse(Animator animator) {}
+    public virtual void ItemUse(Animator animator, PlayerController playerController) {}
      
     /// <summary>
     /// 아이템 별 초기화 작업

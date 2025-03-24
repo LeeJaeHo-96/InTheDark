@@ -7,11 +7,9 @@ public class Item_FishingRod : Item
 {
     private BoxCollider _fishingRodCollider;
     private Coroutine _attackCo;
-    private Transform _holdPos;
-    
+    private Animator _animator;
     private Vector3 _originPos;
     private float _animationLength;
-    private float _animationSpeed;
     private bool _isAttacked;
     
     protected override void Awake()
@@ -22,29 +20,48 @@ public class Item_FishingRod : Item
 
     public override void SetItemHoldPosition(Transform holdPos, float mouseX, float mouseY)
     {
-        _holdPos = holdPos;
-        transform.position = holdPos.position;
         if (!_isAttacked)
         {
             transform.rotation = Quaternion.Euler(-mouseY, mouseX, 0);
-            transform.SetParent(null);
+            
+            if (holdPos.TryGetComponent(out PhotonView view))
+            {
+                photonView.RPC(nameof(SyncSetParentRPC), RpcTarget.AllViaServer, view.ViewID, false);
+            }
         }
         else
         { 
-            photonView.RPC(nameof(SyncParentRPC), RpcTarget.AllViaServer);
-            transform.localRotation = Quaternion.Euler(0, 90,0);
+            if (holdPos.TryGetComponent(out PhotonView view))
+            {
+                photonView.RPC(nameof(SyncSetParentRPC), RpcTarget.AllViaServer, view.ViewID, true);
+            }
+             
+            photonView.RPC(nameof(SyncWeaponRotateRPC), RpcTarget.AllViaServer,holdPos.position.x, holdPos.position.y,holdPos.position.z, 90f);
         }
     }
-
+ 
     [PunRPC]
-    private void SyncParentRPC()
+    private void SyncSetParentRPC(int viewID, bool isCondition)
     {
-        transform.SetParent(_holdPos);
+        PhotonView view = PhotonView.Find(viewID);
+
+        if (view != null)
+        {
+            transform.position = view.transform.position;
+            transform.parent = isCondition ? view.transform : null; 
+        }
+        
     }
     
-    public override void ItemUse(Animator animator)
+    [PunRPC]
+    private void SyncWeaponRotateRPC(float posX, float posY, float posZ, float rotateY)
+    { 
+        transform.localRotation = Quaternion.Euler(0, rotateY, 0);
+    }
+    
+    public override void ItemUse(Animator animator, PlayerController playerController)
     {
-        animator.SetFloat(_attackSpeedAniHash, _itemData.AttackSpeed);
+        playerController.BehaviourAnimation(_attackSpeedAniHash, _itemData.AttackSpeed);
         _animationLength = animator.GetCurrentAnimatorStateInfo(0).length;
         _isAttacked = true;
         _attackCo = StartCoroutine(AttackRoutine()); 

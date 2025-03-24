@@ -103,6 +103,8 @@ MonoBehaviour:
   - SyncItemPosRPC
   - SyncParentRPC
   - SyncItemActiveRPC
+  - SyncAttackAnimationSpeedRPC
+  - SyncWeaponRotateRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

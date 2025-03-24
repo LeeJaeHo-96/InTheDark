@@ -21,7 +21,7 @@ public class PlayerAttack : PlayerState
                     _controller.BehaviourAnimation(_attackAniHash);
                 }
                 
-                _controller.CurCarryItem.ItemUse(_controller.PlayerAnimator);
+                _controller.CurCarryItem.ItemUse(_controller.PlayerAnimator, _controller);
             }
             else
             {
