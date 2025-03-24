@@ -53,7 +53,7 @@ public class PlayerState : StateMachine
             yield return new WaitForSeconds(0.8f); 
             _controller.PlayerStats.Stamina += 5;
             _controller.PlayerStats.Stamina = Mathf.Clamp(_controller.PlayerStats.Stamina, 0, _controller.PlayerStats.MaxStamina);
-            _controller.PlayerStats.OnChangedStamina?.Invoke(_controller.PlayerStats.Stamina); 
+            _controller.PlayerStats.OnChangedStamina?.Invoke(_controller.PlayerStats.Stamina ); 
         }  
     }
     
