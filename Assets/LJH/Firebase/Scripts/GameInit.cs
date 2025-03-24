@@ -6,6 +6,12 @@ using UnityEngine.UI;
 
 public class GameInit : BaseUI
 {
+    //  테스트용 스크립트임
+    //
+    //
+    //
+    //
+    //
 
     [Header("텍스트")]
     public TMP_Text dayText;
@@ -24,8 +30,9 @@ public class GameInit : BaseUI
 
     private void Start()
     {
-        Database.instance.dayText = dayText;
-        Database.instance.moneyText = moneyText;
+        //테스트 코드
+        //Database.instance.dayText = dayText;
+        //Database.instance.moneyText = moneyText;
     }
 
     void ExitButton()
@@ -42,13 +49,13 @@ public class GameInit : BaseUI
 
     void PlusDay()
     {
-            Database.instance.days += 1;
-            dayText.text = Database.instance.days.ToString();
+            //Database.instance.days += 1;
+            //dayText.text = Database.instance.days.ToString();
     }
     void PlusMoney()
     {
-            Database.instance.money += 100;
-            moneyText.text = Database.instance.money.ToString();
+            //Database.instance.money += 100;
+            //moneyText.text = Database.instance.money.ToString();
     }
     void Init()
     {

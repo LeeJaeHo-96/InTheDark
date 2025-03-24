@@ -18,15 +18,12 @@ public class Database : BaseUI
 {
     public static Database instance = null;
 
-
-    [Header("저장할 변수")]
-    public int money;
-    public int days;
-    ObjectInfo obj;
+    const int DefaultMoney = 250;
+    const int DefaultDays = 0;
 
     [Header("텍스트")]
-    public TMP_Text dayText;
-    public TMP_Text moneyText;
+    //public TMP_Text dayText;
+    //public TMP_Text moneyText;
 
     DatabaseReference database;
 
@@ -112,89 +109,59 @@ public class Database : BaseUI
                 {
                     Debug.Log($"데이터 불러오기 성공! 전체 데이터: {snapshot.GetRawJsonValue()}");
 
-                    // 직접 개별 값 가져오기
-                    int money = 150;
-                    int days = 1;
+                    //테스트코드
+                    //int money;
+                    //int days;
 
                     if (snapshot.HasChild("Money"))
                     {
                         object moneyValue = snapshot.Child("Money").Value;
+                        Debug.Log($"{moneyValue}");
                         if (moneyValue != null)
                         {
-                            money = Convert.ToInt32(moneyValue);
+                            Debug.Log($"인게임매니저 머니{IngameManager.Instance.money}, 데이터베이스 머니 {Convert.ToInt32(moneyValue)}");
+                            IngameManager.Instance.money = Convert.ToInt32(moneyValue);
+                            Debug.Log($"인게임매니저 머니{IngameManager.Instance.money}, 데이터베이스 머니 {Convert.ToInt32(moneyValue)}");
                         }
                     }
+                    else
+                    {
+                        IngameManager.Instance.money = DefaultMoney;
+                    }
+
+
                     if (snapshot.HasChild("Days"))
                     {
                         object daysValue = snapshot.Child("Days").Value;
                         if (daysValue != null)
                         {
-                            days = Convert.ToInt32(daysValue);
+                            IngameManager.Instance.days = Convert.ToInt32(daysValue);
                         }
-                    }
-
-                    // UI 업데이트
-                    moneyText.text = money.ToString();
-                    dayText.text = days.ToString();
-
-                    Debug.Log($"데이터 불러오기 성공! 플레이어 ID: {playerId}, 슬롯: {slot}, 보유금: {money}, 날짜: {days}");
-                }
-                else
-                {
-                    Debug.Log("저장된 슬롯 데이터가 없습니다. 새로운 슬롯 데이터를 불러옵니다.");
-                    moneyText.text = "150";
-                    dayText.text = "1";
-                }
-            }
-        });
-    }
-    public void LoadData1(string playerId, string slot)
-    {
-        database.Child("UserData").Child(playerId).Child(slot)
-        .GetValueAsync()
-        .ContinueWithOnMainThread(task =>
-        {
-            if (task.IsFaulted)
-            {
-                Debug.LogError("데이터 불러오기 실패: " + task.Exception);
-            }
-            else if (task.IsCompleted)
-            {
-                DataSnapshot snapshot = task.Result;
-
-                if (snapshot != null)
-                {
-                    Debug.Log($"데이터 불러오기 성공! 전체 데이터: {snapshot.GetRawJsonValue()}");
-
-                    // Dictionary 변환 시도
-                    Dictionary<string, object> slotData = snapshot.Value as Dictionary<string, object>;
-
-                    if (slotData != null)
-                    {
-                        // Money 값 가져오기
-                        int money = slotData.ContainsKey("Money") && slotData["Money"] is long moneyValue ? (int)moneyValue : 150;
-
-                        // Days 값 가져오기
-                        int days = slotData.ContainsKey("Days") && slotData["Days"] is long daysValue ? (int)daysValue : 1;
-
-                        // UI 업데이트
-                        moneyText.text = money.ToString();
-                        dayText.text = days.ToString();
-
-                        Debug.Log($"데이터 불러오기 성공! 플레이어 ID: {playerId}, 슬롯: {slot}, 보유금: {money}, 날짜: {days}");
                     }
                     else
                     {
-                        Debug.Log("slotData 변환 실패! 기본값으로 설정");
-                        moneyText.text = "150";
-                        dayText.text = "1";
+                        IngameManager.Instance.days = DefaultDays;
                     }
+
+                    // UI 업데이트 테스트 코드
+                    //moneyText.text = money.ToString();
+                    //dayText.text = days.ToString();
+
+                    //IngameManager.Instance.money = money;
+                    //IngameManager.Instance.days = days;
+
+                    Debug.Log($"데이터 불러오기 성공! 플레이어 ID: {playerId}");
                 }
                 else
                 {
                     Debug.Log("저장된 슬롯 데이터가 없습니다. 새로운 슬롯 데이터를 불러옵니다.");
-                    moneyText.text = "150";
-                    dayText.text = "1";
+                    //테스트 코드
+                    //moneyText.text = "150";
+                    //dayText.text = "1";
+
+                    IngameManager.Instance.money = 250;
+                    IngameManager.Instance.days = 1;
+
                 }
             }
         });
@@ -205,13 +172,13 @@ public class Database : BaseUI
 
         database = FirebaseDatabase.DefaultInstance.RootReference;
 
-
-        if (dayText != null)
-            if (moneyText != null)
-            {
-                dayText.text = "1";
-                moneyText.text = "150";
-            }
+       //테스트 코드
+       // if (dayText != null)
+       //     if (moneyText != null)
+       //     {
+       //         dayText.text = "1";
+       //         moneyText.text = "150";
+       //     }
     }
 
     void SingletonInit()
