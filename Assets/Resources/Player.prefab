@@ -1248,7 +1248,7 @@ MonoBehaviour:
   PosZ: 0
   CanJump: 0
   IsDeath: 0
-  PlayerBody: {fileID: 2515424160470413546}
+  PlayerBody: {fileID: 4292091855633113344}
   PlayerCanvas: {fileID: 3326468129210432393}
   PlayerCam: {fileID: 3326468129756038850}
   OnTriggerOther: {fileID: 0}
@@ -1256,6 +1256,7 @@ MonoBehaviour:
   CurCarryItem: {fileID: 0}
   PlayerAnimator: {fileID: 0}
   MoveDir: {x: 0, y: 0, z: 0}
+  ObserverPos: {x: 0, y: 0, z: 0}
 --- !u!114 &3326468128879972729
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2202,8 +2203,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 916b188d5c3f799418deb25263e526a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsCameraBlocked: 0
   HeadPos: {fileID: 9209815787856165075}
+  _camDistance: 1
 --- !u!1 &3326468130035162471
 GameObject:
   m_ObjectHideFlags: 0

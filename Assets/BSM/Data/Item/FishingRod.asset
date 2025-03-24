@@ -22,6 +22,6 @@ MonoBehaviour:
   MaxDurability: 0
   AttackSpeed: 1.2
   AttackRange: 0.25
-  Damage: 2
+  Damage: 30
   ItemSellPrice: 10
   ItemBuyPrice: 100

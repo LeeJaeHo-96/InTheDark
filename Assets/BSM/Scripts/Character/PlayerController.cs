@@ -28,7 +28,8 @@ public class PlayerController : MonoBehaviourPun
     public Animator PlayerAnimator;
     public PState CurState => _curState;
     public Vector3 MoveDir = Vector3.zero;
- 
+    public Vector3 ObserverPos;
+    
     private PlayerState[] _playerStates = new PlayerState[(int)PState.SIZE];
     private PlayerStats _playerStats;
     private Rigidbody _playerRb; 
@@ -176,14 +177,15 @@ public class PlayerController : MonoBehaviourPun
             CarryItemChange(3);
         } 
     }
-    
+
+
+    private GameObject temp;
     /// <summary>
     /// 들고있는 아이템 변경
     /// </summary>
     /// <param name="index"></param>
-    private void CarryItemChange(int index)
-    {
- 
+    public void CarryItemChange(int index)
+    { 
         _curInventoryIndex = index;
         
         //들고 있는 아이템이 있는지 확인
@@ -193,12 +195,14 @@ public class PlayerController : MonoBehaviourPun
             {  
                 CurCarryItem.gameObject.SetActive(false); 
                 
+                
                 //변경할 슬롯의 아이템이 있는지 확인
                 if (_inventory.SelectedItem(index) != null)
                 {
                     SwapItemTypeCheck(CurCarryItem, _inventory.SelectedItem(index)); 
                     CurCarryItem = _inventory.SelectedItem(index); 
-                    CurCarryItem.gameObject.SetActive(true); 
+                    CurCarryItem.gameObject.SetActive(true);
+                    
                 }
                 else
                 {
@@ -216,13 +220,12 @@ public class PlayerController : MonoBehaviourPun
             if (_inventory.SelectedItem(index) != null)
             {
                 CurCarryItem = _inventory.SelectedItem(index);
-                CurCarryItem.gameObject.SetActive(true); 
+                CurCarryItem.gameObject.SetActive(true);  
                 CurItemTypeCheck(CurCarryItem);  
             }
         }  
     }
-    
-    
+  
     /// <summary>
     /// 현재 아이템의 소유권자를 확인 후 위치 동기화
     /// </summary>

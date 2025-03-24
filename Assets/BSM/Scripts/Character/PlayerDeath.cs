@@ -31,7 +31,7 @@ public class PlayerDeath : PlayerState
 
     public override void Update()
     {
-        TPS();
+        FollowCharacter();
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -46,35 +46,45 @@ public class PlayerDeath : PlayerState
     {
         do
         {
-            _camIndex = (_camIndex + 1) % GameManager.Instance.PlayerObjects.Count;
+            _camIndex = (_camIndex + 1) % DataManager.Instance.PlayerObjects.Count; 
             
-        } while (GameManager.Instance.PlayerObjects[_camIndex].IsDeath);
+            _controller.PlayerCam.transform.SetParent(DataManager.Instance.PlayerObjects[_camIndex].PlayerBody.transform);
+            
+        } while (DataManager.Instance.PlayerObjects[_camIndex].IsDeath);
     }
     
     /// <summary>
     /// 3인칭 시점
     /// </summary>
-    private void TPS()
+    private void FollowCharacter()
     {
-        _mouseX += Input.GetAxisRaw("Mouse X");
-        _mouseY -= Input.GetAxisRaw("Mouse Y");
+        _controller.ObserverPos = DataManager.Instance.PlayerObjects[_camIndex].PlayerBody.transform.position;
         
-        Vector3 charPos = new Vector3(
-            GameManager.Instance.PlayerObjects[_camIndex].PosX,
-            GameManager.Instance.PlayerObjects[_camIndex].PosY, 
-            GameManager.Instance.PlayerObjects[_camIndex].PosZ
-            );
+        // _controller.ObserverPos = new Vector3(
+        //     DataManager.Instance.PlayerObjects[_camIndex].PosX,
+        //     DataManager.Instance.PlayerObjects[_camIndex].PosY, 
+        //     DataManager.Instance.PlayerObjects[_camIndex].PosZ
+        // );
+        
+        // _mouseX += Input.GetAxisRaw("Mouse X");
+        // _mouseY -= Input.GetAxisRaw("Mouse Y");
+        
+        // Vector3 charPos = new Vector3(
+        //     GameManager.Instance.PlayerObjects[_camIndex].PosX,
+        //     GameManager.Instance.PlayerObjects[_camIndex].PosY, 
+        //     GameManager.Instance.PlayerObjects[_camIndex].PosZ
+        //     );
         
         //카메라 상,하 제한
-        _mouseY = Mathf.Clamp(_mouseY, -50f, 20f);
-        Quaternion rot = Quaternion.Euler(_mouseY, _mouseX, 0);
+        // _mouseY = Mathf.Clamp(_mouseY, -50f, 20f);
+        // Quaternion rot = Quaternion.Euler(_mouseY, _mouseX, 0);
         
         //캐릭터와 카메라의 여유 거리
-        Vector3 direction = new Vector3(0, 3f, -3f);
-        _controller.PlayerCam.transform.position = charPos + rot * direction;
+        // Vector3 direction = new Vector3(0, 3f, -3f);
+        // _controller.PlayerCam.transform.position = charPos + rot * direction;
         
         //카메라 고정
-        _controller.PlayerCam.transform.LookAt(charPos);
+        //_controller.PlayerCam.transform.LookAt(charPos);
     }
 
 }

@@ -188,7 +188,12 @@ public class Item : MonoBehaviourPun
     public int GetSellPrice() => _itemData.ItemSellPrice;
     
     public int GetBuyPrice() => _itemData.ItemBuyPrice;
-    
+
+    [PunRPC]
+    public void SyncItemActiveRPC(bool isActive)
+    {
+        gameObject.SetActive(isActive);
+    }
     
     [PunRPC]
     protected void SyncAttackingRPC(bool isAttacking)

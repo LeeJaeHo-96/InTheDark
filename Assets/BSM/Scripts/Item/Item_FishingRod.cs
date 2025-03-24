@@ -30,10 +30,16 @@ public class Item_FishingRod : Item
             transform.SetParent(null);
         }
         else
-        {
-            transform.SetParent(_holdPos);
+        { 
+            photonView.RPC(nameof(SyncParentRPC), RpcTarget.AllViaServer);
             transform.localRotation = Quaternion.Euler(0, 90,0);
         }
+    }
+
+    [PunRPC]
+    private void SyncParentRPC()
+    {
+        transform.SetParent(_holdPos);
     }
     
     public override void ItemUse(Animator animator)
