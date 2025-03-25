@@ -1270,6 +1270,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CanCarry: 0
+  TempStamina: 0
 --- !u!114 &3326468128879972728
 MonoBehaviour:
   m_ObjectHideFlags: 0
