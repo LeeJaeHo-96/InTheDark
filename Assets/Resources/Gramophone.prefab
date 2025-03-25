@@ -222,6 +222,7 @@ MonoBehaviour:
   _itemID: 6
   IsOwned: 0
   IsAttacking: 0
+  _battery: 0
 --- !u!1 &1643032087812020753
 GameObject:
   m_ObjectHideFlags: 0

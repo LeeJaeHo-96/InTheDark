@@ -27,6 +27,11 @@ public class M_ReturnState : IMonsterState
         {
             monster.stateMachine.ChangeState(new M_IdleState(), monster);
         }
+
+        if (monster.Hp <= 0)
+        {
+            monster.stateMachine.ChangeState(new M_DeadState(), monster);
+        }
     }
 
     public void Exit()

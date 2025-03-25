@@ -1824,6 +1824,7 @@ MonoBehaviour:
   playerList: []
   agent: {fileID: 0}
   spawnPointPos: {x: 0, y: 0, z: 0}
+  Hp: 60
 --- !u!135 &8655203185300316647
 SphereCollider:
   m_ObjectHideFlags: 0

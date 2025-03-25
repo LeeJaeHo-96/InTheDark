@@ -18,6 +18,8 @@ public class Monster : MonoBehaviourPun
 
     float attackDistance = 5f;
 
+    public int Hp = 60;
+
     private void Start()
     {
         Init();
@@ -122,7 +124,7 @@ public class Monster : MonoBehaviourPun
     public void Attack()
     {
         Debug.Log("АјАн");
-        playerList[0].GetComponent<PlayerStats>().CurHP -= 1;
+        playerList[0].GetComponent<PlayerStats>().CurHP -= 30;
     }
 
 
