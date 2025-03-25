@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
     private int _indoorLayerIndexValue => LayerMask.NameToLayer("InDoor");
     private static int _refreshRate;
     private int _itemLayer;
-
+    private int _playerCount = 0;
 
     private ColorGrading PostVolume; 
     private PostProcessProfile _postProfile;
@@ -86,8 +86,12 @@ public class GameManager : MonoBehaviour
     {
         while (true)
         {
-            PlayerObjects.Clear();
-            PlayerObjects = FindObjectsOfType<PlayerController>().ToList();
+            if (PhotonNetwork.InRoom && _playerCount != PhotonNetwork.CurrentRoom.PlayerCount)
+            {
+                _playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
+                PlayerObjects.Clear();
+                PlayerObjects = FindObjectsOfType<PlayerController>().ToList();
+            } 
             yield return new WaitForSeconds(0.5f);
         }
     }    
