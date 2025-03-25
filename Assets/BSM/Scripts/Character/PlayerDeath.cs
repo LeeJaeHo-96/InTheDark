@@ -48,8 +48,6 @@ public class PlayerDeath : PlayerState
         {
             _camIndex = (_camIndex + 1) % DataManager.Instance.PlayerObjects.Count; 
             
-            _controller.PlayerCam.transform.SetParent(DataManager.Instance.PlayerObjects[_camIndex].PlayerBody.transform);
-            
         } while (DataManager.Instance.PlayerObjects[_camIndex].IsDeath);
     }
     

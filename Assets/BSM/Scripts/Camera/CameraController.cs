@@ -7,6 +7,7 @@ public class CameraController : MonoBehaviour
 {
     public Transform HeadPos;
 
+    private Vector3 _currentVelocity;
     private Camera _camera;
     private PlayerController _playerController;
     private Ray _ray;
@@ -64,8 +65,7 @@ public class CameraController : MonoBehaviour
     private void TPSInput()
     {
         if (_playerController.CurState != PState.DEATH) return;
-
-
+ 
         //카메라가 캐릭터를 비출 위치
         _camPos = _playerController.ObserverPos - transform.forward * _camDistance;
 
@@ -78,10 +78,7 @@ public class CameraController : MonoBehaviour
 
         //카메라 회전시킬 Quaternion
         _rot = Quaternion.Euler(_mouseY, _mouseX, 0f);
-
-        //카메라는 캐릭터를 바라보도록
-        transform.LookAt(_playerController.ObserverPos);
-
+ 
         //캐릭터 -> 카메라 방향 벡터
         Vector3 _camDir = transform.position - _playerController.ObserverPos;
 
@@ -105,9 +102,9 @@ public class CameraController : MonoBehaviour
     /// </summary>
     private void TPS()
     {
-        if (_playerController.CurState != PState.DEATH) return;
-
-        transform.position = Vector3.Lerp(transform.position, _camPos, 5f * Time.deltaTime);
-        transform.rotation = _rot;
+        if (_playerController.CurState != PState.DEATH) return; 
+        
+        transform.position = Vector3.SmoothDamp(transform.position, _camPos, ref _currentVelocity, 0.1f);
+        transform.rotation = _rot; 
     }
 }
