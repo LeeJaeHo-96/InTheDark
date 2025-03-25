@@ -21,7 +21,7 @@ public class Item_FishingRod : Item
         else
         {  
             ItemSetParent(holdPos, true);  
-            photonView.RPC(nameof(SyncWeaponRotateRPC), RpcTarget.AllViaServer, 90f);
+            photonView.RPC(nameof(SyncWeaponRotateRPC), RpcTarget.AllViaServer, 180f);
         }
     }
     
