@@ -29,9 +29,6 @@ public class BuildingDoor : MonoBehaviourPun, IHitMe
 
     private void Update()
     {
-        if (!photonView.IsMine)
-            return;
-
         OpenDoor();
     }
 
