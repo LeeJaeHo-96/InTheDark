@@ -8,7 +8,6 @@ public class SpawPos : MonoBehaviourPun
     GameObject player;
     void Start()
     {
-        player = GameObject.FindWithTag(Tag.Player);
 
         photonView.RPC("RPCplayerPosSet", RpcTarget.AllViaServer);
     }
@@ -16,6 +15,7 @@ public class SpawPos : MonoBehaviourPun
     [PunRPC]
     void RPCplayerPosSet()
     {
+        player = GameObject.FindWithTag(Tag.Player);
         player.transform.position = transform.position;
     }
 

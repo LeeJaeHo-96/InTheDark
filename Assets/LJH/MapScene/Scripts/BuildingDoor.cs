@@ -12,6 +12,7 @@ public class BuildingDoor : MonoBehaviourPun, IHitMe
     Coroutine doorIncreaseCo;
 
     GameObject player;
+    GameObject[] players = new GameObject[4];
     [SerializeField] GameObject buildingSpawner;
     Vector3 buildingSpawnerPos;
 
@@ -56,7 +57,7 @@ public class BuildingDoor : MonoBehaviourPun, IHitMe
             yield return null;
 
             if (progressBar.fillAmount >= 1)
-                player.transform.position = buildingSpawnerPos;
+               player.transform.position = buildingSpawnerPos;
         }
     }
 }
