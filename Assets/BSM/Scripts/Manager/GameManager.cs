@@ -29,7 +29,8 @@ public class GameManager : MonoBehaviour
     private static int _refreshRate;
     private int _itemLayer;
     private int _playerCount = 0;
-
+    
+    private SoundManager _soundManager;
     private ColorGrading PostVolume; 
     private PostProcessProfile _postProfile;
     private Dictionary<int, int> _frameDict = new Dictionary<int, int>()
@@ -61,6 +62,7 @@ public class GameManager : MonoBehaviour
     {
         //TODO: 임시로 가져오는 user id
         CurUser = FirebaseManager.Auth.CurrentUser; 
+        _soundManager = SoundManager.Instance;
         StartFrame();
         StartWindowMode();
         StartGammaBrightness(); 
@@ -178,4 +180,19 @@ public class GameManager : MonoBehaviour
         PostVolume.gamma.value = new Vector4(CurGammaBrightness, CurGammaBrightness, CurGammaBrightness, CurGammaBrightness);
     }
 
+    /// <summary>
+    /// 현재 씬 위치에 따른 BGM 재생
+    /// </summary>
+    /// <param name="sceneType"></param>
+    public void SceneBGM(SceneType sceneType)
+    {
+        string sceneName = sceneType switch
+        {
+            SceneType.MAIN => "LobbyBGM",
+            SceneType.INGAME => "MainBGM"
+        };
+        
+        _soundManager.PlayBGM(_soundManager.SoundDatas.SoundDict[sceneName]);
+    }
+    
 }

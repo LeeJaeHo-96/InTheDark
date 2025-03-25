@@ -115,6 +115,7 @@ public class PunManager : MonoBehaviourPunCallbacks
     /// </summary>
     private void GoToWaitingScene()
     { 
+        GameManager.Instance.SceneBGM(SceneType.INGAME);
         PhotonNetwork.LoadLevel(SceneUtility.GetBuildIndexByScenePath("WaitingScene")); 
     }
 
@@ -123,6 +124,7 @@ public class PunManager : MonoBehaviourPunCallbacks
     /// </summary>
     private void GoToStartScene()
     {
+        GameManager.Instance.SceneBGM(SceneType.MAIN);
         PhotonNetwork.LoadLevel(SceneUtility.GetBuildIndexByScenePath("StartScene"));
     }
 }

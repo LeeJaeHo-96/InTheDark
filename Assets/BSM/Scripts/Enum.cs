@@ -22,3 +22,9 @@ public enum ItemHoldingType
 {
     ONEHANDED, TWOHANDED
 }
+
+[System.Serializable]
+public enum SceneType
+{
+    MAIN, INGAME
+}

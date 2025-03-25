@@ -952,6 +952,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SoundDatas: {fileID: 11400000, guid: 4615cf904e30ce04ea16cb4e56872fb2, type: 2}
   _audioMixer: {fileID: 24100000, guid: 045771410c0c4ba478039002f4719be4, type: 2}
+  _sfxSource: {fileID: 1879173019}
+  _bgmSource: {fileID: 1925064760}
 --- !u!4 &873001688
 Transform:
   m_ObjectHideFlags: 0
@@ -2754,11 +2756,11 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -1929154232727244177, guid: 045771410c0c4ba478039002f4719be4,
     type: 2}
-  m_audioClip: {fileID: 8300000, guid: 63510e65f3ff40847bf15a324590a776, type: 3}
+  m_audioClip: {fileID: 8300000, guid: edd338fdf57f55a41b7380cce8a0a6d4, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
