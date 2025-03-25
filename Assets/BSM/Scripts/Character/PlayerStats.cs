@@ -8,7 +8,14 @@ using UnityEngine.Events;
 public class PlayerStats : MonoBehaviourPun
 {
     public bool CanCarry;
-  
+
+    public float TempStamina;
+
+    private void Update()
+    {
+        TempStamina = _stamina;
+    }
+
     //TODO: 전체적인 수치는 조정 필요
     private float _walkSpeed = 2f;
 

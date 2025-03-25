@@ -24,12 +24,12 @@ public class PlayerController : MonoBehaviourPun
     public Coroutine ConsumeStaminaCo;
     public Coroutine RecoverStaminaCo;
     public Transform ItemHoldPos;
-    public Transform HeadPos;
     public Item CurCarryItem;
     public Animator PlayerAnimator;
     public PState CurState => _curState;
     public Vector3 MoveDir = Vector3.zero;
- 
+    public Vector3 ObserverPos;
+    
     private PlayerState[] _playerStates = new PlayerState[(int)PState.SIZE];
     private PlayerStats _playerStats;
     private Rigidbody _playerRb; 
@@ -39,7 +39,6 @@ public class PlayerController : MonoBehaviourPun
     private NewDoor _newDoor;
     private InDoor _inDoor;
     private GameObject _computerObject;
-    private List<Item_FlashLight> _carryFlashLights = new List<Item_FlashLight>();
     
     private PState _curState = PState.IDLE;
 
@@ -85,8 +84,8 @@ public class PlayerController : MonoBehaviourPun
             PlayerCam.gameObject.SetActive(false);
             PlayerCanvas.gameObject.SetActive(false);
             return;
-        } 
-        
+        }
+ 
         PlayerCam.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity); 
         _playerStates[(int)_curState].Enter();
     }
@@ -112,9 +111,10 @@ public class PlayerController : MonoBehaviourPun
     private void Update()
     {
         if (!photonView.IsMine) return;
-        if (_computerObject != null && _computerObject.activeSelf) return; 
-        
+        if (_computerObject != null && _computerObject.activeSelf) return;
         _playerStates[(int)_curState].Update();
+
+        if (_curState == PState.DEATH) return;
         InputKey();
         PositionUpdate();
         InputRotate();
@@ -122,14 +122,6 @@ public class PlayerController : MonoBehaviourPun
         DropItem();
         ItemPositionToArm();
         SelectInventoryInItem();
-    }
-
-    private void LateUpdate()
-    {
-        if (_computerObject != null && _computerObject.activeSelf) return;
-        if (IsDeath) return;
-        
-        PlayerCam.transform.position = Vector3.Lerp(PlayerCam.transform.position, HeadPos.transform.position, 5f * Time.deltaTime);
     }
 
     private void FixedUpdate()
@@ -186,14 +178,15 @@ public class PlayerController : MonoBehaviourPun
             CarryItemChange(3);
         } 
     }
-    
+
+
+    private GameObject temp;
     /// <summary>
     /// 들고있는 아이템 변경
     /// </summary>
     /// <param name="index"></param>
-    private void CarryItemChange(int index)
-    {
- 
+    public void CarryItemChange(int index)
+    { 
         _curInventoryIndex = index;
         
         //들고 있는 아이템이 있는지 확인
@@ -201,14 +194,14 @@ public class PlayerController : MonoBehaviourPun
         {
             if (CurCarryItem.GetHoldingType() == ItemHoldingType.ONEHANDED)
             {  
-                CurCarryItem.gameObject.SetActive(false); 
+                ItemActive(CurCarryItem, false); 
                 
                 //변경할 슬롯의 아이템이 있는지 확인
                 if (_inventory.SelectedItem(index) != null)
                 {
                     SwapItemTypeCheck(CurCarryItem, _inventory.SelectedItem(index)); 
                     CurCarryItem = _inventory.SelectedItem(index); 
-                    CurCarryItem.gameObject.SetActive(true); 
+                    ItemActive(CurCarryItem, true);  
                 }
                 else
                 {
@@ -226,12 +219,27 @@ public class PlayerController : MonoBehaviourPun
             if (_inventory.SelectedItem(index) != null)
             {
                 CurCarryItem = _inventory.SelectedItem(index);
-                CurCarryItem.gameObject.SetActive(true); 
+                ItemActive(CurCarryItem, true);  
                 CurItemTypeCheck(CurCarryItem);  
             }
         }  
     }
-    
+
+    /// <summary>
+    /// 아이템 활성화, 비활성화 동기화
+    /// </summary>
+    /// <param name="viewID">아이템 view ID</param>
+    /// <param name="isActive">활성화 여부</param>
+    [PunRPC]
+    private void SyncItemActiveRPC(int viewID, bool isActive)
+    {
+        PhotonView view = PhotonView.Find(viewID);
+        if (view != null)
+        {
+            view.gameObject.SetActive(isActive);
+        }
+        
+    }
     
     /// <summary>
     /// 현재 아이템의 소유권자를 확인 후 위치 동기화
@@ -251,6 +259,7 @@ public class PlayerController : MonoBehaviourPun
     private void InputRotate()
     {
         if (IsDeath) return;
+        if (_computerObject != null && _computerObject.activeSelf) return;
         
         _mouseX += Input.GetAxisRaw("Mouse X") * _sensitivity * Time.deltaTime;
         _mouseY += Input.GetAxisRaw("Mouse Y");
@@ -283,8 +292,8 @@ public class PlayerController : MonoBehaviourPun
         Ray ray = new Ray(PlayerCam.transform.position, PlayerCam.transform.forward);
         Ray jumpRay = new Ray(transform.position + Vector3.up * 0.1f, Vector3.down);
         
-        Debug.DrawRay(ray.origin, ray.direction * 5, Color.red);
-        Debug.DrawRay(jumpRay.origin, jumpRay.direction * 0.3f, Color.blue);
+        // Debug.DrawRay(ray.origin, ray.direction * 5, Color.red);
+        // Debug.DrawRay(jumpRay.origin, jumpRay.direction * 0.3f, Color.blue);
         
         ItemRaycast(ray);
         ObjectRaycast(ray, ref _popup);
@@ -438,8 +447,8 @@ public class PlayerController : MonoBehaviourPun
             //현재 들고 있는 아이템과 다른 아이템을 주웠을 경우
             if (CurCarryItem != item)
             {
-                SwapItemTypeCheck(CurCarryItem, item); 
-                CurCarryItem.gameObject.SetActive(false); 
+                SwapItemTypeCheck(CurCarryItem, item);
+                ItemActive(CurCarryItem, false); 
                 CurCarryItem = item;
             }
         }
@@ -455,6 +464,14 @@ public class PlayerController : MonoBehaviourPun
          
         CurCarryItem.PickUp(PhotonNetwork.LocalPlayer);
         _playerStats.IsHoldingItem(_item.GetItemWeight());
+    }
+    
+    private void ItemActive(Item item, bool isActive)
+    {
+        if (item.TryGetComponent(out PhotonView view))
+        {
+            photonView.RPC(nameof(SyncItemActiveRPC), RpcTarget.AllViaServer, view.ViewID, isActive);
+        }
     }
     
     /// <summary>

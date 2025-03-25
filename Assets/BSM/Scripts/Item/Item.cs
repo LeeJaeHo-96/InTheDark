@@ -20,7 +20,7 @@ public class Item : MonoBehaviourPun
     
     protected float _attackRange;
     protected float _damage;
-    protected float _battery;
+    public float _battery;
     protected bool isPower = false;
     protected int _attackSpeedAniHash => Animator.StringToHash("AttackSpeed");
     
@@ -173,7 +173,7 @@ public class Item : MonoBehaviourPun
     /// 공격 아아팀 사용
     /// </summary>
     /// <param name="animator"></param>
-    public virtual void ItemUse(Animator animator) {}
+    public virtual void ItemUse(Animator animator, PlayerController playerController) {}
      
     /// <summary>
     /// 아이템 별 초기화 작업
@@ -188,7 +188,12 @@ public class Item : MonoBehaviourPun
     public int GetSellPrice() => _itemData.ItemSellPrice;
     
     public int GetBuyPrice() => _itemData.ItemBuyPrice;
-    
+
+    [PunRPC]
+    public void SyncItemActiveRPC(bool isActive)
+    {
+        gameObject.SetActive(isActive);
+    }
     
     [PunRPC]
     protected void SyncAttackingRPC(bool isAttacking)

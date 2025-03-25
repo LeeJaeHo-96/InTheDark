@@ -100,6 +100,13 @@ MonoBehaviour:
   - SyncBehaviourAnimation
   - SyncMoveAnimation
   - SyncBatteryRPC
+  - SyncItemPosRPC
+  - SyncParentRPC
+  - SyncItemActiveRPC
+  - SyncAttackAnimationSpeedRPC
+  - SyncWeaponRotateRPC
+  - SyncSetParentRPC
+  - SyncParentClearRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

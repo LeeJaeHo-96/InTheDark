@@ -1,18 +1,20 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Item_FlashLight : Item
 {
+    public Light FlashLight;
+    public GameObject FlashLightObject;
+    
     private Coroutine _flashCo;
-    
-    private Light _flashLight;
-    
-    protected override void Awake()
+
+    private void OnDisable()
     {
-        base.Awake();
-        _flashLight = GetComponentInChildren<Light>(); 
+        ItemDrop();
     }
 
     public override void SetItemHoldPosition(Transform holdPos, float mouseX, float mouseY)
@@ -35,9 +37,6 @@ public class Item_FlashLight : Item
         }
         else
         { 
-            //배터리 공유
-            photonView.RPC(nameof(SyncBatteryRPC), RpcTarget.AllViaServer, _battery);
-            
             StopCoroutine(_flashCo);
             _flashCo = null;
         }
@@ -46,7 +45,8 @@ public class Item_FlashLight : Item
     [PunRPC]
     private void SyncLight(bool isOn)
     {
-        _flashLight.enabled = isOn;
+        FlashLight.enabled = isOn;
+        FlashLightObject.SetActive(isOn);
     }
      
     private IEnumerator FlashLightRoutine()
@@ -89,6 +89,9 @@ public class Item_FlashLight : Item
     {
         isPower = false; 
         photonView.RPC(nameof(SyncLight),RpcTarget.AllViaServer, false);
+        
+        //배터리 공유
+        photonView.RPC(nameof(SyncBatteryRPC), RpcTarget.AllViaServer, _battery);
         
         if (_flashCo != null)
         {

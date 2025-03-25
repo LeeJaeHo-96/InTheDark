@@ -5,40 +5,60 @@ using UnityEngine;
 
 public class Item_FishingRod : Item
 {
-    private BoxCollider _fishingRodCollider;
     private Coroutine _attackCo;
-    private Transform _holdPos;
-    
+    private Animator _animator;
     private Vector3 _originPos;
     private float _animationLength;
-    private float _animationSpeed;
     private bool _isAttacked;
-    
-    protected override void Awake()
-    {
-        base.Awake();
-        _fishingRodCollider = GetComponent<BoxCollider>(); 
-    }
-
+ 
     public override void SetItemHoldPosition(Transform holdPos, float mouseX, float mouseY)
     {
-        _holdPos = holdPos;
-        transform.position = holdPos.position;
         if (!_isAttacked)
         {
             transform.rotation = Quaternion.Euler(-mouseY, mouseX, 0);
-            transform.SetParent(null);
+            ItemSetParent(holdPos, false); 
         }
         else
-        {
-            transform.SetParent(_holdPos);
-            transform.localRotation = Quaternion.Euler(0, 90,0);
+        {  
+            ItemSetParent(holdPos, true);  
+            photonView.RPC(nameof(SyncWeaponRotateRPC), RpcTarget.AllViaServer, 90f);
         }
     }
     
-    public override void ItemUse(Animator animator)
+    /// <summary>
+    /// 아이템 부모 동기화
+    /// </summary>
+    /// <param name="holdPos">아이템이 이동할 위치</param>
+    /// <param name="isActive">활성화 여부</param>
+    private void ItemSetParent(Transform holdPos, bool isActive)
     {
-        animator.SetFloat(_attackSpeedAniHash, _itemData.AttackSpeed);
+        if (holdPos.TryGetComponent(out PhotonView view))
+        {
+            photonView.RPC(nameof(SyncSetParentRPC), RpcTarget.AllViaServer, view.ViewID, isActive);
+        }
+    }
+ 
+    [PunRPC]
+    private void SyncSetParentRPC(int viewID, bool isCondition)
+    {
+        PhotonView view = PhotonView.Find(viewID);
+
+        if (view != null)
+        {
+            transform.position = view.transform.position;
+            transform.parent = isCondition ? view.transform : null; 
+        } 
+    }
+    
+    [PunRPC]
+    private void SyncWeaponRotateRPC(float rotateY)
+    { 
+        transform.localRotation = Quaternion.Euler(0, rotateY, 0);
+    }
+    
+    public override void ItemUse(Animator animator, PlayerController playerController)
+    {
+        playerController.BehaviourAnimation(_attackSpeedAniHash, _itemData.AttackSpeed);
         _animationLength = animator.GetCurrentAnimatorStateInfo(0).length;
         _isAttacked = true;
         _attackCo = StartCoroutine(AttackRoutine()); 

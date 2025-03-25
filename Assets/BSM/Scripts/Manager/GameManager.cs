@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     public FirebaseUser CurUser;
     public int ItemLayerIndexValue => LayerMask.NameToLayer("Item");
+    private int _indoorLayerIndexValue => LayerMask.NameToLayer("InDoor");
     private static int _refreshRate;
     private int _itemLayer;
     
@@ -68,6 +69,7 @@ public class GameManager : MonoBehaviour
     private void Init()
     { 
         Physics.IgnoreLayerCollision(ItemLayerIndexValue,ItemLayerIndexValue); 
+        Physics.IgnoreLayerCollision(ItemLayerIndexValue, _indoorLayerIndexValue);
         _postProfile = transform.GetChild(0).GetComponent<PostProcessVolume>().profile;
         _postProfile.TryGetSettings<ColorGrading>(out PostVolume);
         _postProfile = transform.GetChild(0).GetComponent<PostProcessVolume>().profile; 

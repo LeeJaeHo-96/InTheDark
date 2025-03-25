@@ -8,15 +8,17 @@ public class PlayerView : ObjBind
 {
     
     private PlayerStats _playerStats;
-    private Slider _staminaSlider;
-    private Slider _healthSlider;
+    private Image _staminaValue;
+    private Image _healthValue;
+    
     
     private void Awake()
     {
         Bind(); 
         _playerStats = GetComponent<PlayerStats>();
-        _staminaSlider = GetComponentBind<Slider>("StaminaSlider");
-        _healthSlider = GetComponentBind<Slider>("HealthSlider");
+        _staminaValue = GetComponentBind<Image>("StaminaValue");
+        _healthValue = GetComponentBind<Image>("HealthValue");
+        
     }
 
     private void Start()
@@ -43,7 +45,7 @@ public class PlayerView : ObjBind
     /// <param name="value"></param>
     private void UpdateStamina(float value)
     {
-        _staminaSlider.value = value;
+        _staminaValue.fillAmount = value * 0.01f;
     }
 
     /// <summary>
@@ -52,7 +54,7 @@ public class PlayerView : ObjBind
     /// <param name="value"></param>
     private void UpdateHealth(int value)
     {
-        _healthSlider.value = value;
+        _healthValue.fillAmount = value * 0.01f;
     }
     
     
