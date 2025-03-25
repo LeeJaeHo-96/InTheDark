@@ -10,9 +10,12 @@ public class PlayerRun : PlayerState
     public PlayerRun(PlayerController controller) : base(controller) {}
 
     public override void Enter()
-    {  
-        _controller.BehaviourAnimation(_runAniHash, true);
-
+    {
+        _footStepDuration = 0.35f;
+        
+        _controller.BehaviourAnimation(_runAniHash, true); 
+        _footStepCo = _controller.StartCoroutine(FootStepRoutine());
+        
         if (_staminaRecoverCo != null)
         {
             _controller.StopCoroutine(_staminaRecoverCo);
@@ -60,11 +63,11 @@ public class PlayerRun : PlayerState
 
     public override void Exit()
     { 
-        _controller.BehaviourAnimation(_runAniHash, false);
+        _controller.BehaviourAnimation(_runAniHash, false); 
         _controller.StopCoroutine(_consumeCo);
+        _controller.StopCoroutine(_footStepCo);
+        _footStepCo = null;
         _consumeCo = null;
-    }
-    
-
+    } 
     
 }

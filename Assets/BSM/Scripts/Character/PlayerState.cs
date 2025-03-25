@@ -5,8 +5,11 @@ using UnityEngine;
 public class PlayerState : StateMachine
 {
     protected static Coroutine _staminaRecoverCo; 
+    protected static Coroutine _footStepCo;
     protected PlayerController _controller;
+    protected SoundManager _soundManager => SoundManager.Instance;
 
+    protected float _footStepDuration;
     protected int _walkAniHash;
     protected int _runAniHash;
     protected int _dirXAniHash;
@@ -85,6 +88,24 @@ public class PlayerState : StateMachine
             _controller.PlayerStats.OnChangedHealth?.Invoke(_controller.PlayerStats.CurHP);
             yield return new WaitForSeconds(1f);
         }  
+    }
+    
+    protected IEnumerator FootStepRoutine()
+    { 
+        while (true)
+        { 
+            _soundManager.PlaySfx(_soundManager.SoundDatas.SoundDict["FootStepSFX"]); 
+            float elapsedTime = 0f;
+
+            while (elapsedTime < _footStepDuration)
+            {
+                elapsedTime += Time.deltaTime;
+
+                yield return null;
+            }
+            
+            yield return null;
+        } 
     }
     
 }

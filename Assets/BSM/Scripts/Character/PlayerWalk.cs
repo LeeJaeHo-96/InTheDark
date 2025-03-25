@@ -6,11 +6,15 @@ using UnityEngine;
 public class PlayerWalk : PlayerState
 {
     
+    
     public PlayerWalk(PlayerController controller) : base(controller) {}
 
     public override void Enter()
     {
         _controller.BehaviourAnimation(_walkAniHash, true);
+
+        _footStepDuration = 0.7f;
+        _footStepCo = _controller.StartCoroutine(FootStepRoutine());
         RecoverStamina();
     }
 
@@ -46,7 +50,7 @@ public class PlayerWalk : PlayerState
         {
             _controller.ChangeState(PState.ATTACK); 
         }
-
+         
     }
     
     public override void FixedUpdate()
@@ -54,11 +58,16 @@ public class PlayerWalk : PlayerState
         Vector3 dir = _controller.transform.TransformDirection(_controller.MoveDir);
         
         _controller.PlayerRb.MovePosition(_controller.transform.position + dir.normalized * _controller.PlayerStats.WalkSpeed * Time.fixedDeltaTime);   
+
     }
 
     public override void Exit()
     {
+        _controller.StopCoroutine(_footStepCo);
+        _footStepCo = null;
         _controller.BehaviourAnimation(_walkAniHash, false);
     }
+
     
+ 
 }
