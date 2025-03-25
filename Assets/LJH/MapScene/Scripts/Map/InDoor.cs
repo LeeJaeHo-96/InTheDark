@@ -17,9 +17,14 @@ public class InDoor : MonoBehaviourPun, IHitMe
         set
         {
             _HitMe = value;
-
-            if (HitMe != door.HitMe)
-                door.HitMe = _HitMe;
+            Debug.Log(HitMe);
+            Debug.Log(door);
+            Debug.Log(door.HitMe);
+            if (door != null)
+            {
+                if (HitMe != door.HitMe)
+                    door.HitMe = _HitMe;
+            }
         }
     }
 
