@@ -27,6 +27,11 @@ public class M_AttackState : IMonsterState
                 lastAttackTime = Time.time;
             }
         }
+
+        if (monster.Hp <= 0)
+        {
+            monster.stateMachine.ChangeState(new M_DeadState(), monster);
+        }
     }
 
     public void Exit()

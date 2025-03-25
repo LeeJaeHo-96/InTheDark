@@ -27,7 +27,7 @@ public class Pause : BaseUI
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            //플레이어에서 막아줘야할듯
+
             if(Time.timeScale > 0)
                 Time.timeScale = 0f;
             else

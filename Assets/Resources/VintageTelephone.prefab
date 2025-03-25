@@ -113,6 +113,7 @@ MonoBehaviour:
   _itemID: 7
   IsOwned: 0
   IsAttacking: 0
+  _battery: 0
 --- !u!65 &697810887719877040
 BoxCollider:
   m_ObjectHideFlags: 0

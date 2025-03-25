@@ -172,3 +172,4 @@ MonoBehaviour:
   _itemID: 5
   IsOwned: 0
   IsAttacking: 0
+  _battery: 0
