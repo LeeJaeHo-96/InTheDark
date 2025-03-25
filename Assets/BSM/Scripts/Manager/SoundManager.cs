@@ -44,6 +44,7 @@ public class SoundManager : MonoBehaviour
 
         _sfxVolume = DataManager.Instance.UserSettingData.SfxVolume;
         SetVolumeSFX(_sfxVolume / 20f);
+         
     }
 
 
