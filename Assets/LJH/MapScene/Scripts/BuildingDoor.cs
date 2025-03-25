@@ -26,6 +26,12 @@ public class BuildingDoor : MonoBehaviourPun, IHitMe
         popUp = GetComponent<PopUp>();
         buildingSpawnerPos = buildingSpawner.transform.position;
 
+        foreach (PlayerController PC in GameManager.Instance.PlayerObjects)
+        {
+            if (PC.photonView.IsMine)
+                player = PC.gameObject;
+        }
+
     }
 
     private void Update()
@@ -38,7 +44,6 @@ public class BuildingDoor : MonoBehaviourPun, IHitMe
         if (popUp.HitMe && Input.GetKeyDown(KeyCode.E) && doorIncreaseCo == null)
         {
             doorIncreaseCo = StartCoroutine(DoorIncreaseCoRoutine());
-            player = GameObject.FindWithTag(Tag.Player);
         }
 
         if ((!popUp.HitMe || Input.GetKeyUp(KeyCode.E)) && doorIncreaseCo != null)
