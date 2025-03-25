@@ -51,11 +51,22 @@ public class PunManager : MonoBehaviourPunCallbacks
         //방 입장 시 캐릭터 스폰 
         OnChangedPlayer?.Invoke();
         Cursor.lockState = CursorLockMode.Locked;
+
+        if (GameManager.Instance.PlayerSearchCo == null)
+        {
+            GameManager.Instance.PlayerSearchCo = StartCoroutine(GameManager.Instance.PlayerSearchRoutine());
+        }
+        
     }
 
     public override void OnLeftRoom()
     {
-        Cursor.lockState = CursorLockMode.None;
+        if (GameManager.Instance.PlayerSearchCo != null)
+        {
+             StopCoroutine(GameManager.Instance.PlayerSearchCo);
+        }
+        
+        Cursor.lockState = CursorLockMode.Confined;
         GoToStartScene();
     }
 
@@ -71,7 +82,8 @@ public class PunManager : MonoBehaviourPunCallbacks
     /// <param name="newPlayer"></param>
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-
+        GameManager.Instance.PlayerObjects.Clear();
+        GameManager.Instance.PlayerObjects = FindObjectsOfType<PlayerController>().ToList();
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
@@ -103,8 +115,6 @@ public class PunManager : MonoBehaviourPunCallbacks
     /// </summary>
     private void GoToWaitingScene()
     { 
-        GameManager.Instance.PlayerObjects.Clear();
-        GameManager.Instance.PlayerObjects = FindObjectsOfType<PlayerController>().ToList();
         PhotonNetwork.LoadLevel(SceneUtility.GetBuildIndexByScenePath("WaitingScene")); 
     }
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using ExitGames.Client.Photon;
 using Firebase.Auth;
@@ -22,11 +23,13 @@ public class GameManager : MonoBehaviour
     public List<PlayerController> PlayerObjects = new List<PlayerController>();
     public static GameManager Instance;
     public FirebaseUser CurUser;
+    public Coroutine PlayerSearchCo;
     public int ItemLayerIndexValue => LayerMask.NameToLayer("Item");
     private int _indoorLayerIndexValue => LayerMask.NameToLayer("InDoor");
     private static int _refreshRate;
     private int _itemLayer;
-    
+
+
     private ColorGrading PostVolume; 
     private PostProcessProfile _postProfile;
     private Dictionary<int, int> _frameDict = new Dictionary<int, int>()
@@ -74,6 +77,21 @@ public class GameManager : MonoBehaviour
         _postProfile.TryGetSettings<ColorGrading>(out PostVolume);
         _postProfile = transform.GetChild(0).GetComponent<PostProcessVolume>().profile; 
     }
+    
+    /// <summary>
+    /// 접속 유저 확인
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerator PlayerSearchRoutine()
+    {
+        while (true)
+        {
+            PlayerObjects.Clear();
+            PlayerObjects = FindObjectsOfType<PlayerController>().ToList();
+            yield return new WaitForSeconds(0.5f);
+        }
+    }    
+    
     
     //TODO: 추후 게임 도중 나가기 옵션에 달아놓을 것
     /// <summary>
