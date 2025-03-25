@@ -85,12 +85,12 @@ public class GameManager : MonoBehaviour
     public IEnumerator PlayerSearchRoutine()
     {
         while (true)
-        {
-            if (PhotonNetwork.InRoom && _playerCount != PhotonNetwork.CurrentRoom.PlayerCount)
-            {
-                _playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
-                PlayerObjects.Clear();
+        {  
+            if (FindObjectsOfType<PlayerController>().Count() != _playerCount)
+            { 
+                PlayerObjects.Clear(); 
                 PlayerObjects = FindObjectsOfType<PlayerController>().ToList();
+                _playerCount = PlayerObjects.Count();
             } 
             yield return new WaitForSeconds(0.5f);
         }
