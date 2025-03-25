@@ -30,7 +30,8 @@ public class PlayerHurt : PlayerState
   
     private void ValidateHit()
     {
-        if (_controller.OnTriggerOther.gameObject.layer == GameManager.Instance.ItemLayerIndexValue)
+        //if (_controller.OnTriggerOther.gameObject.layer == GameManager.Instance.ItemLayerIndexValue)
+        if (_controller.OnTriggerOther.gameObject.layer == LayerMask.NameToLayer("Item"))
         {
             Item item = _controller.OnTriggerOther.gameObject.GetComponent<Item>();
             
