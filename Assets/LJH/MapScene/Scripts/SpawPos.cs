@@ -19,4 +19,5 @@ public class SpawPos : MonoBehaviourPun
         player.transform.position = transform.position;
     }
 
+
 }

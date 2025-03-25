@@ -112,7 +112,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd6105f114eb6cd48bf32d210682bcd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  indoor: {fileID: 0}
   isClosed: 1
 --- !u!114 &2804541095094486945
 MonoBehaviour:
@@ -150,6 +149,7 @@ GameObject:
   - component: {fileID: 2755184943357968553}
   - component: {fileID: -6344106445631212691}
   - component: {fileID: 3901021357072013344}
+  - component: {fileID: 353986475525159614}
   m_Layer: 0
   m_Name: Realship
   m_TagString: Untagged
@@ -287,6 +287,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.18, y: 1, z: 5.6}
   m_Center: {x: 5, y: 0.59, z: -0.95}
+--- !u!114 &353986475525159614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1934411636381324725}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e49006b59ff04048a0e2287c9b62a24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2320277915243598200
 GameObject:
   m_ObjectHideFlags: 0
