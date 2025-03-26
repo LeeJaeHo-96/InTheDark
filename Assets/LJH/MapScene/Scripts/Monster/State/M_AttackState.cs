@@ -19,14 +19,14 @@ public class M_AttackState : IMonsterState
         {
             monster.stateMachine.ChangeState(new M_ChaseState(), monster);
         }
-        else 
-        {
-            if (Time.time - lastAttackTime < attackCooldown)
-            {
-                monster.Attack();
-                lastAttackTime = Time.time;
-            }
-        }
+        //else 
+        //{
+        //    if (Time.time - lastAttackTime < attackCooldown)
+        //    {
+        //        monster.Attack();
+        //        lastAttackTime = Time.time;
+        //    }
+        //}
 
         if (monster.Hp <= 0)
         {

@@ -1722,7 +1722,7 @@ GameObject:
   - component: {fileID: 2864769590415092603}
   - component: {fileID: 8655203185300316647}
   - component: {fileID: -6546435785562437164}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Enemy1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1825,6 +1825,8 @@ MonoBehaviour:
   agent: {fileID: 0}
   spawnPointPos: {x: 0, y: 0, z: 0}
   Hp: 60
+  isAttacked: 0
+  pirateDamage: 30
 --- !u!135 &8655203185300316647
 SphereCollider:
   m_ObjectHideFlags: 0
