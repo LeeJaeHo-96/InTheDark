@@ -190,8 +190,18 @@ public class GameManager : MonoBehaviour
         string sceneName = sceneType switch
         {
             SceneType.MAIN => "LobbyBGM",
+            SceneType.WAITING => "WaitingBGM",
             SceneType.INGAME => "MainBGM"
         };
+
+        if (sceneType == SceneType.WAITING)
+        {
+            SoundManager.Instance.BGMAudioSource.volume = 0.5f;
+        }
+        else
+        {
+            SoundManager.Instance.BGMAudioSource.volume = 0.1f;
+        }
         
         _soundManager.PlayBGM(_soundManager.SoundDatas.SoundDict[sceneName]);
     }
