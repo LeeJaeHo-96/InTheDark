@@ -20,6 +20,9 @@ public class Monster : MonoBehaviourPun
 
     public int Hp = 60;
 
+    public bool isAttacked = false;
+    public int pirateDamage = 30;
+
     private void Start()
     {
         Init();
@@ -30,6 +33,7 @@ public class Monster : MonoBehaviourPun
     {
         stateMachine.Update();
     }
+
 
     private void OnTriggerEnter(Collider other)
     {
@@ -121,10 +125,16 @@ public class Monster : MonoBehaviourPun
     /// <summary>
     /// 공격 하는 함수
     /// </summary>
-    public void Attack()
+    public void AttackStart()
     {
-        Debug.Log("공격");
-        playerList[0].GetComponent<PlayerStats>().CurHP -= 30;
+        Debug.Log("공격시작");
+        isAttacked = true;
+    }
+
+    public void AttackStop()
+    {
+        Debug.Log("공격끝");
+        isAttacked = false;
     }
 
 
