@@ -19,6 +19,7 @@ public class ComputerControll : BaseUI
     const string land_Start = "시작의 섬";
     const string land_Middle = "중간섬";
     const string land_End = "끝의 섬";
+    const string land_Sell = "상점섬";
     const string flashlight = "손전등";
     const string stick = "막대기";
     const string exit = "나가기";
@@ -44,6 +45,8 @@ public class ComputerControll : BaseUI
     [Header("열기구 생성 위치")]
     [SerializeField] GameObject spawnPoint;
     [SerializeField] GameObject destinationPoint;
+
+    [SerializeField] Lever lever;
 
 
     private void Awake()
@@ -114,17 +117,24 @@ public class ComputerControll : BaseUI
                     {
                         case land_Start:
                             //Todo : 목적지 시작의섬 선택
-                            inputField.ActivateInputField();
+                            lever.Stage = Stage.startLand;
+                            gameObject.SetActive(false);
                             break;
 
                         case land_Middle:
                             //Todo : 목적지 중간섬 선택
-                            inputField.ActivateInputField();
+                            gameObject.SetActive(false);
                             break;
 
                         case land_End:
                             //Todo : 목적지 끝의 섬 선택
-                            inputField.ActivateInputField();
+                            gameObject.SetActive(false);
+                            break;
+
+                        case land_Sell:
+                            //Todo : 목적지 끝의 섬 선택
+                            lever.Stage = Stage.sellLand;
+                            gameObject.SetActive(false);
                             break;
 
                         case exit:
