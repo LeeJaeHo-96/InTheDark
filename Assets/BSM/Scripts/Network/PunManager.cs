@@ -56,7 +56,20 @@ public class PunManager : MonoBehaviourPunCallbacks
         {
             GameManager.Instance.PlayerSearchCo = StartCoroutine(GameManager.Instance.PlayerSearchRoutine());
         }
+
+        //이재호 추가 코드 : Invoke를 통해 게임속에서만 존재하는 IngameManager에 주입시킴
+        Invoke("InsertMasterID", 1f);
         
+    }
+
+    void InsertMasterID()
+    {
+        //이재호 추가 코드 : MasterID 변수에 마스터클라이언트의 유저아이디를 주입
+        if (PhotonNetwork.IsMasterClient)
+        {
+            IngameManager.Instance.masterID = FirebaseManager.Auth.CurrentUser.UserId;
+            Debug.Log($"masterID에 {IngameManager.Instance.masterID} 가 주입되었음");
+        }
     }
 
     public override void OnLeftRoom()

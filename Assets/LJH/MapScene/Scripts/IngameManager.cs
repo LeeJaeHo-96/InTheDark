@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -17,6 +18,8 @@ public class IngameManager : MonoBehaviour
     float elapsedTime = 1f;
 
     public int money { get; set; }
+
+    public string masterID;
 
     private void Awake()
     {
@@ -73,7 +76,18 @@ public class IngameManager : MonoBehaviour
 
     void Init()
     {
-        Database.instance.LoadData(FirebaseManager.Auth.CurrentUser.UserId, "Slot_1");
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            Debug.Log($"방장이라 내꺼로 접근");
+            Database.instance.LoadData(FirebaseManager.Auth.CurrentUser.UserId, "Slot_1");
+
+        }
+        else
+        {
+            Debug.Log($"{masterID}로 접근");
+            Database.instance.LoadData(masterID, "Slot_1");
+        }
     }
 
 
