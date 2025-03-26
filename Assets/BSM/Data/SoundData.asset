@@ -16,6 +16,8 @@ MonoBehaviour:
     _serializedList:
     - Key: LobbyBGM
       Value: {fileID: 8300000, guid: edd338fdf57f55a41b7380cce8a0a6d4, type: 3}
+    - Key: WaitingBGM
+      Value: {fileID: 8300000, guid: 563594b9475ac7d4f916e314f1735d66, type: 3}
     - Key: MainBGM
       Value: {fileID: 8300000, guid: ec6c9e2a79d3cbe469de1981e7172c5b, type: 3}
     - Key: ButtonClickSFX

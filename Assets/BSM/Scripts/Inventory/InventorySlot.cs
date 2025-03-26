@@ -8,7 +8,7 @@ public class InventorySlot : MonoBehaviour
 {
     private Image _slotItemImage; 
     public Item _item;
-
+    
 
     private void Awake()
     {
@@ -23,6 +23,7 @@ public class InventorySlot : MonoBehaviour
     {
         _item = item;
         _slotItemImage.sprite = _item.GetItemImage();
+        _slotItemImage.color = new Color(1f, 1f, 1f, 1f);
     }
 
     /// <summary>
@@ -34,7 +35,7 @@ public class InventorySlot : MonoBehaviour
 
         _item = null;
         _slotItemImage.sprite = null;
-
+        _slotItemImage.color = new Color(1f, 1f, 1f, 0f);
     }
     
 }

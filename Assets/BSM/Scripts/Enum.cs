@@ -26,5 +26,5 @@ public enum ItemHoldingType
 [System.Serializable]
 public enum SceneType
 {
-    MAIN, INGAME
+    MAIN, WAITING , INGAME
 }

@@ -1,20 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
-using Photon.Pun;
-using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
+using TMPro;
+using UnityEngine.EventSystems;
 
-public class CommonButtonController : MonoBehaviour
+public class RoomButtonController : MonoBehaviour
 {
     [SerializeField] private GameObject _panel;
     
-    private CommonButton _curCommonButton;
+    private RoomButton _curRoomButton;
     private Image _curButtonColor;
+    private Image _refreshImageColor;
     private TextMeshProUGUI _curButtonTextColor;
         
     private Button[] _commonButtons;
+    
+    private Color _activateButtonColor = new Color(0.98f, 0.09f, 0.26f);
+    private Color _deActivateTextColor = new Color(0.98f, 0.09f, 0.26f);
     
     private void Awake() => Init();
     
@@ -22,14 +25,10 @@ public class CommonButtonController : MonoBehaviour
     {
         _commonButtons = GetComponentsInChildren<Button>(true);
 
-        _curCommonButton = _commonButtons[0].GetComponent<CommonButton>();
-
-        if (_curCommonButton != null)
-        {
-            _curButtonColor = _curCommonButton.GetComponent<Image>();
-            _curButtonTextColor = _curCommonButton.GetComponentInChildren<TextMeshProUGUI>();
-        }  
+        _curRoomButton = _commonButtons[0].GetComponent<RoomButton>();
         
+        _curButtonColor = _curRoomButton.GetComponent<Image>();
+        _curButtonTextColor = _curRoomButton.GetComponentInChildren<TextMeshProUGUI>();
         OnClickAddListener();
     }
     
@@ -45,20 +44,20 @@ public class CommonButtonController : MonoBehaviour
     /// <param name="commonButton">감지한 버튼</param>
     /// <param name="buttonColor">변경할 버튼의 이미지 오브젝트</param>
     /// <param name="buttonTextColor">변경할 버튼의 텍스트 오브젝트</param>
-    public void CurrentButtonChanged(CommonButton commonButton, Image buttonColor, TextMeshProUGUI buttonTextColor)
+    public void CurrentButtonChanged(RoomButton commonButton, Image buttonColor, TextMeshProUGUI buttonTextColor)  
     {
-        if (_curCommonButton == commonButton) return;
+        if (_curRoomButton == commonButton) return;
 
         //이전 버튼의 색상 변경
-        _curButtonColor.color = Color.black;
-        _curButtonTextColor.color =  new Color(0.98f, 0.07f, 0.26f);
+        _curButtonColor.color = Color.white;
+        _curButtonTextColor.color = _deActivateTextColor;
           
         //새로 감지한 버튼의 색상 변경
-        _curCommonButton = commonButton;
+        _curRoomButton = commonButton;
         _curButtonColor = buttonColor; 
         _curButtonTextColor = buttonTextColor;
         
-        _curButtonColor.color = new Color(1f, 0.5f, 0f);
-        _curButtonTextColor.color = Color.black; 
+        _curButtonColor.color = _activateButtonColor;
+        _curButtonTextColor.color = Color.white; 
     }
 }

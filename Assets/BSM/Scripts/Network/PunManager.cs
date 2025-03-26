@@ -128,7 +128,7 @@ public class PunManager : MonoBehaviourPunCallbacks
     /// </summary>
     private void GoToWaitingScene()
     { 
-        GameManager.Instance.SceneBGM(SceneType.INGAME);
+        GameManager.Instance.SceneBGM(SceneType.WAITING);
         PhotonNetwork.LoadLevel(SceneUtility.GetBuildIndexByScenePath("WaitingScene")); 
     }
 

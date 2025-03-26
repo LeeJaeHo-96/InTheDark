@@ -21,13 +21,13 @@ public class ButtonColor : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     
     public void OnPointerEnter(PointerEventData eventData)
     {
-        _buttonColor.color = new Color(1f, 0.5f, 0f);
-        _buttonTextColor.color = Color.black;
+        _buttonColor.color = Color.white;
+        _buttonTextColor.color = new Color(0.98f, 0.09f, 0.26f);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        _buttonColor.color = Color.white;
-        _buttonTextColor.color = new Color(0.26f, 0.26f, 0.26f);
+        _buttonColor.color = new Color(0.98f, 0.09f, 0.26f);
+        _buttonTextColor.color = Color.white;
     }
 }

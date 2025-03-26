@@ -48,6 +48,7 @@ public class RoomJoin : ObjBind
     /// </summary>
     private void Join()
     {
+        SoundManager.Instance.PlaySfx(SoundManager.Instance.SoundDatas.SoundDict["ButtonClickSFX"]);
         PhotonNetwork.JoinRoom(_roomName.text);
     }
     

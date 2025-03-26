@@ -8,7 +8,7 @@ public class SoundManager : MonoBehaviour
 {
     public static SoundManager Instance;
     public SoundData SoundDatas;
-
+    public AudioSource BGMAudioSource => _bgmSource;
     
     [SerializeField] private AudioMixer _audioMixer;
     [SerializeField] private AudioSource _sfxSource;
