@@ -2132,6 +2132,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _itemID: 1
+  AttackSoundKey: 
   IsOwned: 0
   IsAttacking: 0
   _battery: 0
@@ -2356,6 +2357,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _itemID: 3
+  AttackSoundKey: 
   IsOwned: 0
   IsAttacking: 0
   _battery: 0
@@ -2995,6 +2997,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _itemID: 7
+  AttackSoundKey: 
   IsOwned: 0
   IsAttacking: 0
   _battery: 0
@@ -3113,6 +3116,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _itemID: 6
+  AttackSoundKey: 
   IsOwned: 0
   IsAttacking: 0
   _battery: 0
@@ -5580,6 +5584,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _itemID: 5
+  AttackSoundKey: 
   IsOwned: 0
   IsAttacking: 0
   _battery: 0

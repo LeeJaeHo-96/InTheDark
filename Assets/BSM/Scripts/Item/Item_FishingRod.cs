@@ -68,15 +68,16 @@ public class Item_FishingRod : Item
     {
         float elapsedTime = 0;
         
-        photonView.RPC(nameof(SyncAttackingRPC), RpcTarget.AllBuffered, true);
-
+        photonView.RPC(nameof(SyncAttackingRPC), RpcTarget.AllBuffered, true); 
+        
         //애니메이션 재생이 끝나면 공격 끝난 상태로 변경
         while (elapsedTime < _animationLength)
         { 
             elapsedTime += Time.deltaTime * _itemData.AttackSpeed; 
+            
             yield return null;
         }
-        
+
         _isAttacked = false;
         photonView.RPC(nameof(SyncAttackingRPC), RpcTarget.AllBuffered, false);
 
