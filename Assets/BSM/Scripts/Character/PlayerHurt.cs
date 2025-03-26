@@ -54,6 +54,15 @@ public class PlayerHurt : PlayerState
                 TakeDamage(item.GetItemDamage());  
             } 
         }
+        else if (_controller.OnTriggerOther.gameObject.layer == GameManager.Instance.MonsterLayerIndexValue)
+        {
+            Monster monster = _controller.OnTriggerOther.gameObject.GetComponent<Monster>();
+
+            if (monster.isAttacked)
+            {
+                TakeDamage(monster.pirateDamage);
+            } 
+        }
     }
  
     /// <summary>
