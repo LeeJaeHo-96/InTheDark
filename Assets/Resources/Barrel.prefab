@@ -170,6 +170,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _itemID: 5
+  AttackSoundKey: 
   IsOwned: 0
   IsAttacking: 0
   _battery: 0

@@ -21,6 +21,11 @@ public class IngameManager : MonoBehaviour
 
     public string masterID;
 
+    //아이템 위치 저장용 ItemSave 스크립트와 연동
+    public Dictionary<int, Vector3> posDict = new Dictionary<int, Vector3>();
+    public Dictionary<Vector3, string> nameDict = new Dictionary<Vector3, string>();
+    public List<int> keyList = new List<int>();
+
     private void Awake()
     {
         Init();
@@ -37,7 +42,6 @@ public class IngameManager : MonoBehaviour
     /// </summary>
     public void TimerReset()
     {
-        Debug.Log("시간 초기화되었음");
         time = 8;
         minute = 0;
     }
@@ -48,10 +52,8 @@ public class IngameManager : MonoBehaviour
     /// <returns></returns>
     public IEnumerator TimerCount()
     {
-        Debug.Log("타이머 카운트 시작");
         while (true) 
         {
-            Debug.Log("시간 흐름");
             randomMinute = Random.Range(5, 10);
             minute += randomMinute;
 
