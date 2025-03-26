@@ -22,3 +22,9 @@ MonoBehaviour:
       Value: {fileID: 8300000, guid: 03ee8edcfa8c53a4c9e8c5a8362c5449, type: 3}
     - Key: FootStepSFX
       Value: {fileID: 8300000, guid: 0e2c4b4cd08361a46baa823612e9e831, type: 3}
+    - Key: FlashLightOnSFX
+      Value: {fileID: 8300000, guid: ae90809a8743f404696af6370dc488de, type: 3}
+    - Key: FlashLightOffSFX
+      Value: {fileID: 8300000, guid: 6b67ae67164bfb04aa1bf48f5b59609e, type: 3}
+    - Key: FishingRodSFX
+      Value: {fileID: 8300000, guid: 6637350ac50d91447b29e90ab7db7bcc, type: 3}
