@@ -11,9 +11,8 @@ public class SoundManager : MonoBehaviour
 
     
     [SerializeField] private AudioMixer _audioMixer;
-    
-    private AudioSource _sfxSource;
-    private AudioSource _bgmSource;
+    [SerializeField] private AudioSource _sfxSource;
+    [SerializeField] private AudioSource _bgmSource;
 
     private float _masterVolume;
     private float _sfxVolume;
@@ -44,6 +43,7 @@ public class SoundManager : MonoBehaviour
 
         _sfxVolume = DataManager.Instance.UserSettingData.SfxVolume;
         SetVolumeSFX(_sfxVolume / 20f);
+         
     }
 
 

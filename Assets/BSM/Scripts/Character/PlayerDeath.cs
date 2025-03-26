@@ -46,9 +46,9 @@ public class PlayerDeath : PlayerState
     {
         do
         {
-            _camIndex = (_camIndex + 1) % DataManager.Instance.PlayerObjects.Count; 
+            _camIndex = (_camIndex + 1) % GameManager.Instance.PlayerObjects.Count; 
             
-        } while (DataManager.Instance.PlayerObjects[_camIndex].IsDeath);
+        } while (GameManager.Instance.PlayerObjects[_camIndex].IsDeath);
     }
     
     /// <summary>
@@ -56,7 +56,7 @@ public class PlayerDeath : PlayerState
     /// </summary>
     private void FollowCharacter()
     {
-        _controller.ObserverPos = DataManager.Instance.PlayerObjects[_camIndex].PlayerBody.transform.position;
+        _controller.ObserverPos = GameManager.Instance.PlayerObjects[_camIndex].PlayerBody.transform.position;
     }
 
 }

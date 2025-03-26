@@ -262,7 +262,7 @@ public class PlayerController : MonoBehaviourPun
         if (_computerObject != null && _computerObject.activeSelf) return;
         
         _mouseX += Input.GetAxisRaw("Mouse X") * _sensitivity * Time.deltaTime;
-        _mouseY += Input.GetAxisRaw("Mouse Y");
+        _mouseY += Input.GetAxisRaw("Mouse Y") * _sensitivity * Time.deltaTime;
 
         _mouseY = Mathf.Clamp(_mouseY, -90f, 90f);
         

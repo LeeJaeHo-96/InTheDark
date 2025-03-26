@@ -5,12 +5,13 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
 
-public class CommonButton : MonoBehaviour, IPointerEnterHandler
+public class CommonButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHandler
 {
     private Image _buttonColor;
     private TextMeshProUGUI _buttonTextColor;
 
     private CommonButtonController _commonButtonController;
+    private SoundManager _soundManager => SoundManager.Instance;
     
     private void Awake() => Init();
     
@@ -26,5 +27,11 @@ public class CommonButton : MonoBehaviour, IPointerEnterHandler
     {
         _commonButtonController.CurrentButtonChanged(this, _buttonColor, _buttonTextColor);
 
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        //버튼 클릭 SFX
+        _soundManager.PlaySfx(_soundManager.SoundDatas.SoundDict["ButtonClickSFX"]);
     }
 }
