@@ -39,7 +39,7 @@ public class PlayerController : MonoBehaviourPun
     private NewDoor _newDoor;
     private InDoor _inDoor;
     private GameObject _computerObject;
-    
+    private SoundManager _soundManager => SoundManager.Instance;
     private PState _curState = PState.IDLE;
 
     private int _curInventoryIndex = 0;
@@ -561,6 +561,14 @@ public class PlayerController : MonoBehaviourPun
         IsDeath = isDeath;
         gameObject.GetComponent<CapsuleCollider>().enabled = isEnable;
         gameObject.GetComponent<Rigidbody>().isKinematic = isKinematic;
+    }
+    
+    /// <summary>
+    /// 공격 애니메이션 재생 시 무기 사운드 재생
+    /// </summary>
+    public void AttackSound()
+    {
+        _soundManager.PlaySfx(_soundManager.SoundDatas.SoundDict[CurCarryItem.AttackSoundKey]);
     }
     
     /// <summary>

@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     public FirebaseUser CurUser;
     public Coroutine PlayerSearchCo;
     public int ItemLayerIndexValue => LayerMask.NameToLayer("Item");
+    public int MonsterLayerIndexValue => LayerMask.NameToLayer("Monster");
     private int _indoorLayerIndexValue => LayerMask.NameToLayer("InDoor");
     private static int _refreshRate;
     private int _itemLayer;

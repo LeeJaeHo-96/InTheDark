@@ -9,10 +9,10 @@ using UnityEngine;
 public class Item : MonoBehaviourPun
 {
     [SerializeField] private int _itemID;
-    
+    public string AttackSoundKey;
     private Rigidbody _itemRb;
     protected Collider _itemCollider;
-    
+    protected SoundManager _soundManager => SoundManager.Instance;
     protected InteractableItemData _itemData; 
  
     public bool IsOwned;

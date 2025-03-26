@@ -118,8 +118,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _itemID: 2
+  AttackSoundKey: FishingRodSFX
   IsOwned: 0
   IsAttacking: 0
+  _battery: 0
 --- !u!1 &2981447290846159052
 GameObject:
   m_ObjectHideFlags: 0

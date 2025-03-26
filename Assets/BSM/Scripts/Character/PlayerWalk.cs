@@ -38,7 +38,7 @@ public class PlayerWalk : PlayerState
         {
             _controller.ChangeState(PState.IDLE);
         }
-        else if (_controller.MoveDir.z > 0 && Input.GetKey(KeyCode.LeftShift))
+        else if (_controller.PlayerStats.Stamina > 5f && _controller.MoveDir.z > 0 && Input.GetKey(KeyCode.LeftShift))
         {
             _controller.ChangeState(PState.RUN);
         }

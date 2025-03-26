@@ -93,16 +93,18 @@ public class PlayerState : StateMachine
     protected IEnumerator FootStepRoutine()
     { 
         while (true)
-        { 
+        {  
+            float elapsedTime = 0f; 
+            
             _soundManager.PlaySfx(_soundManager.SoundDatas.SoundDict["FootStepSFX"]); 
-            float elapsedTime = 0f;
-
+            
             while (elapsedTime < _footStepDuration)
             {
                 elapsedTime += Time.deltaTime;
 
                 yield return null;
             }
+            
             
             yield return null;
         } 

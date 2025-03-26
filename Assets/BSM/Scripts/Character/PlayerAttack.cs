@@ -29,7 +29,7 @@ public class PlayerAttack : PlayerState
             } 
         }
     }
-
+    
     public override void OnTrigger()
     {
         _controller.ChangeState(PState.HURT);
