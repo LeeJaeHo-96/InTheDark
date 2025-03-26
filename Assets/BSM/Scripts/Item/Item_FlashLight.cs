@@ -30,6 +30,14 @@ public class Item_FlashLight : Item
     {
         isPower = !isPower;
         photonView.RPC(nameof(SyncLight),RpcTarget.AllViaServer, isPower && _battery >= 0f);
+
+        string onOff = isPower switch
+        {
+            true => "FlashLightOnSFX",
+            false => "FlashLightOffSFX", 
+        };
+        
+        _soundManager.PlaySfx(_soundManager.SoundDatas.SoundDict[onOff]);
         
         if (_flashCo == null)
         {
