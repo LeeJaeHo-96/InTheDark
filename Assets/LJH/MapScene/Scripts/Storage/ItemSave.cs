@@ -111,27 +111,22 @@ public class ItemSave : MonoBehaviour
 
     void SaveItems()
     {
-        Debug.Log("아이템 저장됨");
         IngameManager.Instance.posDict = posDict;
         IngameManager.Instance.nameDict = nameDict;
         IngameManager.Instance.keyList = keyList;
 
-        Debug.Log($" 포즈딕트 몇개 드갔니? {IngameManager.Instance.posDict.Count}");
     }
 
     void RespawnItems()
     {
-        Debug.Log("아이템 불러옴");
         posDict = IngameManager.Instance.posDict;
         nameDict = IngameManager.Instance.nameDict;
         keyList = IngameManager.Instance.keyList;
 
-        Debug.Log($" 포즈딕트 몇개 들왔니? {posDict.Count}");
 
         for (int i = 0; i < nameDict.Count; i++)
         {
-            Debug.Log("아이템 생성되었어용");
-            PhotonNetwork.Instantiate(nameDict[posDict[keyList[i]]], (transform.position - new Vector3(0, 2.5f, 0)) + posDict[keyList[i]], Quaternion.identity);
+            PhotonNetwork.Instantiate(nameDict[posDict[keyList[i]]], transform.position + posDict[keyList[i]], Quaternion.identity);
         }
     }
 }

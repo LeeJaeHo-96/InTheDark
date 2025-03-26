@@ -73,10 +73,6 @@ public class Database : BaseUI
                 {
                     Debug.LogError("데이터 저장 실패: " + task.Exception);
                 }
-                else if (task.IsCompleted)
-                {
-                    Debug.Log("데이터 저장 성공! 플레이어 ID: " + playerId + " | 슬롯: " + slot);
-                }
             });
     }
 
@@ -89,7 +85,6 @@ public class Database : BaseUI
     /// 
     public void LoadData(string playerId, string slot)
     {
-        Debug.Log($"데이터 요청 경로: UserData/{playerId}/{slot}");
 
         database.Child("UserData").Child(playerId).Child(slot.ToString())
         .GetValueAsync()
@@ -107,7 +102,6 @@ public class Database : BaseUI
 
                 if (snapshot.Exists)
                 {
-                    Debug.Log($"데이터 불러오기 성공! 전체 데이터: {snapshot.GetRawJsonValue()}");
 
                     //테스트코드
                     //int money;
@@ -116,12 +110,9 @@ public class Database : BaseUI
                     if (snapshot.HasChild("Money"))
                     {
                         object moneyValue = snapshot.Child("Money").Value;
-                        Debug.Log($"{moneyValue}");
                         if (moneyValue != null)
                         {
-                            Debug.Log($"인게임매니저 머니{IngameManager.Instance.money}, 데이터베이스 머니 {Convert.ToInt32(moneyValue)}");
                             IngameManager.Instance.money = Convert.ToInt32(moneyValue);
-                            Debug.Log($"인게임매니저 머니{IngameManager.Instance.money}, 데이터베이스 머니 {Convert.ToInt32(moneyValue)}");
                         }
                     }
                     else
@@ -150,7 +141,6 @@ public class Database : BaseUI
                     //IngameManager.Instance.money = money;
                     //IngameManager.Instance.days = days;
 
-                    Debug.Log($"데이터 불러오기 성공! 플레이어 ID: {playerId}");
                 }
                 else
                 {

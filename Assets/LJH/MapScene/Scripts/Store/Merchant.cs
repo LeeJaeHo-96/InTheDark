@@ -15,6 +15,7 @@ public class Merchant : MonoBehaviour
         {
             totalPrice += other.GetComponent<Item>().GetSellPrice();
             sellItemList.Add(other.gameObject);
+            Debug.Log(totalPrice);
         }
     }
 
@@ -24,11 +25,13 @@ public class Merchant : MonoBehaviour
         {
             totalPrice -= other.GetComponent<Item>().GetSellPrice();
             sellItemList.Remove(other.gameObject);
+            Debug.Log(totalPrice);
         }
     }
 
     public void SellItem()
     {
+        Debug.Log("π∞∞«∆»æ“¿Ω");
         for (int i = 0; i < sellItemList.Count; i++)
         {
             Destroy(sellItemList[i]);

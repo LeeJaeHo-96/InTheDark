@@ -8,7 +8,6 @@ public class M_ChaseState : IMonsterState
     public void Enter(Monster monster)
     {
         this.monster = monster;
-        Debug.Log("추격 상태 진입");
     }
 
     public void Update()
@@ -38,6 +37,5 @@ public class M_ChaseState : IMonsterState
 
     public void Exit()
     {
-        Debug.Log("추격 상태 나감");
     }
 }

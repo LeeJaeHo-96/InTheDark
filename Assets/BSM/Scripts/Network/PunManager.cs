@@ -68,7 +68,6 @@ public class PunManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             IngameManager.Instance.masterID = FirebaseManager.Auth.CurrentUser.UserId;
-            Debug.Log($"masterID에 {IngameManager.Instance.masterID} 가 주입되었음");
         }
     }
 

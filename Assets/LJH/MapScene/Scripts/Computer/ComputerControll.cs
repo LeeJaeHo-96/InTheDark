@@ -241,7 +241,6 @@ public class ComputerControll : BaseUI
     bool itemPriceCheck(Item item)
     {
         InteractableItemData itemData;
-        Debug.Log(item.name);
 
         switch (item.name)
         {
@@ -258,9 +257,7 @@ public class ComputerControll : BaseUI
                 return false;
         }
 
-        Debug.Log($"아이템 데이터 {itemData.name}");
         int itemPrice = itemData.ItemBuyPrice;
-        Debug.Log($"{item.name}의 가격 {itemPrice}");
 
         if(itemsPrice + itemPrice > IngameManager.Instance.money)
         { 
@@ -268,7 +265,6 @@ public class ComputerControll : BaseUI
         }
         
         itemsPrice += itemPrice;
-        Debug.Log($"담은 아이템의 가격 {itemsPrice}1");
         return true;
     }
 
@@ -277,9 +273,7 @@ public class ComputerControll : BaseUI
     /// </summary>
     public void CallAirBalloon()
     {
-        Debug.Log($"담은 아이템의 가격 {itemsPrice}2");
         IngameManager.Instance.money -= itemsPrice;
-        Debug.Log($"변동된 돈 {IngameManager.Instance.money}");
 
         GameObject airBallonPrefab = PhotonNetwork.Instantiate("HotAirBalloon", spawnPoint.transform.position, Quaternion.identity);
         airBallonPrefab.GetComponent<HotAirBalloon>().spawnPoint = spawnPoint;
