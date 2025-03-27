@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Photon.Pun;
 using UnityEngine;
 
@@ -46,8 +47,14 @@ public class PlayerDeath : PlayerState
     {
         do
         {
-            _camIndex = (_camIndex + 1) % GameManager.Instance.PlayerObjects.Count; 
-            
+            _camIndex = (_camIndex + 1) % GameManager.Instance.PlayerObjects.Count;
+
+            if (GameManager.Instance.PlayerObjects.Where(x => x.IsDeath).Count() ==
+                GameManager.Instance.PlayerObjects.Count)
+            {
+                break;
+            }
+
         } while (GameManager.Instance.PlayerObjects[_camIndex].IsDeath);
     }
     
