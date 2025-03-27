@@ -96,7 +96,7 @@ public class PlayerController : MonoBehaviourPun
         { 
             OnTriggerOther = other;
         }
-        
+        Debug.Log("이거 동작");
         if (!photonView.IsMine) return; 
         _playerStates[(int)_curState].OnTrigger(); 
     }

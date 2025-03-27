@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class Sea : MonoBehaviour
 {
-
+    int i = 0;
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.CompareTag(Tag.Player))
+        if (collision.gameObject.CompareTag(Tag.Player))
         {
-            collision.gameObject.GetComponent<PlayerController>().ChangeState(PState.DEATH);
+            Debug.Log("플레이어죽음");
+            collision.gameObject.GetComponent<PlayerController>();
         }
     }
 }

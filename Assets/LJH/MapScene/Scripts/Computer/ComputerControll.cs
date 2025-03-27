@@ -14,12 +14,16 @@ enum Text
 }
 public class ComputerControll : BaseUI
 {
+    SoundManager _soundManager => SoundManager.Instance;
+    string keyboardSoundName;
+    List<string> keyboardSounds = new List<string>();
+
     const string land = "목적지 선택";
     const string store = "상점 선택";
     const string land_Start = "시작의 섬";
     const string land_Middle = "중간섬";
     const string land_End = "끝의 섬";
-    const string land_Sell = "상점섬";
+    const string land_Sell = "만물상 선박";
     const string flashlight = "손전등";
     const string stick = "막대기";
     const string exit = "나가기";
@@ -69,10 +73,19 @@ public class ComputerControll : BaseUI
     private void Update()
     {
         TextInput(inputField.text);
-        
+        KeyboardSound();
 
     }
 
+
+    void KeyboardSound()
+    {
+        if(Input.anyKeyDown)
+        {
+            keyboardSoundName = keyboardSounds[Random.Range(0, keyboardSounds.Count)];
+            SoundManager.Instance.PlaySfx(_soundManager.SoundDatas.SoundDict[keyboardSoundName]);
+        }
+    }
     /// <summary>
     /// 글자 입력
     /// </summary>
@@ -118,22 +131,26 @@ public class ComputerControll : BaseUI
                         case land_Start:
                             //Todo : 목적지 시작의섬 선택
                             lever.Stage = Stage.startLand;
+                            lever.posNameisWhat(lever.Stage);
                             gameObject.SetActive(false);
                             break;
 
                         case land_Middle:
                             //Todo : 목적지 중간섬 선택
                             gameObject.SetActive(false);
+                            lever.posNameisWhat(lever.Stage);
                             break;
 
                         case land_End:
                             //Todo : 목적지 끝의 섬 선택
                             gameObject.SetActive(false);
+                            lever.posNameisWhat(lever.Stage);
                             break;
 
                         case land_Sell:
-                            //Todo : 목적지 끝의 섬 선택
+                            //Todo : 목적지 만물상 선박 선택
                             lever.Stage = Stage.sellLand;
+                            lever.posNameisWhat(lever.Stage);
                             gameObject.SetActive(false);
                             break;
 
@@ -311,5 +328,12 @@ public class ComputerControll : BaseUI
         curPage = textObjList[0];
 
         inputField = GetUI<TMP_InputField>("InputField (TMP)");
+
+        keyboardSounds.Add("KeyboardSFX1");
+        keyboardSounds.Add("KeyboardSFX2");
+        keyboardSounds.Add("KeyboardSFX3");
+        keyboardSounds.Add("KeyboardSFX4");
+        keyboardSounds.Add("KeyboardSFX5");
+        keyboardSounds.Add("KeyboardSFX6");
     }
 }

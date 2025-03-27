@@ -53,7 +53,6 @@ public class Login : BaseUI
             }
 
             AuthResult result = task.Result;
-            Debug.Log($"유저 로그인 성공! {result.User.DisplayName} ({result.User.UserId})");
 
             // 이메일 인증 여부 
             if (!isTest && result.User.IsEmailVerified.Equals(false))

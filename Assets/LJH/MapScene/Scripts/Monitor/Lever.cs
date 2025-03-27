@@ -1,6 +1,8 @@
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Http.Headers;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 public enum Stage
@@ -15,6 +17,8 @@ public class Lever : MonoBehaviourPun
     public Stage Stage;
     PopUp popUp;
 
+    [SerializeField] TMP_Text posName;
+
     private void Start()
     {
         popUp = GetComponent<PopUp>();
@@ -22,6 +26,28 @@ public class Lever : MonoBehaviourPun
     private void Update()
     {
         GoingMap();
+    }
+
+    public void posNameisWhat(Stage stage)
+    {
+        switch (stage)
+        {
+            case Stage.startLand:
+                posName.text = "Ω√¿€¿« º∂";
+                break;
+
+            case Stage.middleLand:
+                posName.text = "¡ﬂ∞£º∂";
+                break;
+
+            case Stage.endLand:
+                posName.text = "≥°¿« º∂";
+                break;
+
+            case Stage.sellLand:
+                posName.text = "∏∏π∞ªÛ º±π⁄";
+                break;
+        }
     }
 
     void GoingMap()
