@@ -6,6 +6,9 @@ using UnityEngine;
 
 public class Door : MonoBehaviourPun
 {
+    //»ç¿îµå
+    SoundManager _soundManager => SoundManager.Instance;
+    
     [SerializeField] DoorController doorCon;
     
     [SerializeField] GameObject door;
@@ -45,6 +48,7 @@ public class Door : MonoBehaviourPun
     /// <returns></returns>
     public IEnumerator DoorOpenCoroutine()
     {
+        SoundManager.Instance.PlaySfx(_soundManager.SoundDatas.SoundDict["OpenDoor"]);
         while (Vector3.Distance(transform.position, pillPos) > 0.001f)
         {
             transform.position = Vector3.MoveTowards(transform.position, pillPos, doorSpeed * Time.deltaTime);
@@ -64,6 +68,7 @@ public class Door : MonoBehaviourPun
     /// <returns></returns>
     public IEnumerator DoorCloseCoroutine()
     {
+        SoundManager.Instance.PlaySfx(_soundManager.SoundDatas.SoundDict["CloseDoor"]);
         while (Vector3.Distance(transform.position, doorStopperPos) > 0.6f)
         {
             transform.position = Vector3.MoveTowards(transform.position, doorStopperPos, doorSpeed * Time.deltaTime);
