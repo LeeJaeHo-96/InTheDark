@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class NewDoor : MonoBehaviourPun, IHitMe
 {
+    SoundManager _soundManager => SoundManager.Instance;
 
     float doorSpeed = 5f;
     private Coroutine doorCo;
@@ -51,6 +52,7 @@ public class NewDoor : MonoBehaviourPun, IHitMe
         Quaternion targetAngle;
         if(isClosed)
         {
+            SoundManager.Instance.PlaySfx(_soundManager.SoundDatas.SoundDict["OpenDoorSFX"]);
             targetAngle = Quaternion.Euler(openedAngle, vec.y, vec.z);
             while (elapsedTime < duration)
             {
@@ -67,6 +69,7 @@ public class NewDoor : MonoBehaviourPun, IHitMe
         }
         else
         {
+            SoundManager.Instance.PlaySfx(_soundManager.SoundDatas.SoundDict["CloseDoorSFX"]);
             targetAngle = Quaternion.Euler(closedAngle, vec.y, vec.z);
             while (elapsedTime < duration)
             {

@@ -111,7 +111,7 @@ public class Pause : BaseUI
     void Init()
     {
         pausePannel = GetUI("PausePannel");
-        optionPannel = GetUI("OptionPannel");
+        optionPannel = GetUI("SettingCanvas");
 
         exitPopUp = GetUI("ExitPopUp");
 

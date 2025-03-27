@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class BuildingNewDoor : MonoBehaviourPun, IHitMe
 {
+    SoundManager _soundManager => SoundManager.Instance;
+
     [SerializeField] InDoor indoor;
 
     float doorSpeed = 5f;
@@ -36,6 +38,14 @@ public class BuildingNewDoor : MonoBehaviourPun, IHitMe
                     photonView.RPC("RPCObstacle", RpcTarget.AllViaServer);
                 }
                 photonView.RPC("RPCDoor", RpcTarget.AllViaServer);
+                if (isClosed)
+                {
+                    SoundManager.Instance.PlaySfx(_soundManager.SoundDatas.SoundDict["OpenDoorSFX"]);
+                }
+                else
+                {
+                    SoundManager.Instance.PlaySfx(_soundManager.SoundDatas.SoundDict["CloseDoorSFX"]);
+                }
             }
         }
     }

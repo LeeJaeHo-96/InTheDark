@@ -16,6 +16,22 @@ MonoBehaviour:
     _serializedList:
     - Key: LobbyBGM
       Value: {fileID: 8300000, guid: edd338fdf57f55a41b7380cce8a0a6d4, type: 3}
+    - Key: KeyboardSFX1
+      Value: {fileID: 8300000, guid: d5c9ff1aea83b4d4b88e5c940cc18fc6, type: 3}
+    - Key: KeyboardSFX2
+      Value: {fileID: 8300000, guid: 3f91f7495c294944fb80f5885c25549b, type: 3}
+    - Key: KeyboardSFX3
+      Value: {fileID: 8300000, guid: e5aa58c969023d147a5bf5eed9e3ba0e, type: 3}
+    - Key: KeyboardSFX4
+      Value: {fileID: 8300000, guid: f152c7ad67f7fa64bbd44ca5af0d1caa, type: 3}
+    - Key: KeyboardSFX5
+      Value: {fileID: 8300000, guid: 37aae3ffc0e84ab448fcda8aba7edfe0, type: 3}
+    - Key: KeyboardSFX6
+      Value: {fileID: 8300000, guid: 82b5ab46400c8d5499cc62287afa1db0, type: 3}
+    - Key: OpenDoorSFX
+      Value: {fileID: 8300000, guid: 744ed6d7af8028146a36c64a049d6fe2, type: 3}
+    - Key: CloseDoorSFX
+      Value: {fileID: 8300000, guid: 60d049ae5f09d074ea2ae907519e6474, type: 3}
     - Key: WaitingBGM
       Value: {fileID: 8300000, guid: 563594b9475ac7d4f916e314f1735d66, type: 3}
     - Key: MainBGM
