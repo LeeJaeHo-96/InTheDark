@@ -11,7 +11,7 @@ public class Sea : MonoBehaviour
         if (collision.gameObject.CompareTag(Tag.Player))
         {
             Debug.Log("플레이어죽음");
-            collision.gameObject.GetComponent<PlayerController>();
+            collision.gameObject.GetComponent<PlayerController>().ChangeState(PState.DEATH);
         }
     }
 }
