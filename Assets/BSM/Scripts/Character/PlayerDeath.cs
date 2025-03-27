@@ -52,6 +52,7 @@ public class PlayerDeath : PlayerState
             if (GameManager.Instance.PlayerObjects.Where(x => x.IsDeath).Count() ==
                 GameManager.Instance.PlayerObjects.Count)
             {
+                
                 break;
             }
 

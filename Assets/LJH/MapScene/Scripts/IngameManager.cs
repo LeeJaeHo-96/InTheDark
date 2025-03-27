@@ -40,26 +40,24 @@ public class IngameManager : MonoBehaviourPun
         SingletonInit();
     }
 
-    private void Start()
-    {
-        Invoke(nameof(PlayerCheck), 5f);
-    }
-    void PlayerCheck()
-    {
-        playerCount = GameManager.Instance.PlayerObjects.Count;
-        Debug.Log($"현재 인원 {playerCount}");
-    }
-
     private void Update()
     {
-        if (playerCount != 0)
+        //Todo : 업데이트라 좀 부담시러움.. 딴걸로 바꾸면 좋을거 같음
+        if (gameOverPopup.activeSelf) return;
+
+        if (GameManager.Instance.PlayerObjects.Where(x => x.IsDeath).Count() ==
+                GameManager.Instance.PlayerObjects.Count)
         {
-            if (playerCount - GameManager.Instance.PlayerObjects.Count == playerCount)
-            {
-                GameOver();
-            }
+            Invoke(nameof(GameOver), 3f);
         }
     }
+
+    public void PlayerCheck()
+    {
+        playerCount = GameManager.Instance.PlayerObjects.Count;
+    }
+
+    
 
 
     //시간의 경우 10초마다 5 ~10분이 흐르고
@@ -119,8 +117,7 @@ public class IngameManager : MonoBehaviourPun
         }
     }
 
-    [PunRPC]
-    void GameOver()
+    public void GameOver()
     {
         gameOverPopup.SetActive(true);
     }
