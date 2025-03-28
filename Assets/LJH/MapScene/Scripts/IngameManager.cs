@@ -17,7 +17,7 @@ public class IngameManager : MonoBehaviourPun
 
     float randomMinute;
 
-    float elapsedTime = 1f;
+    float elapsedTime = 0.1f;
 
     public int money { get; set; }
 
