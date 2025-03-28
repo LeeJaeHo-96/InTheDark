@@ -22,6 +22,7 @@ public class Lever : MonoBehaviourPun
     private void Start()
     {
         popUp = GetComponent<PopUp>();
+        posNameisWhat(Stage.startLand);
     }
     private void Update()
     {

@@ -1,6 +1,7 @@
 using Photon.Pun;
 using Photon.Realtime;
 using Photon.Voice.PUN;
+using Photon.Voice.Unity;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -134,7 +135,7 @@ public class PunManager : MonoBehaviourPunCallbacks
     /// </summary>
     public void GoToStartScene()
     {
-        //punVoiceClient.Disconnect();
+        punVoiceClient.Disconnect();
 
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;

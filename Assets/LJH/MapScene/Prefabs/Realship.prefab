@@ -2212,6 +2212,7 @@ GameObject:
   - component: {fileID: 7078540136895111925}
   - component: {fileID: 8932583907762421340}
   - component: {fileID: 8444739777330491603}
+  - component: {fileID: 2912950835053226998}
   m_Layer: 0
   m_Name: Inwall
   m_TagString: Untagged
@@ -2260,6 +2261,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.3, y: 2.29, z: 2.72}
   m_Center: {x: 0, y: 0.52, z: 2.41}
+--- !u!65 &2912950835053226998
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2105016049698285010}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 5.23, y: 0.3, z: 0.49}
+  m_Center: {x: -6.01, y: -0.6, z: 3.44}
 --- !u!1 &2182694321632957565
 GameObject:
   m_ObjectHideFlags: 0
@@ -6199,7 +6213,7 @@ MonoBehaviour:
   - {fileID: 2711540062947287058, guid: 778a4ff95e8737349abfc3a9d4e41555, type: 3}
   spawnPoint: {fileID: 0}
   destinationPoint: {fileID: 0}
-  lever: {fileID: 0}
+  lever: {fileID: 6171234343123320606}
 --- !u!114 &1472572888772139828
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8633,7 +8647,7 @@ GameObject:
   - component: {fileID: 6171234343123320606}
   - component: {fileID: 1722911309073546787}
   m_Layer: 0
-  m_Name: ControllMan
+  m_Name: LeverMan
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

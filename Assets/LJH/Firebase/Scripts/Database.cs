@@ -76,6 +76,39 @@ public class Database : BaseUI
             });
     }
 
+    public void ResetData(string playerId, string slot)
+    {
+        //
+        // 유저마다 슬롯이 1 ~ 5 있음
+        // 슬롯 1을 선택했을 때, 해당하는 슬롯데이터에 돈과 날짜가 저장되어야 함
+        // 플레이어에서 슬롯을 불러오고
+        // 슬롯에 따라 해당 데이터를 불러오는 방식
+        //
+        // 저장할땐 슬롯에 데이터를 저장하고
+        // 슬롯을 플레이어에 해당 슬롯 위치에 저장
+        // 유저iD를 Key로 슬롯 보관
+
+        //슬롯을 Key로 데이터 보관
+        Dictionary<string, object> slotData = new Dictionary<string, object>
+    {
+        {"Money", DefaultMoney},
+        {"Days", DefaultDays}
+    };
+
+
+
+        // 슬롯 데이터를 해당 유저의 특정 슬롯 위치에 저장
+        database.Child("UserData").Child(playerId).Child(slot.ToString())
+            .SetValueAsync(slotData)
+            .ContinueWithOnMainThread(task =>
+            {
+                if (task.IsFaulted)
+                {
+                    Debug.LogError("데이터 저장 실패: " + task.Exception);
+                }
+            });
+    }
+
     /// <summary>
     /// 데이터 불러오기 함수/
     /// 슬롯 버튼에 해당 함수 넣어두고 플레이어 아이디랑 슬롯 넣어주는 식으로 사용
@@ -102,11 +135,6 @@ public class Database : BaseUI
 
                 if (snapshot.Exists)
                 {
-
-                    //테스트코드
-                    //int money;
-                    //int days;
-
                     if (snapshot.HasChild("Money"))
                     {
                         object moneyValue = snapshot.Child("Money").Value;
@@ -133,13 +161,6 @@ public class Database : BaseUI
                     {
                         IngameManager.Instance.days = DefaultDays;
                     }
-
-                    // UI 업데이트 테스트 코드
-                    //moneyText.text = money.ToString();
-                    //dayText.text = days.ToString();
-
-                    //IngameManager.Instance.money = money;
-                    //IngameManager.Instance.days = days;
 
                 }
                 else

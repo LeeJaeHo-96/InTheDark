@@ -68,6 +68,7 @@ public class Pause : BaseUI
         if (SceneManager.GetActiveScene().name == "WaitingScene")
             return;
 
+        Time.timeScale = 1f;
         SceneManager.LoadScene("WaitingScene");
     }
 

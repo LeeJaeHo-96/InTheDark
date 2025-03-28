@@ -1,26 +1,22 @@
 using Photon.Pun;
-using Photon.Realtime;
-using Photon.Voice.PUN;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
+using Photon.Voice.Unity;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GameOver : MonoBehaviour
 {
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.E))
+        if (PhotonNetwork.InRoom && Input.GetKeyDown(KeyCode.E))
         {
-            for(int i = GameManager.Instance.PlayerObjects.Count - 1; i >= 0; i--)
-            {
-                GameManager.Instance.PlayerRemove(GameManager.Instance.PlayerObjects[i]);
-            }
             Destroy(GameObject.Find(nameof(Camera)).gameObject);
 
-            PunManager.Instance.GoToStartScene();
+            PhotonNetwork.LeaveRoom();
+            //인게임 매니저 삭제
             Destroy(transform.parent.parent.gameObject);
+
+            //게임 오버시 데이터 초기화
+            Database.instance.ResetData(FirebaseManager.Auth.CurrentUser.UserId, "Slot_1");
+
         }
     }
 }
