@@ -10,19 +10,16 @@ public class MapDoorOnOff : MonoBehaviourPun
 
     private void Start()
     {
-        if (PhotonNetwork.IsMasterClient)
+        //방
+        if (openDoorList.Count > 0)
         {
-            //방
-            if (openDoorList.Count > 0)
-            {
-                CreateDoor(lockDoorList, openDoorList);
-            }
-            //복도
-            else
-            {
-                if (PhotonNetwork.IsMasterClient)
-                    CreateDoor(lockDoorList);
-            }
+            CreateDoor(lockDoorList, openDoorList);
+        }
+        //복도
+        else
+        {
+            if (PhotonNetwork.IsMasterClient)
+                CreateDoor(lockDoorList);
         }
     }
 
@@ -34,7 +31,7 @@ public class MapDoorOnOff : MonoBehaviourPun
     void CreateDoor(List<GameObject> lockList, List<GameObject> openList)
     {
 
-        for(int i = 0; i < lockList.Count - 2; i++)
+        for (int i = 0; i < lockList.Count - 2; i++)
         {
             openList[i].SetActive(!lockList[i].activeSelf);
         }
@@ -50,7 +47,7 @@ public class MapDoorOnOff : MonoBehaviourPun
         int howManyLocked;
 
         howManyLocked = Random.Range(0, lockList.Count);
-        for(int i = 0; i < howManyLocked; i++)
+        for (int i = 0; i < howManyLocked; i++)
         {
             lockList[i].SetActive(true);
         }
