@@ -12,90 +12,60 @@ public class MapDoorOnOff : MonoBehaviourPun
     {
         if (PhotonNetwork.IsMasterClient)
         {
+            //방
             if (openDoorList.Count > 0)
+            {
                 CreateDoor(lockDoorList, openDoorList);
+            }
+            //복도
             else
-                CreateDoor(lockDoorList);
+            {
+                if (PhotonNetwork.IsMasterClient)
+                    CreateDoor(lockDoorList);
+            }
         }
     }
 
     /// <summary>
-    /// 만약에 네트워크 연결이 늦을 시 이걸로 지연시간 줘야함
+    /// 방 의 경우 이걸로
     /// </summary>
     /// <param name="lockList"></param>
     /// <param name="openList"></param>
-    //IEnumerator SettingCoroutine()
-    //{
-    //    yield return new WaitForTime(5f); 
-    //
-    //    if (PhotonNetwork.IsMasterClient)
-    //    {
-    //        Debug.Log("방장이라 실행됨");
-    //        if (openDoorList.Count > 0)
-    //            CreateDoor(lockDoorList, openDoorList);
-    //        else
-    //            CreateDoor(lockDoorList);
-    //    }
-    //    else { Debug.Log("게스트따리라 실행안됨"); }
-    //}
-
     void CreateDoor(List<GameObject> lockList, List<GameObject> openList)
     {
-        bool[] lockStates = new bool[lockList.Count];
 
-        //문 한쪽만 있게 테스트용
-        //for (int i = 0; i < lockList.Count; i++)
-        for (int i = 0; i < 2; i++)
+        for(int i = 0; i < lockList.Count - 2; i++)
         {
-            if (!lockList[i].activeSelf)
-            {
-                lockStates[i] = (Random.Range(0, 3) < 0.5f);
-                lockList[i].SetActive(lockStates[i]);
-            }
             openList[i].SetActive(!lockList[i].activeSelf);
         }
 
-        photonView.RPC("RPCSyncDoors", RpcTarget.Others, lockList, openList);
     }
 
+    /// <summary>
+    /// 복도의 경우 이걸로
+    /// </summary>
+    /// <param name="lockList"></param>
     void CreateDoor(List<GameObject> lockList)
     {
-        bool[] lockStates = new bool[lockList.Count];
+        int howManyLocked;
 
-        //문 한쪽만 있게 테스트용
-        //for (int i = 0; i < lockList.Count; i++)
-        for (int i = 0; i < 2; i++)
+        howManyLocked = Random.Range(0, lockList.Count);
+        for(int i = 0; i < howManyLocked; i++)
         {
-            if (!lockList[i].activeSelf)
-            {
-                lockStates[i] = (Random.Range(0, 3) < 0.5f);
-                lockList[i].SetActive(lockStates[i]);
-            }
+            lockList[i].SetActive(true);
         }
 
-        photonView.RPC("RPCSyncDoors", RpcTarget.Others, lockList);
+        photonView.RPC(nameof(RPCSyncDoors), RpcTarget.Others, howManyLocked);
+
     }
 
     [PunRPC]
-    void RPCSyncDoors(List<GameObject> lockList, List<GameObject> openList)
+    void RPCSyncDoors(int howManyLocked)
     {
-        for (int i = 0; i < lockDoorList.Count; i++)
+        for (int i = 0; i < howManyLocked; i++)
         {
-            lockDoorList[i].SetActive(lockList[i].activeSelf);
-            openDoorList[i].SetActive(openList[i].activeSelf);
+            lockDoorList[i].SetActive(true);
         }
     }
 
-    void RPCSyncDoors1(bool[] lockStates)
-    {
-        for (int i = 0; i < lockStates.Length; i++)
-        {
-            lockDoorList[i].SetActive(lockStates[i]);
-
-            if (openDoorList.Count > i)
-            {
-                openDoorList[i].SetActive(!lockStates[i]);
-            }
-        }
-    }
 }
