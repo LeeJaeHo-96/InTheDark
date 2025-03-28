@@ -34,7 +34,7 @@ public class CreateBuidlingRoom : MonoBehaviourPun
     [PunRPC]
     void RPCCreaTeRandomToTal()
     {
-        Debug.Log("ø°¿Ã");
+        
         photonView.RPC("CreateRandomDepth1", RpcTarget.AllViaServer);
         photonView.RPC("CreateRandomDepth2", RpcTarget.AllViaServer);
         photonView.RPC("CreateRandomDepth3", RpcTarget.AllViaServer);

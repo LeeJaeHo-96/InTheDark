@@ -1,3 +1,5 @@
+using Photon.Pun;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -16,6 +18,7 @@ public class Pause : BaseUI
     Button yesButton;
     Button noButton;
 
+    TMP_Text exitText;
 
     private void Awake()
     {
@@ -58,7 +61,17 @@ public class Pause : BaseUI
     /// </summary>
     void ExitPopUp()
     {
-        exitPopUp.SetActive(true);
+        if (SceneManager.GetActiveScene().name == "WaitingScene")
+        {
+            exitText.text = "메인 화면으로 돌아가시겠습니까?";
+        }
+        else
+        {
+            exitText.text = "바다로 돌아가시겠습니까?";
+        }
+
+
+            exitPopUp.SetActive(true);
     }
     /// <summary>
     /// 게임씬일경우 > 대기씬으로 이동
@@ -80,16 +93,9 @@ public class Pause : BaseUI
         if (SceneManager.GetActiveScene().name != "WaitingScene")
             return;
 
-        Debug.Log(IngameManager.Instance.money);
         Database.instance.SaveData(FirebaseManager.Auth.CurrentUser.UserId, "Slot_1", IngameManager.Instance.money, IngameManager.Instance.days);
-
-#if UNITY_EDITOR
-        //Comment : 유니티 에디터상에서 종료
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-        //Comment : 빌드 상에서 종료
-        Application.Quit();
-#endif
+        
+        PhotonNetwork.LeaveRoom();
     }
 
     void ExitNo()
@@ -104,6 +110,8 @@ public class Pause : BaseUI
         optionPannel = GetUI("SettingCanvas");
 
         exitPopUp = GetUI("ExitPopUp");
+        exitText = GetUI<TMP_Text>("ExitText");
+
 
         continueButton = GetUI<Button>("ContinueButton");
         optionButton = GetUI<Button>("OptionButton");

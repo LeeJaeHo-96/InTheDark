@@ -203,6 +203,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _itemID: 4
+  AttackSoundKey: 
   IsOwned: 0
   IsAttacking: 0
   _battery: 0
