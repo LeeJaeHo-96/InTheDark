@@ -17,7 +17,7 @@ public class PlayerStats : MonoBehaviourPun
     }
 
     //TODO: 전체적인 수치는 조정 필요
-    private float _walkSpeed = 2f;
+    private float _walkSpeed = 3.5f;
 
     private int _curHP;
 
@@ -37,7 +37,7 @@ public class PlayerStats : MonoBehaviourPun
         get => _walkSpeed;
     }
 
-    private float _runSpeed = 5f;
+    private float _runSpeed = 6.5f;
 
     public float RunSpeed
     {

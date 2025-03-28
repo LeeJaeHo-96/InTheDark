@@ -312,7 +312,7 @@ public class PlayerController : MonoBehaviourPun
     /// </summary>
     private void JumpGroundCheckRayCast(Ray jumpRay)
     {
-        if (Physics.Raycast(jumpRay.origin, jumpRay.direction, out RaycastHit jumpHit, 0.3f))
+        if (Physics.Raycast(jumpRay.origin, jumpRay.direction, out RaycastHit jumpHit, 0.6f))
         {
             if (jumpHit.collider != null)
             {

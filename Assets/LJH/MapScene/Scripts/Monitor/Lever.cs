@@ -60,8 +60,7 @@ public class Lever : MonoBehaviourPun
                 case Stage.startLand:
                     IngameManager.Instance.PlayerCheck();
                     IngameManager.Instance.days++;
-                    GameManager.Instance.SceneBGM(SceneType.INGAME);
-                    SceneManager.LoadScene("MapScene1");
+                    PhotonNetwork.LoadLevel(SceneUtility.GetBuildIndexByScenePath("MapScene_1"));
                     break;
 
                 case Stage.middleLand:

@@ -116,7 +116,7 @@ public class IngameManager : MonoBehaviourPun
                 minute = minute - 60;
             }
 
-            if(time >= 12)
+            if(time >= 24)
             {
                 TimeOver();
             }

@@ -16,6 +16,7 @@ public class TimerUI : MonoBehaviour
     private void Start()
     {
         timerText = GetComponent<TMP_Text>();
+        GameManager.Instance.SceneBGM(SceneType.INGAME);
     }
 
     private void Update()
