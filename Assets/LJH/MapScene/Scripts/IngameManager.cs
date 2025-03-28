@@ -17,7 +17,7 @@ public class IngameManager : MonoBehaviourPun
 
     float randomMinute;
 
-    float elapsedTime = 0.1f;
+    float elapsedTime = 10f;
 
     public int money { get; set; }
 
@@ -118,18 +118,17 @@ public class IngameManager : MonoBehaviourPun
             {
                 TimeOver();
             }
-            yield return new WaitForSeconds(elapsedTime);
+            yield return new WaitForSecondsRealtime(elapsedTime);
         }
     }
 
     void TimeOver()
     {
-        photonView.RPC("RPCPlayerAllDie", RpcTarget.AllViaServer);
-
+        //photonView.RPC("RPCPlayerAllDie", RpcTarget.AllViaServer);
+        PlayerAllDie();
     }
 
-    [PunRPC]
-    void RPCPlayerAllDie()
+    void PlayerAllDie()
     {
         List<GameObject> playerS = new List<GameObject>();
 
@@ -137,6 +136,7 @@ public class IngameManager : MonoBehaviourPun
 
         foreach (GameObject player in playerS)
         {
+            if(player != null)
             player.GetComponent<PlayerController>().ChangeState(PState.DEATH);
         }
     }
