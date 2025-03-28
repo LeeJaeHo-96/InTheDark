@@ -55,7 +55,7 @@ public class MapDoorOnOff : MonoBehaviourPun
             openList[i].SetActive(!lockList[i].activeSelf);
         }
 
-        photonView.RPC("RPCSyncDoors", RpcTarget.Others, lockStates);
+        photonView.RPC("RPCSyncDoors", RpcTarget.Others, lockList, openList);
     }
 
     void CreateDoor(List<GameObject> lockList)
@@ -73,17 +73,26 @@ public class MapDoorOnOff : MonoBehaviourPun
             }
         }
 
-        photonView.RPC("RPCSyncDoors", RpcTarget.Others, lockStates);
+        photonView.RPC("RPCSyncDoors", RpcTarget.Others, lockList);
     }
 
     [PunRPC]
-    void RPCSyncDoors(bool[] lockStates)
+    void RPCSyncDoors(List<GameObject> lockList, List<GameObject> openList)
+    {
+        for (int i = 0; i < lockDoorList.Count; i++)
+        {
+            lockDoorList[i].SetActive(lockList[i].activeSelf);
+            openDoorList[i].SetActive(openList[i].activeSelf);
+        }
+    }
+
+    void RPCSyncDoors1(bool[] lockStates)
     {
         for (int i = 0; i < lockStates.Length; i++)
         {
             lockDoorList[i].SetActive(lockStates[i]);
 
-            if(openDoorList.Count > i)
+            if (openDoorList.Count > i)
             {
                 openDoorList[i].SetActive(!lockStates[i]);
             }
