@@ -18,6 +18,7 @@ public class Lever : MonoBehaviourPun
     PopUp popUp;
 
     [SerializeField] TMP_Text posName;
+    [SerializeField] ItemSave itemSave;
 
     private void Start()
     {
@@ -55,6 +56,8 @@ public class Lever : MonoBehaviourPun
     {
         if(popUp.HitMe && Input.GetKeyDown(KeyCode.E))
         {
+            //itemSave.SaveItems();
+
             switch(Stage)
             {
                 case Stage.startLand:

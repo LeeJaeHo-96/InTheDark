@@ -8719,6 +8719,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Stage: 0
   posName: {fileID: 685560311835647275}
+  itemSave: {fileID: 8865201857128210385}
 --- !u!65 &1722911309073546787
 BoxCollider:
   m_ObjectHideFlags: 0

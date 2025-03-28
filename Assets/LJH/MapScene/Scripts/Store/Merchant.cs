@@ -35,6 +35,7 @@ public class Merchant : MonoBehaviour
         for (int i = 0; i < sellItemList.Count; i++)
         {
             Destroy(sellItemList[i]);
+
             IngameManager.Instance.money += totalPrice;
         } 
     }

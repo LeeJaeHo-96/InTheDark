@@ -20,12 +20,14 @@ public class ItemSave : MonoBehaviour
 
     private void Start()
     {
-        RespawnItems();
+        StartCoroutine(RespawnItemsCo());
     }
 
-    private void OnDisable()
+    IEnumerator RespawnItemsCo()
     {
-        SaveItems();
+        yield return new WaitForSeconds(0.1f);
+
+        RespawnItems();
     }
 
 
@@ -36,6 +38,9 @@ public class ItemSave : MonoBehaviour
             items.Add(collision.gameObject);
 
             Vector3 itemPos = new Vector3(DistanceCal(collision, 'x'), DistanceCal(collision, 'y'), DistanceCal(collision, 'z')); // 아이템의 위치
+
+            Debug.Log(itemPos);
+
             string itemName = collision.gameObject.GetComponent<Item>().name; // 아이템의 종류 ID
 
             //Clone 문구 지워주기
@@ -44,20 +49,17 @@ public class ItemSave : MonoBehaviour
             {
                 _itemName = itemName.Replace("(Clone)", "");
                 itemName = _itemName;
+
+                Debug.Log(itemName);
             }
 
             int viewId = collision.gameObject.GetComponent<PhotonView>().ViewID; // 아이템의 포톤뷰 ID
             //불러올때 대비한 키값 저장소
-            keyList.Add(viewId);
+            IngameManager.Instance.keyList.Add(viewId);
+            IngameManager.Instance.nameDict.TryAdd(itemPos, itemName);
+            IngameManager.Instance.posDict.TryAdd(viewId, itemPos);
 
-
-            nameDict.TryAdd(itemPos, itemName);
-
-            
-            posDict.TryAdd(viewId, itemPos);
-
-
-
+            Debug.Log($"네임딕셔너리에 저장된 아이템 갯수 : {IngameManager.Instance.nameDict.Count}");
 
         }
     }
@@ -67,15 +69,17 @@ public class ItemSave : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Item"))
         {
-            items.Remove(collision.gameObject);
-
-            int viewId = collision.gameObject.GetComponent<PhotonView>().ViewID;
-            
-            
-
-            nameDict.Remove(posDict[viewId]);
-            posDict.Remove(viewId);
-            keyList.Remove(viewId);
+           // items.Remove(collision.gameObject);
+           //
+           // int viewId = collision.gameObject.GetComponent<PhotonView>().ViewID;
+           // 
+           // 
+           //
+           // nameDict.Remove(posDict[viewId]);
+           // posDict.Remove(viewId);
+           // keyList.Remove(viewId);
+           //
+           // Debug.Log("아이템 삭제 실행됨");
         }
     }
 
@@ -109,10 +113,13 @@ public class ItemSave : MonoBehaviour
         return Mathf.Abs(a - b);
     }
 
-    void SaveItems()
+    public void SaveItems()
     {
+
         IngameManager.Instance.posDict = posDict;
+        Debug.Log($"nameDict의 갯수{nameDict.Count}");
         IngameManager.Instance.nameDict = nameDict;
+        Debug.Log($"인게임 매니저 nameDict의 갯수{IngameManager.Instance.nameDict.Count}");
         IngameManager.Instance.keyList = keyList;
 
     }
@@ -123,9 +130,12 @@ public class ItemSave : MonoBehaviour
         nameDict = IngameManager.Instance.nameDict;
         keyList = IngameManager.Instance.keyList;
 
+        Debug.Log($"리스폰 될때 불러온 nameDict : { nameDict.Count}");
+        Debug.Log($"리스폰 될때 불러온 인게임 매니저 nameDict : {IngameManager.Instance.nameDict.Count}");
 
         for (int i = 0; i < nameDict.Count; i++)
         {
+            Debug.Log($"아이템 {i}개 생성");
             PhotonNetwork.Instantiate(nameDict[posDict[keyList[i]]], transform.position + posDict[keyList[i]], Quaternion.identity);
         }
     }
