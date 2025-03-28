@@ -55,10 +55,8 @@ public class IngameManager : MonoBehaviourPun
     IEnumerator curPlayerCheckCoroutine()
     {
         yield return new WaitForSecondsRealtime(3f);
-        Debug.Log("인원 체크 시작");
         while (true)
         {
-            Debug.Log("인원 체크 도는중");
             List<GameObject> playerList = new List<GameObject>();
 
             playerList = GameObject.FindGameObjectsWithTag(Tag.Player).ToList();

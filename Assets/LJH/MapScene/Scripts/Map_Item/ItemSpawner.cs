@@ -65,6 +65,7 @@ public class ItemSpawner : MonoBehaviourPun
             Vector3 pos = transform.position + new Vector3(Random.Range(-xDistance, xDistance), 0, Random.Range(-zDistance, zDistance));
 
             //Instantiate(item, pos, Quaternion.identity);
+            if(Random.Range(0,3) < 0.5f)
             PhotonNetwork.Instantiate(item, pos, Quaternion.identity);
         }
     }

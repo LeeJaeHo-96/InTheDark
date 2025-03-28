@@ -20,7 +20,7 @@ public class Monster : MonoBehaviourPun
 
     public int Hp = 60;
 
-    public bool isAttacked = false;
+    public bool isAttacked;
     public int pirateDamage = 30;
 
     private void Start()
@@ -108,7 +108,8 @@ public class Monster : MonoBehaviourPun
     /// </summary>
     public void ChasePlayer()
     {
-        agent.SetDestination(playerList[0].transform.position);
+
+       agent.SetDestination(playerList[0].transform.position + new Vector3(2, 0 , 2));
     }
 
     /// <summary>
@@ -124,13 +125,11 @@ public class Monster : MonoBehaviourPun
     /// </summary>
     public void AttackStart()
     {
-        Debug.Log("공격시작");
         isAttacked = true;
     }
 
     public void AttackStop()
     {
-        Debug.Log("공격끝");
         isAttacked = false;
     }
 

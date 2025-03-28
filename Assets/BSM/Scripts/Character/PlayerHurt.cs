@@ -10,6 +10,7 @@ public class PlayerHurt : PlayerState
     {
     }
 
+
     public override void Enter()
     { 
         ValidateHit(); 
@@ -57,14 +58,18 @@ public class PlayerHurt : PlayerState
         else if (_controller.OnTriggerOther.gameObject.layer == GameManager.Instance.MonsterLayerIndexValue)
         {
             Monster monster = _controller.OnTriggerOther.gameObject.GetComponent<Monster>();
-
+            Debug.Log($"monster에는 이거가 {monster.GetComponent<PhotonView>().ViewID}");
+            monster.isAttacked = true;
+            
             if (monster.isAttacked)
             {
+                monster.isAttacked = false;
+                Debug.Log("플레이어가 맞음");
                 TakeDamage(monster.pirateDamage);
             } 
         }
     }
- 
+
     /// <summary>
     /// 현재 체력 감소
     /// </summary>
