@@ -37,9 +37,6 @@ public class Monster : MonoBehaviourPun
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!PhotonNetwork.IsMasterClient)
-            return;
-
         if(other.CompareTag(Tag.Player))
         {
             SearchingPlayer(other);

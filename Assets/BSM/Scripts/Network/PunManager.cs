@@ -54,6 +54,7 @@ public class PunManager : MonoBehaviourPunCallbacks
         {
             GameManager.Instance.PlayerSearchCo = StartCoroutine(GameManager.Instance.PlayerSearchRoutine());
         }
+        GameManager.Instance.SceneBGM(SceneType.WAITING);
 
         //이재호 추가 코드 : Invoke를 통해 게임속에서만 존재하는 IngameManager에 주입시킴
         Invoke("InsertMasterID", 1f);
@@ -125,8 +126,7 @@ public class PunManager : MonoBehaviourPunCallbacks
     /// 대기 화면으로 이동
     /// </summary>
     private void GoToWaitingScene()
-    { 
-        GameManager.Instance.SceneBGM(SceneType.WAITING);
+    {
         PhotonNetwork.LoadLevel(SceneUtility.GetBuildIndexByScenePath("WaitingScene")); 
     }
 

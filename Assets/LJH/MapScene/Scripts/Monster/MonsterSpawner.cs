@@ -8,32 +8,15 @@ public class MonsterSpawner : MonoBehaviourPun
     [SerializeField] List<GameObject> monsterList;
     List<string> monsterNames = new List<string>();
 
-    //게임 시스템의 인게임 타이머와 연동되어야 함 현재 임시로 10 박아두었음
-    public int Timer = 10;
 
     private void Start()
     {
         monsterNames.Add("Enemy1");
 
-        //StartCoroutine(MonsterSpawnCoroutine());
+        if(PhotonNetwork.IsMasterClient)
         MonsterSpawn();
     }
 
-    /// <summary>
-    /// 특정 시간이 될 때마다 몬스터 스폰
-    /// </summary>
-    /// <returns></returns>
-    IEnumerator MonsterSpawnCoroutine()
-    {
-        while (true)
-        {
-            if(Timer % 2 == 1)
-            {
-                MonsterSpawn();
-            }
-            yield return null;
-        }
-    }
 
     void MonsterSpawn()
     {
