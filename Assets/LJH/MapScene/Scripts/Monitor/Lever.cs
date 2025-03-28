@@ -60,7 +60,7 @@ public class Lever : MonoBehaviourPun
                 case Stage.startLand:
                     IngameManager.Instance.PlayerCheck();
                     IngameManager.Instance.days++;
-                    PhotonNetwork.LoadLevel(SceneUtility.GetBuildIndexByScenePath("MapScene_1"));
+                    PhotonNetwork.LoadLevel(SceneUtility.GetBuildIndexByScenePath("MapScene1"));
                     break;
 
                 case Stage.middleLand:
@@ -80,7 +80,7 @@ public class Lever : MonoBehaviourPun
                 case Stage.sellLand:
                     IngameManager.Instance.PlayerCheck();
                     IngameManager.Instance.days++;
-                    SceneManager.LoadScene("StoreScene");
+                    PhotonNetwork.LoadLevel(SceneUtility.GetBuildIndexByScenePath("StoreScene"));
                     Debug.Log("ªÛ¡° º∂¿∏∑Œ ∞©¥œ¥Ÿ");
                     break;
             }
