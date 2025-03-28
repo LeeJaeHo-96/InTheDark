@@ -1,18 +1,15 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using Photon.Pun;
 using Photon.Realtime;
-using UnityEditor;
-using UnityEditor.Build.Content;
+using Photon.Voice.PUN;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
-using Photon.Voice.PUN;
 
 public class PunManager : MonoBehaviourPunCallbacks
 {
+    [SerializeField] private PunVoiceClient punVoiceClient;
     private Lobby Lobby => Lobby.Instance;
     public static PunManager Instance;
     public UnityAction OnChangedPlayer;
@@ -78,7 +75,7 @@ public class PunManager : MonoBehaviourPunCallbacks
              StopCoroutine(GameManager.Instance.PlayerSearchCo);
         }
         
-        Cursor.lockState = CursorLockMode.Confined;
+        
         GoToStartScene();
     }
 
@@ -134,8 +131,13 @@ public class PunManager : MonoBehaviourPunCallbacks
     /// <summary>
     /// 시작 화면으로 이동
     /// </summary>
-    private void GoToStartScene()
+    public void GoToStartScene()
     {
+        punVoiceClient.Disconnect();
+
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
         GameManager.Instance.SceneBGM(SceneType.MAIN);
         PhotonNetwork.LoadLevel(SceneUtility.GetBuildIndexByScenePath("StartScene"));
     }

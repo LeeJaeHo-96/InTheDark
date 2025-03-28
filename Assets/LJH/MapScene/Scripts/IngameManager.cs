@@ -40,15 +40,41 @@ public class IngameManager : MonoBehaviourPun
         SingletonInit();
     }
 
+    private void Start()
+    {
+        StartCoroutine(curPlayerCheckCoroutine());
+    }
+
     private void Update()
     {
         //Todo : 업데이트라 좀 부담시러움.. 딴걸로 바꾸면 좋을거 같음
         if (gameOverPopup.activeSelf) return;
 
-        if (GameManager.Instance.PlayerObjects.Where(x => x.IsDeath).Count() ==
-                GameManager.Instance.PlayerObjects.Count)
+    }
+
+    IEnumerator curPlayerCheckCoroutine()
+    {
+        yield return new WaitForSecondsRealtime(3f);
+        Debug.Log("인원 체크 시작");
+        while (true)
         {
-            Invoke(nameof(GameOver), 3f);
+            Debug.Log("인원 체크 도는중");
+            List<GameObject> playerList = new List<GameObject>();
+
+            playerList = GameObject.FindGameObjectsWithTag(Tag.Player).ToList();
+            int playerCount = 0;
+            foreach(GameObject pl in playerList)
+            {
+                if (pl.GetComponent<PlayerController>().IsDeath == true)
+                    playerCount++;
+            }
+
+            if(GameManager.Instance.PlayerObjects.Count == playerCount)
+            {
+                GameOver();
+            }
+
+            yield return new WaitForSeconds(0.5f);
         }
     }
 

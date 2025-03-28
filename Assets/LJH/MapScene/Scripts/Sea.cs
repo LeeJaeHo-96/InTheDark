@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Sea : MonoBehaviour
 {
-    int i = 0;
 
     private void OnCollisionEnter(Collision collision)
     {

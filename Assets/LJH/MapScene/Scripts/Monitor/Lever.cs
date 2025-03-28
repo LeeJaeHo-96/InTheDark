@@ -58,24 +58,28 @@ public class Lever : MonoBehaviourPun
             {
                 case Stage.startLand:
                     IngameManager.Instance.PlayerCheck();
+                    IngameManager.Instance.days++;
                     GameManager.Instance.SceneBGM(SceneType.INGAME);
                     SceneManager.LoadScene("MapScene1");
                     break;
 
                 case Stage.middleLand:
                     IngameManager.Instance.PlayerCheck();
+                    IngameManager.Instance.days++;
                     //Todo : 스테이지 채워야함 SceneManager.LoadScene("");
                     Debug.Log("중간 섬으로 갑니다");
                     break;
 
                 case Stage.endLand:
                     IngameManager.Instance.PlayerCheck();
+                    IngameManager.Instance.days++;
                     //Todo : 스테이지 채워야함 SceneManager.LoadScene("");
                     Debug.Log("끝의 섬으로 갑니다");
                     break;
 
                 case Stage.sellLand:
                     IngameManager.Instance.PlayerCheck();
+                    IngameManager.Instance.days++;
                     SceneManager.LoadScene("StoreScene");
                     Debug.Log("상점 섬으로 갑니다");
                     break;

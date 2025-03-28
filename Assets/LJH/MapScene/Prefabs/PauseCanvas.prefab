@@ -863,6 +863,7 @@ GameObject:
   - component: {fileID: 4176645879017160305}
   - component: {fileID: 4176645879017160311}
   - component: {fileID: 4176645879017160304}
+  - component: {fileID: 5762117956065270100}
   m_Layer: 5
   m_Name: PausePannel
   m_TagString: Untagged
@@ -931,6 +932,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5762117956065270100
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4176645879017160306}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 157ee6f744480d143bd793623ebf04c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4176645879112100822
 GameObject:
   m_ObjectHideFlags: 0

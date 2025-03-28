@@ -36,17 +36,6 @@ public class Pause : BaseUI
 
             pausePannel.SetActive(!pausePannel.activeSelf);
         }
-
-        if(pausePannel.activeSelf)
-        {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-        }
-        else
-        {
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
-        }
     }
 
     /// <summary>

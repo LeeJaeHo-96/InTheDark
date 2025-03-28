@@ -12,6 +12,7 @@ using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 using Screen = UnityEngine.Device.Screen;
+using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviour
 {
@@ -110,6 +111,7 @@ public class GameManager : MonoBehaviour
         if (PlayerObjects.Contains(player))
         {
             PlayerObjects.Remove(player);
+            Destroy(player.gameObject);
         }
     }
     
