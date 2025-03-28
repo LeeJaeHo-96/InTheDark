@@ -73,6 +73,7 @@ public class PunManager : MonoBehaviourPunCallbacks
         if (GameManager.Instance.PlayerSearchCo != null)
         {
              StopCoroutine(GameManager.Instance.PlayerSearchCo);
+             GameManager.Instance.PlayerSearchCo = null;
         }
         
         
@@ -91,8 +92,8 @@ public class PunManager : MonoBehaviourPunCallbacks
     /// <param name="newPlayer"></param>
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        GameManager.Instance.PlayerObjects.Clear();
-        GameManager.Instance.PlayerObjects = FindObjectsOfType<PlayerController>().ToList();
+        //GameManager.Instance.PlayerObjects.Clear();
+        //GameManager.Instance.PlayerObjects = FindObjectsOfType<PlayerController>().ToList();
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
@@ -133,7 +134,7 @@ public class PunManager : MonoBehaviourPunCallbacks
     /// </summary>
     public void GoToStartScene()
     {
-        punVoiceClient.Disconnect();
+        //punVoiceClient.Disconnect();
 
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;

@@ -96,7 +96,7 @@ public class PlayerController : MonoBehaviourPun
         { 
             OnTriggerOther = other;
         }
-        Debug.Log("이거 동작");
+
         if (!photonView.IsMine) return; 
         _playerStates[(int)_curState].OnTrigger(); 
     }
@@ -114,6 +114,11 @@ public class PlayerController : MonoBehaviourPun
         if (_computerObject != null && _computerObject.activeSelf) return;
         _playerStates[(int)_curState].Update();
 
+        // if (Input.GetKeyDown(KeyCode.C))
+        // {
+        //     PhotonNetwork.LeaveRoom();
+        // }
+        
         if (_curState == PState.DEATH) return;
         InputKey();
         PositionUpdate();
