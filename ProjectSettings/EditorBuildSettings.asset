@@ -6,6 +6,24 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: Assets/LJH/Firebase/LoginScene.unity
+    guid: 72d8a0fc6a76f5d499f8d0d0da5f0f9d
+  - enabled: 1
+    path: Assets/LJH/Firebase/DataBaseScene.unity
+    guid: ec3acb4fcccbb2940a6d9aad01a077b4
+  - enabled: 1
+    path: Assets/LJH/Firebase/SlotTestScene.unity
+    guid: 995b4c53ba033e44fa297e5b1c9626d3
+  - enabled: 1
+    path: Assets/BSM/Scenes/StartScene.unity
+    guid: 946d1ffaa7cfbe44fb529237d58c75c6
+  - enabled: 1
+    path: Assets/LJH/MapScene/Scene/MapScene1.unity
+    guid: 0e57678fa8e7d3c4ab2c3b84bc1218dd
+  - enabled: 1
+    path: Assets/LJH/MapScene/Scene/WaitingScene.unity
+    guid: 3e54ebfb35052074a9d4daac8b55b62b
+  - enabled: 1
+    path: Assets/LJH/MapScene/Scene/StoreScene.unity
+    guid: cccb47766cc3e4141abb0b34999a8808
   m_configObjects: {}

@@ -25,9 +25,9 @@ namespace Photon.Chat.Demo
             get { return this.NameLabel.text; }
         }
 
-        public Text NameLabel;
-        public Text StatusLabel;
-        public Text Health;
+        public UnityEngine.UI.Text NameLabel;
+        public UnityEngine.UI.Text StatusLabel;
+        public UnityEngine.UI.Text Health;
 
         public void Awake()
         {
