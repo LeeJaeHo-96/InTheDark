@@ -126,6 +126,8 @@ public class ItemSave : MonoBehaviour
 
     void RespawnItems()
     {
+        if (!PhotonNetwork.IsMasterClient) return;
+
         posDict = IngameManager.Instance.posDict;
         nameDict = IngameManager.Instance.nameDict;
         keyList = IngameManager.Instance.keyList;
